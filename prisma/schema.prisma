@@ -1,0 +1,268 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Domaine {
+  id            String      @id @default(cuid())
+  nomFr         String
+  nomAr         String      @default("")
+  nomEn         String      @default("")
+  slug          String      @unique
+  descriptionFr String?     @db.Text
+  descriptionAr String?     @db.Text
+  descriptionEn String?     @db.Text
+  icon          String?
+  imageUrl      String?
+  color         String      @default("#1B3A5C")
+  order         Int         @default(0)
+  isActive      Boolean     @default(true)
+  metaTitle     String?
+  metaDescription String?
+  formations    Formation[]
+  createdAt     DateTime    @default(now())
+}
+
+model Formation {
+  id              String    @id @default(cuid())
+  titreFr         String
+  titreAr         String    @default("")
+  titreEn         String    @default("")
+  slug            String    @unique
+  shortDescFr     String    @default("") @db.Text
+  shortDescAr     String    @default("") @db.Text
+  shortDescEn     String    @default("") @db.Text
+  descriptionFr   String    @default("") @db.Text
+  descriptionAr   String    @default("") @db.Text
+  descriptionEn   String    @default("") @db.Text
+  mode            String    @default("PRESENTIEL")
+  duree           String    @default("")
+  dureeHeures     Int?
+  niveau          String    @default("Débutant")
+  prix            Float?
+  prixPromo       Float?
+  prixDisplay     String?
+  certification   String?
+  imageUrl        String?
+  galleryUrls     String[]  @default([])
+  videoUrl        String?
+  programmeFr     String[]  @default([])
+  programmeAr     String[]  @default([])
+  programmeEn     String[]  @default([])
+  objectifsFr     String[]  @default([])
+  objectifsAr     String[]  @default([])
+  objectifsEn     String[]  @default([])
+  prerequis       String?   @db.Text
+  prochaineSeance DateTime?
+  placesDispo     Int?
+  studentsCount   Int       @default(0)
+  rating          Float     @default(5)
+  villes          String[]  @default([])
+  isActive        Boolean   @default(true)
+  isFeatured      Boolean   @default(false)
+  enrollmentOpen  Boolean   @default(true)
+  order           Int       @default(0)
+  domaineId       String
+  domaine         Domaine   @relation(fields: [domaineId], references: [id])
+  formateurs      FormationFormateur[]
+  faqs            FormationFaq[]
+  temoignages     Temoignage[]
+  metaTitle       String?
+  metaDescription String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model FormationFaq {
+  id          String    @id @default(cuid())
+  questionFr  String
+  questionAr  String    @default("")
+  questionEn  String    @default("")
+  answerFr    String    @db.Text
+  answerAr    String    @default("") @db.Text
+  answerEn    String    @default("") @db.Text
+  order       Int       @default(0)
+  formationId String
+  formation   Formation @relation(fields: [formationId], references: [id], onDelete: Cascade)
+}
+
+model Service {
+  id            String   @id @default(cuid())
+  titreFr       String
+  titreAr       String   @default("")
+  titreEn       String   @default("")
+  slug          String   @unique
+  type          String   @default("AUTRE")
+  shortDescFr   String   @default("") @db.Text
+  shortDescAr   String   @default("") @db.Text
+  shortDescEn   String   @default("") @db.Text
+  descriptionFr String   @default("") @db.Text
+  descriptionAr String   @default("") @db.Text
+  descriptionEn String   @default("") @db.Text
+  imageUrl      String?
+  icon          String?
+  avantagesFr   String[] @default([])
+  avantagesAr   String[] @default([])
+  avantagesEn   String[] @default([])
+  processusFr   String[] @default([])
+  processusAr   String[] @default([])
+  processusEn   String[] @default([])
+  isActive      Boolean  @default(true)
+  isFeatured    Boolean  @default(false)
+  order         Int      @default(0)
+  metaTitle     String?
+  metaDescription String?
+  createdAt     DateTime @default(now())
+}
+
+model Formateur {
+  id          String   @id @default(cuid())
+  nom         String
+  prenom      String
+  slug        String   @unique
+  bioFr       String   @default("") @db.Text
+  bioAr       String   @default("") @db.Text
+  bioEn       String   @default("") @db.Text
+  specialite  String   @default("")
+  photoUrl    String?
+  linkedinUrl String?
+  experience  String?
+  isActive    Boolean  @default(true)
+  order       Int      @default(0)
+  formations  FormationFormateur[]
+  createdAt   DateTime @default(now())
+}
+
+model FormationFormateur {
+  id          String    @id @default(cuid())
+  formationId String
+  formateurId String
+  formation   Formation @relation(fields: [formationId], references: [id], onDelete: Cascade)
+  formateur   Formateur @relation(fields: [formateurId], references: [id], onDelete: Cascade)
+  @@unique([formationId, formateurId])
+}
+
+model Temoignage {
+  id          String     @id @default(cuid())
+  nom         String
+  role        String?
+  contenuFr   String     @db.Text
+  contenuAr   String     @default("") @db.Text
+  contenuEn   String     @default("") @db.Text
+  rating      Int        @default(5)
+  photoUrl    String?
+  videoUrl    String?
+  isActive    Boolean    @default(true)
+  isFeatured  Boolean    @default(false)
+  order       Int        @default(0)
+  formationId String?
+  formation   Formation? @relation(fields: [formationId], references: [id])
+  createdAt   DateTime   @default(now())
+}
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  titreFr     String
+  titreAr     String   @default("")
+  titreEn     String   @default("")
+  slug        String   @unique
+  extraitFr   String   @default("") @db.Text
+  extraitAr   String   @default("") @db.Text
+  extraitEn   String   @default("") @db.Text
+  contenuFr   String   @default("") @db.Text
+  contenuAr   String   @default("") @db.Text
+  contenuEn   String   @default("") @db.Text
+  imageUrl    String?
+  auteur      String   @default("Institut Lorel")
+  categorie   String   @default("Actualités")
+  tags        String[] @default([])
+  isPublished Boolean  @default(false)
+  isFeatured  Boolean  @default(false)
+  metaTitle   String?
+  metaDescription String?
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Page {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  titreFr     String
+  titreAr     String   @default("")
+  titreEn     String   @default("")
+  contenuFr   String   @default("") @db.Text
+  contenuAr   String   @default("") @db.Text
+  contenuEn   String   @default("") @db.Text
+  metaTitle   String?
+  metaDescription String?
+  updatedAt   DateTime @updatedAt
+}
+
+model SiteLead {
+  id         String   @id @default(cuid())
+  nom        String
+  prenom     String?
+  email      String?
+  telephone  String
+  formation  String?
+  mode       String?
+  message    String?  @db.Text
+  source     String   @default("SITE")
+  langue     String   @default("fr")
+  pageUrl    String?
+  synced     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model SiteSettings {
+  id                 String   @id @default("main")
+  phone              String   @default("+212 5XX-XXXXXX")
+  email              String   @default("contact@institutlorel.com")
+  whatsappNumber     String   @default("212XXXXXXXXX")
+  addressMarrakech   String   @default("")
+  addressCasablanca  String   @default("")
+  facebookUrl        String?
+  instagramUrl       String?
+  youtubeUrl         String?
+  linkedinUrl        String?
+  tiktokUrl          String?
+  announcementFr     String   @default("")
+  announcementAr     String   @default("")
+  announcementEn     String   @default("")
+  announcementActive Boolean  @default(false)
+  metaTitleFr        String   @default("Institut Lorel — Formation Professionnelle au Maroc")
+  metaTitleAr        String   @default("")
+  metaTitleEn        String   @default("")
+  metaDescFr         String   @default("")
+  metaDescAr         String   @default("")
+  metaDescEn         String   @default("")
+  ogImageUrl         String?
+  googleAnalyticsId  String?
+  heroImageUrl       String?
+  heroVideoUrl       String?
+  updatedAt          DateTime @updatedAt
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("EDITOR")
+  createdAt DateTime @default(now())
+}
+
+model MediaFile {
+  id        String   @id @default(cuid())
+  filename  String
+  url       String
+  size      Int
+  mimeType  String
+  alt       String?
+  createdAt DateTime @default(now())
+}
