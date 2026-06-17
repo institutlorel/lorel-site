@@ -23,6 +23,7 @@ import {
 import type { Formation } from "@/lib/data/formations";
 import { FormationCard } from "@/components/formations/FormationCard";
 import { Container } from "@/components/ui/Container";
+import { InscriptionModal } from "@/components/InscriptionModal";
 
 const MODE_LABELS: Record<string, string> = {
   EN_LIGNE: "En ligne",
@@ -89,7 +90,15 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
   );
 }
 
-function EnrollCard({ formation: f, waNumber }: { formation: Formation; waNumber?: string }) {
+function EnrollCard({
+  formation: f,
+  waNumber,
+  onOpenModal,
+}: {
+  formation: Formation;
+  waNumber?: string;
+  onOpenModal: () => void;
+}) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-card-hover overflow-hidden">
       {/* Image preview */}
@@ -185,38 +194,27 @@ function EnrollCard({ formation: f, waNumber }: { formation: Formation; waNumber
         <div className="h-px bg-gray-100 mb-5" />
 
         <div className="space-y-3">
+          <button
+            onClick={onOpenModal}
+            className="flex items-center justify-center gap-2 w-full min-h-[46px] bg-brand-blue hover:bg-brand-dark text-white font-body text-sm font-semibold py-3.5 rounded-sm transition-all duration-300"
+          >
+            S&apos;inscrire maintenant
+            <ArrowUpRight className="w-4 h-4" />
+          </button>
           {waNumber ? (
-            <>
-              <a
-                href={`https://wa.me/${waNumber}`}
-                className="flex items-center justify-center gap-2 w-full min-h-[46px] bg-brand-blue hover:bg-brand-dark text-white font-body text-sm font-semibold py-3.5 rounded-sm transition-all duration-300"
-              >
-                S&apos;inscrire maintenant
-                <ArrowUpRight className="w-4 h-4" />
-              </a>
-              <a
-                href={`https://wa.me/${waNumber}`}
-                className="flex items-center justify-center gap-2 w-full min-h-[46px] bg-brand-cream hover:bg-brand-cream-dark text-brand-blue font-body text-sm font-semibold py-3.5 rounded-sm transition-all duration-300 border border-brand-blue/15"
-              >
-                Demander plus d&apos;infos
-              </a>
-            </>
+            <a
+              href={`https://wa.me/${waNumber}`}
+              className="flex items-center justify-center gap-2 w-full min-h-[46px] bg-brand-cream hover:bg-brand-cream-dark text-brand-blue font-body text-sm font-semibold py-3.5 rounded-sm transition-all duration-300 border border-brand-blue/15"
+            >
+              Demander plus d&apos;infos
+            </a>
           ) : (
-            <>
-              <Link
-                href="/contact"
-                className="flex items-center justify-center gap-2 w-full min-h-[46px] bg-brand-blue hover:bg-brand-dark text-white font-body text-sm font-semibold py-3.5 rounded-sm transition-all duration-300"
-              >
-                S&apos;inscrire maintenant
-                <ArrowUpRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/contact"
-                className="flex items-center justify-center gap-2 w-full min-h-[46px] bg-brand-cream hover:bg-brand-cream-dark text-brand-blue font-body text-sm font-semibold py-3.5 rounded-sm transition-all duration-300 border border-brand-blue/15"
-              >
-                Demander plus d&apos;infos
-              </Link>
-            </>
+            <Link
+              href="/contact"
+              className="flex items-center justify-center gap-2 w-full min-h-[46px] bg-brand-cream hover:bg-brand-cream-dark text-brand-blue font-body text-sm font-semibold py-3.5 rounded-sm transition-all duration-300 border border-brand-blue/15"
+            >
+              Demander plus d&apos;infos
+            </Link>
           )}
         </div>
 
@@ -260,6 +258,7 @@ export function FormationDetailClient({
   waNumber?: string;
 }) {
   const [activeTab, setActiveTab] = useState<TabId>("programme");
+  const [inscOpen, setInscOpen] = useState(false);
   const ModeIcon = MODE_ICONS[f.mode];
 
   return (
@@ -347,7 +346,7 @@ export function FormationDetailClient({
 
             {/* Right: enrollment card (desktop) */}
             <div className="hidden lg:block w-80 shrink-0">
-              <EnrollCard formation={f} waNumber={waNumber} />
+              <EnrollCard formation={f} waNumber={waNumber} onOpenModal={() => setInscOpen(true)} />
             </div>
           </div>
         </Container>
@@ -471,7 +470,7 @@ export function FormationDetailClient({
             {/* Right: sticky enrollment card (desktop only) */}
             <div className="hidden lg:block w-80 shrink-0">
               <div className="sticky top-24">
-                <EnrollCard formation={f} waNumber={waNumber} />
+                <EnrollCard formation={f} waNumber={waNumber} onOpenModal={() => setInscOpen(true)} />
               </div>
             </div>
           </div>
@@ -522,15 +521,13 @@ export function FormationDetailClient({
               pour garantir votre place.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href={waNumber ? `https://wa.me/${waNumber}` : "/contact"}
-                target={waNumber ? "_blank" : undefined}
-                rel={waNumber ? "noopener noreferrer" : undefined}
+              <button
+                onClick={() => setInscOpen(true)}
                 className="flex items-center gap-2 bg-brand-gold hover:bg-brand-gold-dark text-brand-dark font-body text-sm font-semibold px-8 py-4 rounded-sm transition-all duration-300 w-full sm:w-auto justify-center"
               >
                 S&apos;inscrire maintenant
                 <ArrowUpRight className="w-4 h-4" />
-              </a>
+              </button>
               {waNumber && (
                 <a
                   href={`tel:+${waNumber}`}
@@ -545,6 +542,14 @@ export function FormationDetailClient({
         </Container>
       </section>
 
+      <InscriptionModal
+        open={inscOpen}
+        onClose={() => setInscOpen(false)}
+        formationId={f.id}
+        formationTitre={f.titreFr}
+        formationSlug={f.slug}
+      />
+
       {/* Fixed mobile bottom CTA bar */}
       <div className="fixed bottom-0 inset-x-0 z-50 lg:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
         <div className="flex items-center gap-3 px-4 py-3 max-w-screen-sm mx-auto">
@@ -554,13 +559,13 @@ export function FormationDetailClient({
               {f.prixPromo ? `${f.prixPromo.toLocaleString("fr-MA")} DH` : f.priceDisplay}
             </div>
           </div>
-          <a
-            href={waNumber ? `https://wa.me/${waNumber}` : "/contact"}
+          <button
+            onClick={() => setInscOpen(true)}
             className="flex-1 flex items-center justify-center gap-2 bg-brand-blue text-white font-body text-sm font-semibold py-3 rounded-sm min-h-[44px]"
           >
             S&apos;inscrire
             <ArrowUpRight className="w-4 h-4" />
-          </a>
+          </button>
           {waNumber && (
             <a
               href={`tel:+${waNumber}`}
