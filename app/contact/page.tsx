@@ -20,7 +20,6 @@ interface FormData {
 interface FormErrors {
   prenom?: string;
   nom?: string;
-  email?: string;
   telephone?: string;
   message?: string;
 }
@@ -52,24 +51,67 @@ export default function ContactPage() {
     formation: "",
     message: "",
   });
+  const [honeypot, setHoneypot] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   function validate(): boolean {
     const errs: FormErrors = {};
-    if (!form.prenom.trim()) errs.prenom = "Ce champ est requis";
-    if (!form.nom.trim()) errs.nom = "Ce champ est requis";
-    if (!form.email.trim()) errs.email = "Ce champ est requis";
-    if (!form.telephone.trim()) errs.telephone = "Ce champ est requis";
+    if (form.prenom.trim().length < 2) errs.prenom = "Minimum 2 caractères";
+    if (form.nom.trim().length < 2) errs.nom = "Minimum 2 caractères";
+    if (form.telephone.trim().length < 6) errs.telephone = "Numéro invalide";
     if (!form.message.trim()) errs.message = "Ce champ est requis";
     setErrors(errs);
     return Object.keys(errs).length === 0;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (validate()) {
+    setSubmitError("");
+
+    // Honeypot — silent success for bots
+    if (honeypot) {
       setSubmitted(true);
+      return;
+    }
+
+    if (!validate()) return;
+
+    // Build message: append formation title if one was selected
+    let fullMessage = form.message.trim();
+    if (form.formation) {
+      const formation = FORMATIONS.find((f) => f.slug === form.formation);
+      if (formation) {
+        fullMessage += ` — Intéressé(e) par : ${formation.titreFr}`;
+      }
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch("/api/inscription", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prenom: form.prenom.trim(),
+          nom: form.nom.trim(),
+          telephone: form.telephone.trim(),
+          email: form.email.trim() || undefined,
+          cta: "RAPPEL",
+          message: fullMessage,
+        }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        setSubmitted(true);
+      } else {
+        setSubmitError(data.error || "Une erreur est survenue, réessayez.");
+      }
+    } catch {
+      setSubmitError("Une erreur est survenue, réessayez.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -146,6 +188,17 @@ export default function ContactPage() {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} noValidate>
+                    {/* Honeypot — hidden from real users */}
+                    <input
+                      name="website"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                      tabIndex={-1}
+                      autoComplete="off"
+                      aria-hidden="true"
+                      style={{ position: "absolute", left: "-9999px", opacity: 0, pointerEvents: "none" }}
+                    />
+
                     {/* Name row */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                       <div>
@@ -184,7 +237,7 @@ export default function ContactPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                       <div>
                         <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">
-                          Email *
+                          Email
                         </label>
                         <input
                           type="email"
@@ -194,9 +247,6 @@ export default function ContactPage() {
                           placeholder="vous@exemple.com"
                           className={inputClass}
                         />
-                        {errors.email && (
-                          <p className="font-body text-[11px] text-red-500 mt-1">{errors.email}</p>
-                        )}
                       </div>
                       <div>
                         <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">
@@ -256,11 +306,42 @@ export default function ContactPage() {
                       )}
                     </div>
 
+                    {submitError && (
+                      <p className="font-body text-sm text-red-600 mb-4">{submitError}</p>
+                    )}
+
                     <button
                       type="submit"
-                      className="w-full bg-brand-blue hover:bg-brand-blue-light text-white font-body font-bold text-sm py-3.5 rounded-sm transition-colors"
+                      disabled={loading}
+                      className="w-full flex items-center justify-center gap-2 bg-brand-blue hover:bg-brand-blue-light disabled:opacity-60 disabled:cursor-not-allowed text-white font-body font-bold text-sm py-3.5 rounded-sm transition-colors"
                     >
-                      Envoyer le message
+                      {loading ? (
+                        <>
+                          <svg
+                            className="animate-spin w-4 h-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            aria-hidden="true"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            />
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8v8z"
+                            />
+                          </svg>
+                          Envoi en cours…
+                        </>
+                      ) : (
+                        "Envoyer le message"
+                      )}
                     </button>
                   </form>
                 )}

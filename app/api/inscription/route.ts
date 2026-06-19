@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   try {
     const { prenom, nom, telephone, email, formationId, cta, message, slug } = await req.json();
-    if (!prenom || !nom || !telephone || !formationId) {
+    if (!prenom || !nom || !telephone) {
       return NextResponse.json({ error: "Champs requis manquants." }, { status: 400 });
     }
     const r = await fetch(`${process.env.PLATFORM_API_URL}/api/public/inscription`, {
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
         nom,
         telephone,
         email,
-        formationId,
+        ...(formationId ? { formationId } : {}),
         cta,
         message,
         successUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/merci`,
