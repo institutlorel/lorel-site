@@ -548,6 +548,7 @@ export function FormationDetailClient({
         formationId={f.id}
         formationTitre={f.titreFr}
         formationSlug={f.slug}
+        formationPrix={f.prixPromo ? `${f.prixPromo.toLocaleString("fr-MA")} DH` : f.priceDisplay}
       />
 
       {/* Fixed mobile bottom CTA bar */}
