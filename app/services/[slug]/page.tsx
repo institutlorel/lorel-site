@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle, ArrowUpRight } from "lucide-react";
@@ -9,6 +11,22 @@ import { getSiteSettings } from "@/lib/data/platform-api";
 
 export function generateStaticParams() {
   return SERVICES.map((s) => ({ slug: s.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const service = getServiceBySlug(slug);
+  if (!service) return { title: "Service introuvable" };
+  return buildMetadata({
+    title: service.titre,
+    description: service.shortDesc,
+    image: service.image,
+    path: `/services/${slug}`,
+  });
 }
 
 export default async function ServiceDetailPage({

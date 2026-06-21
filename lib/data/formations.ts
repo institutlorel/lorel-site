@@ -35,6 +35,7 @@ export interface Formation {
   faqFr: { q: string; a: string }[];
   seoTitle?: string;
   seoDescription?: string;
+  seoImage?: string;
 }
 
 export const FORMATIONS: Formation[] = [

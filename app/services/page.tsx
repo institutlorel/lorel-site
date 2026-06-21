@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+import { getPageSeo } from "@/lib/data/platform-api";
+import { buildMetadata, resolvePageMeta } from "@/lib/seo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getPageSeo();
+  const m = resolvePageMeta(seo, "services");
+  return buildMetadata({ ...m, path: "/services" });
+}
+
 import Link from "next/link";
 import {
   Award,

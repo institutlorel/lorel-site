@@ -165,6 +165,7 @@ function mapFormation(api: any): SiteFormation {
     faqFr: faqRaw.map((item) => ({ q: item.question, a: item.answer })),
     seoTitle: api.seoTitle ?? undefined,
     seoDescription: api.seoDescription ?? undefined,
+    seoImage: api.seoImage ?? undefined,
   };
 }
 
@@ -263,5 +264,27 @@ export async function getTemoignages(): Promise<SiteTemoignage[]> {
     return (data.temoignages ?? []).map(mapTemoignage);
   } catch {
     return [];
+  }
+}
+
+export interface PageSeoEntry {
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  ogImage?: string | null;
+  keywords?: string | null;
+}
+
+export type PageSeoMap = Record<string, PageSeoEntry>;
+
+export async function getPageSeo(): Promise<PageSeoMap> {
+  try {
+    const res = await fetch(`${BASE}/api/public/page-seo`, {
+      next: { revalidate: 300 },
+    });
+    if (!res.ok) return {};
+    const data = await res.json();
+    return data.seo ?? {};
+  } catch {
+    return {};
   }
 }

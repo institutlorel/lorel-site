@@ -1,4 +1,14 @@
+import type { Metadata } from "next";
+import { getPageSeo } from "@/lib/data/platform-api";
+import { buildMetadata, resolvePageMeta } from "@/lib/seo";
+
 export const revalidate = 60;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getPageSeo();
+  const m = resolvePageMeta(seo, "home");
+  return buildMetadata({ ...m, path: "/" });
+}
 
 import { AnnouncementBar } from "@/components/home/AnnouncementBar";
 import { Navbar } from "@/components/home/Navbar";

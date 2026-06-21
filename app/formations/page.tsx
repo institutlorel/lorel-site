@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+import { getPageSeo } from "@/lib/data/platform-api";
+import { buildMetadata, resolvePageMeta } from "@/lib/seo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getPageSeo();
+  const m = resolvePageMeta(seo, "formations");
+  return buildMetadata({ ...m, path: "/formations" });
+}
+
 import Link from "next/link";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";

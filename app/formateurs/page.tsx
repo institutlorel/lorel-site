@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+import { getPageSeo } from "@/lib/data/platform-api";
+import { buildMetadata, resolvePageMeta } from "@/lib/seo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getPageSeo();
+  const m = resolvePageMeta(seo, "formateurs");
+  return buildMetadata({ ...m, path: "/formateurs" });
+}
+
 import Link from "next/link";
 import { ArrowUpRight, Star } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";

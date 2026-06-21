@@ -27,19 +27,35 @@ const tajawal = Tajawal({
   display: "swap",
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://institutlorel.com";
+const DEFAULT_OG =
+  "https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1200";
+
 export const metadata: Metadata = {
-  title: "Institut Lorel — Formation Professionnelle au Maroc",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Institut Lorel — Formations Professionnelles à Marrakech & Casablanca",
+    template: "%s | Institut Lorel",
+  },
   description:
     "Formations professionnelles certifiées à Marrakech et Casablanca. Présentiel, en ligne et hybride. VAE et accompagnement. +500 diplômés.",
-  keywords:
-    "formation professionnelle maroc, formation marrakech, formation casablanca, VAE maroc, formation en ligne maroc, institut lorel",
-  metadataBase: new URL("https://institutlorel.com"),
+  keywords: [
+    "formation professionnelle maroc",
+    "formation marrakech",
+    "formation casablanca",
+    "VAE maroc",
+    "formation en ligne maroc",
+    "institut lorel",
+  ],
   openGraph: {
-    title: "Institut Lorel — Formation Professionnelle au Maroc",
-    description: "Formez-vous avec les meilleurs au Maroc.",
     type: "website",
     locale: "fr_MA",
     siteName: "Institut Lorel",
+    images: [{ url: DEFAULT_OG }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [DEFAULT_OG],
   },
 };
 

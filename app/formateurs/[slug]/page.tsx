@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Star, BookOpen, Users, Award } from "lucide-react";
@@ -9,6 +11,22 @@ import { getSiteSettings } from "@/lib/data/platform-api";
 
 export function generateStaticParams() {
   return FORMATEURS.map((f) => ({ slug: f.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const formateur = getFormateurBySlug(slug);
+  if (!formateur) return { title: "Formateur introuvable" };
+  return buildMetadata({
+    title: formateur.nomComplet,
+    description: `${formateur.specialite} — ${formateur.bio[0]?.slice(0, 140) ?? "Formateur expert à Institut Lorel."}`,
+    image: formateur.photo,
+    path: `/formateurs/${slug}`,
+  });
 }
 
 export default async function FormateurPage({

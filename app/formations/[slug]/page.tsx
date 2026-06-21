@@ -1,8 +1,10 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { getFormations, getFormation, getRelatedFormations, getSiteSettings } from "@/lib/data/platform-api";
 import { FormationDetailClient } from "./FormationDetailClient";
+import { buildMetadata } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -11,16 +13,20 @@ export async function generateStaticParams() {
   return formations.map((f) => ({ slug: f.slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
   const formation = await getFormation(slug);
-  if (!formation) return { title: "Formation introuvable | Institut Lorel" };
-  return {
-    title: formation.seoTitle
-      ? `${formation.seoTitle} | Institut Lorel`
-      : `${formation.titreFr} | Institut Lorel`,
+  if (!formation) return { title: "Formation introuvable" };
+  return buildMetadata({
+    title: formation.seoTitle ?? formation.titreFr,
     description: formation.seoDescription ?? formation.shortDesc,
-  };
+    image: formation.seoImage ?? (formation.image || undefined),
+    path: `/formations/${slug}`,
+  });
 }
 
 export default async function FormationDetailPage({
