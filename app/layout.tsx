@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter, Tajawal } from "next/font/google";
 import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
+import { CodeInjector } from "@/components/CodeInjector";
 import { getSiteSettings } from "@/lib/data/platform-api";
 import "./globals.css";
 
@@ -43,15 +44,18 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const { principal } = await getSiteSettings();
+  const { principal, code } = await getSiteSettings();
   return (
     <html
       lang="fr"
       className={`${cormorant.variable} ${inter.variable} ${tajawal.variable}`}
     >
       <body>
+        {code.head && <CodeInjector html={code.head} position="head" />}
+        {code.bodyStart && <CodeInjector html={code.bodyStart} position="body-start" />}
         {children}
         <WhatsAppFloat number={principal} />
+        {code.footer && <CodeInjector html={code.footer} position="body-end" />}
       </body>
     </html>
   );

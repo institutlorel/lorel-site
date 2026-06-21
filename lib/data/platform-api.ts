@@ -33,12 +33,19 @@ const GRADIENTS: Record<string, string> = {
 
 const BASE = process.env.PLATFORM_API_URL ?? "https://app.institutlorel.com";
 
+export interface SiteCode {
+  head: string | null;
+  bodyStart: string | null;
+  footer: string | null;
+}
+
 export interface SiteSettings {
   casablanca: string;
   marrakech: string;
   enLigne: string;
   principalKey: string;
   principal: string;
+  code: SiteCode;
 }
 
 const DEFAULT_SETTINGS: SiteSettings = {
@@ -47,6 +54,7 @@ const DEFAULT_SETTINGS: SiteSettings = {
   enLigne: "",
   principalKey: "EN_LIGNE",
   principal: "",
+  code: { head: null, bodyStart: null, footer: null },
 };
 
 export async function getSiteSettings(): Promise<SiteSettings> {
@@ -57,12 +65,18 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     if (!res.ok) return DEFAULT_SETTINGS;
     const data = await res.json();
     const wa = data?.whatsapp ?? {};
+    const c = data?.code ?? {};
     return {
       casablanca: wa.casablanca ?? "",
       marrakech: wa.marrakech ?? "",
       enLigne: wa.enLigne ?? "",
       principalKey: wa.principalKey ?? "EN_LIGNE",
       principal: wa.principal ?? "",
+      code: {
+        head: c.head ?? null,
+        bodyStart: c.bodyStart ?? null,
+        footer: c.footer ?? null,
+      },
     };
   } catch {
     return DEFAULT_SETTINGS;
