@@ -198,3 +198,56 @@ export async function getRelatedFormations(
   const all = await getFormations(catKey ? { category: catKey } : undefined);
   return all.filter((f) => f.slug !== slug).slice(0, 3);
 }
+
+const TEMOIGNAGE_GRADIENTS = [
+  "from-brand-blue to-brand-dark",
+  "from-[#1a3a2a] to-brand-dark",
+  "from-[#3a1a2a] to-brand-dark",
+  "from-[#2a1a0a] to-brand-dark",
+  "from-[#4a1a6a] to-brand-dark",
+  "from-[#0a2a1a] to-brand-dark",
+];
+
+export interface SiteTemoignage {
+  id: string;
+  nom: string;
+  quote: string;
+  rating: number;
+  formation: string;
+  role: string;
+  photo: string;
+  annee: string | null;
+  resultat: string | null;
+  initials: string;
+  gradient: string;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapTemoignage(api: any, idx: number): SiteTemoignage {
+  return {
+    id: String(api.id ?? ""),
+    nom: api.nom ?? "",
+    quote: api.texte ?? "",
+    rating: typeof api.note === "number" ? api.note : 5,
+    formation: api.formation ?? "",
+    role: api.role ?? "",
+    photo: api.photo ?? "",
+    annee: api.annee ?? null,
+    resultat: api.resultat ?? null,
+    initials: initials(api.nom),
+    gradient: TEMOIGNAGE_GRADIENTS[idx % TEMOIGNAGE_GRADIENTS.length],
+  };
+}
+
+export async function getTemoignages(): Promise<SiteTemoignage[]> {
+  try {
+    const res = await fetch(`${BASE}/api/public/temoignages`, {
+      next: { revalidate: 300 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.temoignages ?? []).map(mapTemoignage);
+  } catch {
+    return [];
+  }
+}

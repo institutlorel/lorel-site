@@ -17,10 +17,13 @@ import { BlogPreview } from "@/components/home/BlogPreview";
 import { CentersSection } from "@/components/home/CentersSection";
 import { CTASection } from "@/components/home/CTASection";
 import { Footer } from "@/components/home/Footer";
-import { getSiteSettings } from "@/lib/data/platform-api";
+import { getSiteSettings, getTemoignages } from "@/lib/data/platform-api";
 
 export default async function Home() {
-  const { principal } = await getSiteSettings();
+  const [{ principal }, temoignages] = await Promise.all([
+    getSiteSettings(),
+    getTemoignages(),
+  ]);
   return (
     <>
       <AnnouncementBar />
@@ -35,7 +38,7 @@ export default async function Home() {
         <WhyLorel />
         <ServicesVAE />
         <FormateursSection />
-        <Temoignages />
+        <Temoignages temoignages={temoignages} />
         <Process />
         <BlogPreview />
         <CentersSection />
