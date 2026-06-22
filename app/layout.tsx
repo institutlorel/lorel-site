@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter, Tajawal } from "next/font/google";
 import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
 import { CodeInjector } from "@/components/CodeInjector";
+import { JsonLd } from "@/components/JsonLd";
 import { getSiteSettings } from "@/lib/data/platform-api";
+import { organizationJsonLd } from "@/lib/seo";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -69,6 +71,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         {code.head && <CodeInjector html={code.head} position="head" />}
         {code.bodyStart && <CodeInjector html={code.bodyStart} position="body-start" />}
+        <JsonLd data={organizationJsonLd()} />
         {children}
         <WhatsAppFloat number={principal} />
         {code.footer && <CodeInjector html={code.footer} position="body-end" />}

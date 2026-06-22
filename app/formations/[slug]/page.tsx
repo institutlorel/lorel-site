@@ -4,7 +4,8 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { getFormations, getFormation, getRelatedFormations, getSiteSettings } from "@/lib/data/platform-api";
 import { FormationDetailClient } from "./FormationDetailClient";
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, courseJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
 
 export const revalidate = 60;
 
@@ -43,6 +44,7 @@ export default async function FormationDetailPage({
 
   return (
     <>
+      <JsonLd data={courseJsonLd(formation)} />
       <SiteHeader />
       <main>
         <FormationDetailClient formation={formation} related={related} waNumber={principal} />

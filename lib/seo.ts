@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { PageSeoEntry } from "@/lib/data/platform-api";
+import type { PageSeoEntry, SiteFormation } from "@/lib/data/platform-api";
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://institutlorel.com";
 
@@ -83,6 +83,60 @@ export function buildMetadata({
       images: [imageUrl],
     },
   };
+}
+
+export function organizationJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    name: "Institut Lorel",
+    url: SITE_URL,
+    logo: DEFAULT_OG_IMAGE,
+    description:
+      "Formations professionnelles certifiées à Marrakech et Casablanca. Présentiel, en ligne et hybride. VAE et accompagnement.",
+    address: [
+      {
+        "@type": "PostalAddress",
+        streetAddress: "Quartier Guéliz",
+        addressLocality: "Marrakech",
+        postalCode: "40000",
+        addressCountry: "MA",
+      },
+      {
+        "@type": "PostalAddress",
+        streetAddress: "Quartier Maârif",
+        addressLocality: "Casablanca",
+        postalCode: "20000",
+        addressCountry: "MA",
+      },
+    ],
+    areaServed: "MA",
+    inLanguage: "fr",
+  };
+}
+
+export function courseJsonLd(formation: SiteFormation) {
+  const base: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: formation.titreFr,
+    description: formation.shortDesc || formation.descriptionFr.slice(0, 160),
+    provider: {
+      "@type": "EducationalOrganization",
+      name: "Institut Lorel",
+      url: SITE_URL,
+    },
+    inLanguage: "fr",
+    url: `${SITE_URL}/formations/${formation.slug}`,
+  };
+  if (formation.prix > 0) {
+    base.offers = {
+      "@type": "Offer",
+      price: formation.prix,
+      priceCurrency: "MAD",
+    };
+  }
+  return base;
 }
 
 export function resolvePageMeta(
