@@ -288,3 +288,66 @@ export async function getPageSeo(): Promise<PageSeoMap> {
     return {};
   }
 }
+
+export interface SiteArticle {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  coverImage: string;
+  category: string;
+  tags: string[];
+  publishedAt: string;
+  readingMinutes: number;
+  author: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  ogImage?: string;
+}
+
+export interface SiteArticleFull extends SiteArticle {
+  content: string;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapArticle(api: any): SiteArticle {
+  return {
+    id: String(api.id ?? ""),
+    slug: api.slug ?? "",
+    title: api.title ?? "",
+    excerpt: api.excerpt ?? "",
+    coverImage: api.coverImage ?? "",
+    category: api.category ?? "",
+    tags: Array.isArray(api.tags) ? api.tags : [],
+    publishedAt: api.publishedAt ?? new Date().toISOString(),
+    readingMinutes: typeof api.readingMinutes === "number" ? api.readingMinutes : 5,
+    author: api.author ?? "Institut Lorel",
+    metaTitle: api.metaTitle ?? undefined,
+    metaDescription: api.metaDescription ?? undefined,
+    ogImage: api.ogImage ?? undefined,
+  };
+}
+
+export async function getArticles(category?: string): Promise<SiteArticle[]> {
+  try {
+    const qs = category ? `?category=${encodeURIComponent(category)}` : "";
+    const res = await fetch(`${BASE}/api/public/blog${qs}`, { next: { revalidate: 300 } });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.articles ?? []).map(mapArticle);
+  } catch {
+    return [];
+  }
+}
+
+export async function getArticle(slug: string): Promise<SiteArticleFull | null> {
+  try {
+    const res = await fetch(`${BASE}/api/public/blog/${slug}`, { next: { revalidate: 300 } });
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data.article) return null;
+    return { ...mapArticle(data.article), content: data.article.content ?? "" };
+  } catch {
+    return null;
+  }
+}

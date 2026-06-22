@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { PageSeoEntry, SiteFormation } from "@/lib/data/platform-api";
+import type { PageSeoEntry, SiteFormation, SiteArticle } from "@/lib/data/platform-api";
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://institutlorel.com";
 
@@ -41,6 +41,11 @@ export const DEFAULT_SEO: Record<string, { title: string; description: string }>
     title: "Questions Fréquentes (FAQ)",
     description:
       "Inscriptions, paiement, certifications, VAE... Trouvez les réponses à vos questions sur les formations Institut Lorel.",
+  },
+  blog: {
+    title: "Blog & Ressources",
+    description:
+      "Conseils carrière, guides formation et actualités du monde professionnel au Maroc. Articles rédigés par nos formateurs experts.",
   },
 };
 
@@ -137,6 +142,29 @@ export function courseJsonLd(formation: SiteFormation) {
     };
   }
   return base;
+}
+
+export function articleJsonLd(article: SiteArticle) {
+  const canonical = `${SITE_URL}/blog/${article.slug}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.excerpt,
+    image: article.coverImage || DEFAULT_OG_IMAGE,
+    datePublished: article.publishedAt,
+    dateModified: article.publishedAt,
+    author: {
+      "@type": "Organization",
+      name: article.author || "Institut Lorel",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Institut Lorel",
+      logo: { "@type": "ImageObject", url: DEFAULT_OG_IMAGE },
+    },
+    mainEntityOfPage: canonical,
+  };
 }
 
 export function resolvePageMeta(

@@ -1,9 +1,8 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/seo";
-import { getFormations } from "@/lib/data/platform-api";
+import { getFormations, getArticles } from "@/lib/data/platform-api";
 import { FORMATEURS } from "@/lib/data/formateurs";
 import { SERVICES } from "@/lib/data/services";
-import { ARTICLES } from "@/lib/data/blog";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
@@ -41,9 +40,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  const articleRoutes: MetadataRoute.Sitemap = ARTICLES.map((a) => ({
+  const articles = await getArticles();
+  const articleRoutes: MetadataRoute.Sitemap = articles.map((a) => ({
     url: `${SITE_URL}/blog/${a.slug}`,
-    lastModified: new Date(a.date),
+    lastModified: new Date(a.publishedAt),
     changeFrequency: "monthly",
     priority: 0.6,
   }));

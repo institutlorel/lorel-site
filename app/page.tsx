@@ -27,12 +27,13 @@ import { BlogPreview } from "@/components/home/BlogPreview";
 import { CentersSection } from "@/components/home/CentersSection";
 import { CTASection } from "@/components/home/CTASection";
 import { Footer } from "@/components/home/Footer";
-import { getSiteSettings, getTemoignages } from "@/lib/data/platform-api";
+import { getSiteSettings, getTemoignages, getArticles } from "@/lib/data/platform-api";
 
 export default async function Home() {
-  const [{ principal }, temoignages] = await Promise.all([
+  const [{ principal }, temoignages, previewArticles] = await Promise.all([
     getSiteSettings(),
     getTemoignages(),
+    getArticles(),
   ]);
   return (
     <>
@@ -50,7 +51,7 @@ export default async function Home() {
         <FormateursSection />
         <Temoignages temoignages={temoignages} />
         <Process />
-        <BlogPreview />
+        <BlogPreview articles={previewArticles.slice(0, 3)} />
         <CentersSection />
         <CTASection waNumber={principal} />
       </main>

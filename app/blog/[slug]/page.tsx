@@ -1,18 +1,40 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Calendar, Clock, Tag, ArrowUpRight } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Container } from "@/components/ui/Container";
-import { ARTICLES, getArticleBySlug, getRelatedArticles } from "@/lib/data/blog";
-import { getSiteSettings } from "@/lib/data/platform-api";
+import { getArticles, getArticle, getSiteSettings } from "@/lib/data/platform-api";
+import { Markdown } from "@/components/Markdown";
+import { JsonLd } from "@/components/JsonLd";
+import { buildMetadata, articleJsonLd, SITE_URL } from "@/lib/seo";
 
-export function generateStaticParams() {
-  return ARTICLES.map((a) => ({ slug: a.slug }));
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  const articles = await getArticles();
+  return articles.map((a) => ({ slug: a.slug }));
 }
 
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("fr-MA", {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const article = await getArticle(slug);
+  if (!article) return { title: "Article introuvable" };
+  return buildMetadata({
+    title: article.metaTitle ?? article.title,
+    description: article.metaDescription ?? article.excerpt,
+    image: article.ogImage ?? (article.coverImage || undefined),
+    path: `/blog/${slug}`,
+  });
+}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("fr-MA", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -25,21 +47,27 @@ export default async function BlogArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = getArticleBySlug(slug);
+  const [article, allArticles, { principal }] = await Promise.all([
+    getArticle(slug),
+    getArticles(),
+    getSiteSettings(),
+  ]);
   if (!article) notFound();
 
-  const related = getRelatedArticles(slug, article.categorie);
-  const { principal } = await getSiteSettings();
+  const related = allArticles
+    .filter((a) => a.slug !== slug && a.category === article.category)
+    .slice(0, 3);
 
   const waShareUrl = `https://wa.me/?text=${encodeURIComponent(
-    article.titre + " - https://institutlorel.com/blog/" + slug
+    article.title + " - " + SITE_URL + "/blog/" + slug
   )}`;
   const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-    "https://institutlorel.com/blog/" + slug
+    SITE_URL + "/blog/" + slug
   )}`;
 
   return (
     <>
+      <JsonLd data={articleJsonLd(article)} />
       <SiteHeader />
 
       {/* Hero */}
@@ -56,59 +84,59 @@ export default async function BlogArticlePage({
               Blog
             </Link>
             <span>/</span>
-            <span className="text-white/60 truncate max-w-[180px]">{article.titre}</span>
+            <span className="text-white/60 truncate max-w-[180px]">{article.title}</span>
           </div>
           <span className="inline-block font-body text-[10px] font-bold uppercase tracking-widest bg-brand-gold text-brand-dark px-3 py-1 rounded-sm mb-4">
-            {article.categorie}
+            {article.category}
           </span>
           <h1
             className="font-display font-bold text-white mb-6 max-w-3xl"
             style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)" }}
           >
-            {article.titre}
+            {article.title}
           </h1>
           <div className="flex flex-wrap items-center gap-4 text-white/50">
             <div>
-              <p className="font-body text-sm font-semibold text-white/80">{article.auteur}</p>
-              <p className="font-body text-xs text-white/40">{article.auteurRole}</p>
+              <p className="font-body text-sm font-semibold text-white/80">{article.author}</p>
             </div>
             <span className="font-body text-xs flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5" />
-              {formatDate(article.date)}
+              {formatDate(article.publishedAt)}
             </span>
             <span className="font-body text-xs flex items-center gap-1">
               <Clock className="w-3.5 h-3.5" />
-              {article.readTime} min de lecture
+              {article.readingMinutes} min de lecture
             </span>
           </div>
         </Container>
       </div>
 
       {/* Cover Image */}
-      <div className="bg-brand-dark">
-        <Container>
-          <div className="relative max-h-80 overflow-hidden rounded-2xl">
-            <img
-              src={article.image}
-              alt={article.titre}
-              className="w-full max-h-80 object-cover"
-            />
-          </div>
-        </Container>
-      </div>
+      {article.coverImage && (
+        <div className="bg-brand-dark">
+          <Container>
+            <div className="relative max-h-80 overflow-hidden rounded-2xl">
+              <img
+                src={article.coverImage}
+                alt={article.title}
+                className="w-full max-h-80 object-cover"
+              />
+            </div>
+          </Container>
+        </div>
+      )}
 
       {/* Article Body */}
       <section className="bg-white py-12">
         <Container>
           <div className="max-w-2xl mx-auto">
-            {article.contenu.map((para, i) => (
-              <p
-                key={i}
-                className="font-body text-base text-text-primary leading-[1.9] mb-6"
-              >
-                {para}
+            {article.content ? (
+              <Markdown>{article.content}</Markdown>
+            ) : (
+              <p className="font-body text-base text-text-muted italic">
+                Contenu non disponible.
               </p>
-            ))}
+            )}
 
             {/* Share */}
             <div className="mt-10 pt-8 border-t border-gray-100">
@@ -175,18 +203,20 @@ export default async function BlogArticlePage({
                 >
                   <div className="relative h-36 overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-brand-blue to-brand-dark" />
-                    <img
-                      src={rel.image}
-                      alt={rel.titre}
-                      className="absolute inset-0 w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500"
-                    />
+                    {rel.coverImage && (
+                      <img
+                        src={rel.coverImage}
+                        alt={rel.title}
+                        className="absolute inset-0 w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500"
+                      />
+                    )}
                   </div>
                   <div className="p-4">
                     <h3 className="font-display font-bold text-brand-dark text-[0.95rem] leading-snug mb-2 group-hover:text-brand-blue transition-colors">
-                      {rel.titre}
+                      {rel.title}
                     </h3>
                     <div className="flex items-center justify-between text-text-muted">
-                      <span className="font-body text-[10px]">{formatDate(rel.date)}</span>
+                      <span className="font-body text-[10px]">{formatDate(rel.publishedAt)}</span>
                       <ArrowUpRight className="w-3.5 h-3.5 group-hover:text-brand-gold transition-colors" />
                     </div>
                   </div>
