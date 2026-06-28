@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { PageSeoEntry, SiteFormation, SiteArticle } from "@/lib/data/platform-api";
+import type { PageSeoEntry, SiteFormation, SiteArticleFull } from "@/lib/data/platform-api";
 
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://institutlorel.com";
 
@@ -144,16 +144,22 @@ export function courseJsonLd(formation: SiteFormation) {
   return base;
 }
 
-export function articleJsonLd(article: SiteArticle) {
+export function articleJsonLd(article: SiteArticleFull) {
   const canonical = `${SITE_URL}/blog/${article.slug}`;
+  const wordCount = article.content
+    ? article.content.split(/\s+/).filter(Boolean).length
+    : undefined;
   return {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: article.title,
-    description: article.excerpt,
-    image: article.coverImage || DEFAULT_OG_IMAGE,
+    headline: article.metaTitle ?? article.title,
+    description: article.metaDescription ?? article.excerpt,
+    image: [article.ogImage ?? article.coverImage ?? DEFAULT_OG_IMAGE],
     datePublished: article.publishedAt,
     dateModified: article.publishedAt,
+    inLanguage: "fr",
+    articleSection: article.category || undefined,
+    ...(wordCount ? { wordCount } : {}),
     author: {
       "@type": "Organization",
       name: article.author || "Institut Lorel",
@@ -163,7 +169,40 @@ export function articleJsonLd(article: SiteArticle) {
       name: "Institut Lorel",
       logo: { "@type": "ImageObject", url: DEFAULT_OG_IMAGE },
     },
-    mainEntityOfPage: canonical,
+    mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
+    url: canonical,
+  };
+}
+
+export function faqPageJsonLd(faq: { question: string; answer: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
+}
+
+export function breadcrumbJsonLd(article: { slug: string; title: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: article.title,
+        item: `${SITE_URL}/blog/${article.slug}`,
+      },
+    ],
   };
 }
 

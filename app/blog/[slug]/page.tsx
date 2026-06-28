@@ -5,10 +5,22 @@ import { Calendar, Clock, Tag, ArrowUpRight } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Container } from "@/components/ui/Container";
-import { getArticles, getArticle, getArticlePreview, getSiteSettings } from "@/lib/data/platform-api";
+import {
+  getArticles,
+  getArticle,
+  getArticlePreview,
+  getSiteSettings,
+} from "@/lib/data/platform-api";
 import { Markdown } from "@/components/Markdown";
 import { JsonLd } from "@/components/JsonLd";
-import { buildMetadata, articleJsonLd, SITE_URL } from "@/lib/seo";
+import {
+  articleJsonLd,
+  faqPageJsonLd,
+  breadcrumbJsonLd,
+  SITE_URL,
+  DEFAULT_OG_IMAGE,
+} from "@/lib/seo";
+import { extractToc } from "@/lib/toc";
 
 export const revalidate = 300;
 
@@ -39,12 +51,35 @@ export async function generateMetadata({
 
   const article = await getArticle(slug);
   if (!article) return { title: "Article introuvable" };
-  return buildMetadata({
-    title: article.metaTitle ?? article.title,
-    description: article.metaDescription ?? article.excerpt,
-    image: article.ogImage ?? (article.coverImage || undefined),
-    path: `/blog/${slug}`,
-  });
+
+  const title = article.metaTitle ?? article.title;
+  const description = article.metaDescription ?? article.excerpt;
+  const imageUrl = article.ogImage ?? article.coverImage ?? DEFAULT_OG_IMAGE;
+  const canonical = `${SITE_URL}/blog/${slug}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: {
+      type: "article",
+      title,
+      description,
+      url: canonical,
+      siteName: "Institut Lorel",
+      locale: "fr_MA",
+      publishedTime: article.publishedAt,
+      authors: [article.author || "Institut Lorel"],
+      section: article.category || undefined,
+      images: [{ url: imageUrl }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+    },
+  };
 }
 
 function formatDate(iso: string) {
@@ -77,6 +112,10 @@ export default async function BlogArticlePage({
   ]);
   if (!article) notFound();
 
+  const toc = extractToc(article.content);
+  const hasToc = toc.length >= 3;
+  const faq = article.faq ?? [];
+
   const related = allArticles
     .filter((a) => a.slug !== slug && a.category === article.category)
     .slice(0, 3);
@@ -90,7 +129,14 @@ export default async function BlogArticlePage({
 
   return (
     <>
-      {!isPreview && <JsonLd data={articleJsonLd(article)} />}
+      {/* JSON-LD — normal mode only, never in preview */}
+      {!isPreview && (
+        <>
+          <JsonLd data={articleJsonLd(article)} />
+          {faq.length > 0 && <JsonLd data={faqPageJsonLd(faq)} />}
+          <JsonLd data={breadcrumbJsonLd(article)} />
+        </>
+      )}
 
       {/* Preview banner */}
       {isPreview && (
@@ -101,7 +147,7 @@ export default async function BlogArticlePage({
 
       <SiteHeader />
 
-      {/* Hero — shifted down slightly on preview to clear banner */}
+      {/* Hero — shifted down on preview to clear banner */}
       <div className={`bg-brand-dark relative overflow-hidden${isPreview ? " mt-9" : ""}`}>
         <div className="absolute inset-0 bg-hero-gradient" />
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-brand-gold/25 to-transparent" />
@@ -131,11 +177,11 @@ export default async function BlogArticlePage({
               <p className="font-body text-sm font-semibold text-white/80">{article.author}</p>
             </div>
             <span className="font-body text-xs flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5" />
+              <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
               {formatDate(article.publishedAt)}
             </span>
             <span className="font-body text-xs flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5" />
+              <Clock className="w-3.5 h-3.5" aria-hidden="true" />
               {article.readingMinutes} min de lecture
             </span>
           </div>
@@ -149,7 +195,7 @@ export default async function BlogArticlePage({
             <div className="relative max-h-80 overflow-hidden rounded-2xl">
               <img
                 src={article.coverImage}
-                alt={article.title}
+                alt={article.coverAlt || article.title}
                 className="w-full max-h-80 object-cover"
               />
             </div>
@@ -161,6 +207,35 @@ export default async function BlogArticlePage({
       <section className="bg-white py-12">
         <Container>
           <div className="max-w-2xl mx-auto">
+
+            {/* Table of Contents / Sommaire */}
+            {hasToc && (
+              <nav
+                aria-label="Sommaire"
+                className="mb-8 rounded-xl border border-brand-gold/30 bg-amber-50/50 p-5"
+              >
+                <p className="font-body text-[10px] font-bold uppercase tracking-widest text-brand-gold mb-3">
+                  Sommaire
+                </p>
+                <ol className="list-none m-0 p-0 space-y-1.5">
+                  {toc.map((item) => (
+                    <li key={item.id} className={item.depth === 3 ? "pl-4" : ""}>
+                      <a
+                        href={`#${item.id}`}
+                        className="font-body text-sm text-brand-dark hover:text-brand-blue transition-colors no-underline leading-snug"
+                      >
+                        {item.depth === 3 && (
+                          <span className="mr-1.5 text-brand-gold/60">›</span>
+                        )}
+                        {item.text}
+                      </a>
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
+
+            {/* Article content */}
             {article.content ? (
               <Markdown>{article.content}</Markdown>
             ) : (
@@ -203,7 +278,7 @@ export default async function BlogArticlePage({
             {/* Tags */}
             {article.tags.length > 0 && (
               <div className="mt-6 flex flex-wrap gap-2">
-                <Tag className="w-3.5 h-3.5 text-text-muted mt-1" />
+                <Tag className="w-3.5 h-3.5 text-text-muted mt-1" aria-hidden="true" />
                 {article.tags.map((tag) => (
                   <span
                     key={tag}
@@ -217,6 +292,40 @@ export default async function BlogArticlePage({
           </div>
         </Container>
       </section>
+
+      {/* FAQ Accordion */}
+      {faq.length > 0 && (
+        <section className="bg-brand-cream py-12">
+          <Container>
+            <div className="max-w-2xl mx-auto">
+              <h2 className="font-display font-bold text-brand-dark text-2xl mb-6">
+                Questions fréquentes
+              </h2>
+              <dl className="space-y-3">
+                {faq.map((item, i) => (
+                  <details
+                    key={i}
+                    className="group bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm"
+                  >
+                    <summary className="flex cursor-pointer select-none items-start justify-between gap-4 p-5 list-none font-body font-semibold text-brand-dark text-[0.95rem] leading-snug">
+                      <span>{item.question}</span>
+                      <span
+                        className="mt-0.5 shrink-0 w-5 h-5 rounded-full border border-brand-gold/40 flex items-center justify-center text-brand-gold text-sm font-light leading-none transition-transform group-open:rotate-45"
+                        aria-hidden="true"
+                      >
+                        +
+                      </span>
+                    </summary>
+                    <div className="px-5 pb-5 font-body text-sm text-text-primary leading-relaxed border-t border-gray-50 pt-3">
+                      {item.answer}
+                    </div>
+                  </details>
+                ))}
+              </dl>
+            </div>
+          </Container>
+        </section>
+      )}
 
       {/* Related Articles */}
       {related.length > 0 && (

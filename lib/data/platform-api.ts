@@ -295,6 +295,7 @@ export interface SiteArticle {
   title: string;
   excerpt: string;
   coverImage: string;
+  coverAlt?: string | null;
   category: string;
   tags: string[];
   publishedAt: string;
@@ -303,6 +304,7 @@ export interface SiteArticle {
   metaTitle?: string;
   metaDescription?: string;
   ogImage?: string;
+  faq?: { question: string; answer: string }[];
 }
 
 export interface SiteArticleFull extends SiteArticle {
@@ -317,6 +319,7 @@ function mapArticle(api: any): SiteArticle {
     title: api.title ?? "",
     excerpt: api.excerpt ?? "",
     coverImage: api.coverImage ?? "",
+    coverAlt: api.coverAlt ?? null,
     category: api.category ?? "",
     tags: Array.isArray(api.tags) ? api.tags : [],
     publishedAt: api.publishedAt ?? new Date().toISOString(),
@@ -325,6 +328,7 @@ function mapArticle(api: any): SiteArticle {
     metaTitle: api.metaTitle ?? undefined,
     metaDescription: api.metaDescription ?? undefined,
     ogImage: api.ogImage ?? undefined,
+    faq: Array.isArray(api.faq) ? api.faq : [],
   };
 }
 
