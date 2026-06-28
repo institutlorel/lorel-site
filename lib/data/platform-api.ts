@@ -351,3 +351,18 @@ export async function getArticle(slug: string): Promise<SiteArticleFull | null> 
     return null;
   }
 }
+
+export async function getArticlePreview(slug: string, token: string): Promise<SiteArticleFull | null> {
+  try {
+    const res = await fetch(
+      `${BASE}/api/public/blog/preview/${slug}?token=${encodeURIComponent(token)}`,
+      { cache: "no-store" }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data.article) return null;
+    return { ...mapArticle(data.article), content: data.article.content ?? "" };
+  } catch {
+    return null;
+  }
+}

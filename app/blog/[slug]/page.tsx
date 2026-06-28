@@ -5,7 +5,7 @@ import { Calendar, Clock, Tag, ArrowUpRight } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Container } from "@/components/ui/Container";
-import { getArticles, getArticle, getSiteSettings } from "@/lib/data/platform-api";
+import { getArticles, getArticle, getArticlePreview, getSiteSettings } from "@/lib/data/platform-api";
 import { Markdown } from "@/components/Markdown";
 import { JsonLd } from "@/components/JsonLd";
 import { buildMetadata, articleJsonLd, SITE_URL } from "@/lib/seo";
@@ -19,10 +19,24 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+  const sp = await searchParams;
+  const previewToken = typeof sp.preview === "string" ? sp.preview : undefined;
+  const isPreview =
+    !!previewToken && previewToken === process.env.BLOG_PREVIEW_TOKEN;
+
+  if (isPreview) {
+    return {
+      title: "Aperçu — brouillon",
+      robots: { index: false, follow: false },
+    };
+  }
+
   const article = await getArticle(slug);
   if (!article) return { title: "Article introuvable" };
   return buildMetadata({
@@ -43,12 +57,21 @@ function formatDate(iso: string) {
 
 export default async function BlogArticlePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { slug } = await params;
+  const sp = await searchParams;
+  const previewToken = typeof sp.preview === "string" ? sp.preview : undefined;
+  const isPreview =
+    !!previewToken && previewToken === process.env.BLOG_PREVIEW_TOKEN;
+
   const [article, allArticles, { principal }] = await Promise.all([
-    getArticle(slug),
+    isPreview
+      ? getArticlePreview(slug, process.env.BLOG_PREVIEW_TOKEN!)
+      : getArticle(slug),
     getArticles(),
     getSiteSettings(),
   ]);
@@ -67,11 +90,19 @@ export default async function BlogArticlePage({
 
   return (
     <>
-      <JsonLd data={articleJsonLd(article)} />
+      {!isPreview && <JsonLd data={articleJsonLd(article)} />}
+
+      {/* Preview banner */}
+      {isPreview && (
+        <div className="fixed top-0 inset-x-0 z-50 bg-amber-400 text-amber-900 text-center font-body text-sm font-bold py-2 shadow-md">
+          👁 Aperçu — brouillon non publié
+        </div>
+      )}
+
       <SiteHeader />
 
-      {/* Hero */}
-      <div className="bg-brand-dark relative overflow-hidden">
+      {/* Hero — shifted down slightly on preview to clear banner */}
+      <div className={`bg-brand-dark relative overflow-hidden${isPreview ? " mt-9" : ""}`}>
         <div className="absolute inset-0 bg-hero-gradient" />
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-brand-gold/25 to-transparent" />
         <Container className="relative z-10 py-14 lg:py-18">
