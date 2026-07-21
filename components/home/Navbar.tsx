@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -90,9 +91,14 @@ export function Navbar() {
       <div className="max-w-screen-xl mx-auto px-5 lg:px-10 h-16 flex items-center justify-between gap-4">
         {/* Logo — gold "L" box is always gold */}
         <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-          <div className="w-8 h-8 border border-brand-gold/70 group-hover:border-brand-gold rounded flex items-center justify-center transition-colors duration-300">
-            <span className="font-display text-brand-gold font-bold text-base leading-none">L</span>
-          </div>
+          <Image
+            src="/logo-symbol.png"
+            alt="Institut Lorel"
+            width={32}
+            height={32}
+            className="w-8 h-8 object-contain shrink-0"
+            priority
+          />
           <div className="leading-none">
             <div
               className={`font-display font-bold tracking-[0.14em] text-[13px] uppercase transition-colors duration-300 ${logoText}`}

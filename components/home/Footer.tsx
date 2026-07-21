@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Phone, Mail, ArrowRight, Send } from "lucide-react";
 
@@ -100,9 +101,13 @@ export function Footer({ waNumber }: { waNumber?: string }) {
           {/* Brand column */}
           <div className="lg:col-span-3">
             <Link href="/" className="flex items-center gap-2.5 mb-5">
-              <div className="w-8 h-8 border border-brand-gold/50 rounded flex items-center justify-center">
-                <span className="font-display text-brand-gold font-bold text-sm">L</span>
-              </div>
+              <Image
+                src="/logo-symbol.png"
+                alt="Institut Lorel"
+                width={32}
+                height={32}
+                className="w-8 h-8 object-contain shrink-0"
+              />
               <div>
                 <div className="font-display font-bold text-white tracking-[0.14em] text-[13px] uppercase">Lorel</div>
                 <div className="font-body text-[9px] text-brand-gold/45 tracking-[0.22em] uppercase">Institut</div>
