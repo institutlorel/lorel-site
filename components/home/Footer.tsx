@@ -104,9 +104,9 @@ export function Footer({ waNumber }: { waNumber?: string }) {
               <Image
                 src="/logo-symbol.png"
                 alt="Institut Lorel"
-                width={32}
-                height={32}
-                className="w-8 h-8 object-contain shrink-0"
+                width={40}
+                height={40}
+                className="w-10 h-10 object-contain shrink-0"
               />
               <div>
                 <div className="font-display font-bold text-white tracking-[0.14em] text-[13px] uppercase">Lorel</div>
