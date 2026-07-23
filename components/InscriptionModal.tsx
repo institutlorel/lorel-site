@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { X, Lock, ShieldCheck } from "lucide-react";
+import { PhoneInput } from "@/components/PhoneInput";
+import { DEFAULT_COUNTRY_ISO2, toE164, localDigitCount } from "@/lib/data/countries";
 
 type Cta = "PAYER" | "RAPPEL";
 
@@ -65,6 +67,7 @@ export function InscriptionModal({
 }: Props) {
   const [prenom, setPrenom] = useState("");
   const [nom, setNom] = useState("");
+  const [countryIso2, setCountryIso2] = useState(DEFAULT_COUNTRY_ISO2);
   const [telephone, setTelephone] = useState("");
   const [email, setEmail] = useState("");
   const [honeypot, setHoneypot] = useState("");
@@ -86,6 +89,7 @@ export function InscriptionModal({
     if (open) {
       setPrenom("");
       setNom("");
+      setCountryIso2(DEFAULT_COUNTRY_ISO2);
       setTelephone("");
       setEmail("");
       setHoneypot("");
@@ -102,7 +106,7 @@ export function InscriptionModal({
     const errs: { prenom?: string; nom?: string; telephone?: string } = {};
     if (prenom.trim().length < 2) errs.prenom = "Minimum 2 caractères";
     if (nom.trim().length < 2) errs.nom = "Minimum 2 caractères";
-    if (telephone.trim().length < 6) errs.telephone = "Numéro invalide";
+    if (localDigitCount(telephone) < 6) errs.telephone = "Numéro de téléphone invalide";
     setErrors(errs);
     return Object.keys(errs).length === 0;
   }
@@ -122,7 +126,7 @@ export function InscriptionModal({
         body: JSON.stringify({
           prenom: prenom.trim(),
           nom: nom.trim(),
-          telephone: telephone.trim(),
+          telephone: toE164(countryIso2, telephone),
           email: email.trim() || undefined,
           formationId,
           cta: choice.cta,
@@ -321,15 +325,16 @@ export function InscriptionModal({
                   <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">
                     Téléphone *
                   </label>
-                  <input
-                    type="tel"
-                    value={telephone}
-                    onChange={(e) => {
-                      setTelephone(e.target.value);
+                  <PhoneInput
+                    countryIso2={countryIso2}
+                    onCountryChange={setCountryIso2}
+                    localNumber={telephone}
+                    onLocalNumberChange={(v) => {
+                      setTelephone(v);
                       if (errors.telephone) setErrors((prev) => ({ ...prev, telephone: undefined }));
                     }}
-                    placeholder="+212 6 00 00 00 00"
-                    className={inputClass + (errors.telephone ? " !border-red-400 !ring-red-100" : "")}
+                    error={errors.telephone}
+                    inputClassName={inputClass}
                   />
                   {errors.telephone && (
                     <p className="font-body text-[11px] text-red-500 mt-1">{errors.telephone}</p>
