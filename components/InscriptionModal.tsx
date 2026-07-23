@@ -69,10 +69,11 @@ export function InscriptionModal({
   const [nom, setNom] = useState("");
   const [countryIso2, setCountryIso2] = useState(DEFAULT_COUNTRY_ISO2);
   const [telephone, setTelephone] = useState("");
+  const [ville, setVille] = useState("");
   const [email, setEmail] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const [choiceIdx, setChoiceIdx] = useState(0);
-  const [errors, setErrors] = useState<{ prenom?: string; nom?: string; telephone?: string }>({});
+  const [errors, setErrors] = useState<{ prenom?: string; nom?: string; telephone?: string; ville?: string }>({});
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -91,6 +92,7 @@ export function InscriptionModal({
       setNom("");
       setCountryIso2(DEFAULT_COUNTRY_ISO2);
       setTelephone("");
+      setVille("");
       setEmail("");
       setHoneypot("");
       setChoiceIdx(0);
@@ -103,10 +105,11 @@ export function InscriptionModal({
   if (!open) return null;
 
   function validate(): boolean {
-    const errs: { prenom?: string; nom?: string; telephone?: string } = {};
+    const errs: { prenom?: string; nom?: string; telephone?: string; ville?: string } = {};
     if (prenom.trim().length < 2) errs.prenom = "Minimum 2 caractères";
     if (nom.trim().length < 2) errs.nom = "Minimum 2 caractères";
     if (localDigitCount(telephone) < 6) errs.telephone = "Numéro de téléphone invalide";
+    if (ville.trim().length < 2) errs.ville = "Veuillez indiquer votre ville";
     setErrors(errs);
     return Object.keys(errs).length === 0;
   }
@@ -127,6 +130,7 @@ export function InscriptionModal({
           prenom: prenom.trim(),
           nom: nom.trim(),
           telephone: toE164(countryIso2, telephone),
+          ville: ville.trim(),
           email: email.trim() || undefined,
           formationId,
           cta: choice.cta,
@@ -338,6 +342,24 @@ export function InscriptionModal({
                   />
                   {errors.telephone && (
                     <p className="font-body text-[11px] text-red-500 mt-1">{errors.telephone}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">
+                    Ville *
+                  </label>
+                  <input
+                    value={ville}
+                    onChange={(e) => {
+                      setVille(e.target.value);
+                      if (errors.ville) setErrors((prev) => ({ ...prev, ville: undefined }));
+                    }}
+                    placeholder="Casablanca, Marrakech…"
+                    className={inputClass + (errors.ville ? " !border-red-400 !ring-red-100" : "")}
+                  />
+                  {errors.ville && (
+                    <p className="font-body text-[11px] text-red-500 mt-1">{errors.ville}</p>
                   )}
                 </div>
 
