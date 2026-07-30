@@ -29,7 +29,12 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     // Skip API routes, Next internals, and any path with a file extension
-    // (favicon.ico, icon.png, sitemap.xml, robots.txt, /logo-symbol.png, etc.)
-    "/((?!api/|_next/static/|_next/image/|.*\\..*).*)",
+    // (favicon.ico, icon.png, sitemap.xml, robots.txt, /logo-symbol.png, etc.).
+    // NOTE: no trailing slash after "_next/image" — the actual request path is
+    // exactly "/_next/image" (query string only, no nested segment), so a
+    // trailing slash here would never match and the exclusion would silently
+    // do nothing, causing every optimized image on the site to be rewritten
+    // to /fr/_next/image?... and 404 (this happened once already).
+    "/((?!api/|_next/static/|_next/image|.*\\..*).*)",
   ],
 };
