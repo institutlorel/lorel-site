@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 import { useInView } from "framer-motion";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/LocaleLink";
 import { MapPin, Award, Target, Heart } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";

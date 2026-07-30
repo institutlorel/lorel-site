@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/LocaleLink";
 import { Clock, Star, ArrowUpRight, ArrowRight, MonitorPlay, Building, Layers } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import type { Formation } from "@/lib/data/formations";

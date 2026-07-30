@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Award, Briefcase, Users, BadgeCheck, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/LocaleLink";
 import { Container } from "@/components/ui/Container";
 
 const SERVICES = [

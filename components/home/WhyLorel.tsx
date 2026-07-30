@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/LocaleLink";
 import { Container } from "@/components/ui/Container";
 import { SITE_IMAGES } from "@/lib/data/images";
 

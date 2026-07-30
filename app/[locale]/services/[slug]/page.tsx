@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/LocaleLink";
 import { CheckCircle, ArrowUpRight } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";

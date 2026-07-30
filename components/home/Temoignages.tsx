@@ -62,7 +62,7 @@ export function Temoignages({ temoignages }: Props) {
                 {[1, 2, 3, 4, 5].map((s) => (
                   <Star key={s} className="w-3 h-3 text-brand-gold fill-brand-gold" />
                 ))}
-                <span className="font-body text-[10px] text-text-muted ml-1.5">Note moyenne 4.9/5</span>
+                <span className="font-body text-[10px] text-text-muted ms-1.5">Note moyenne 4.9/5</span>
               </div>
             </div>
           </motion.div>
@@ -126,7 +126,7 @@ export function Temoignages({ temoignages }: Props) {
                     </div>
                   </div>
                   {t.resultat && (
-                    <div className="hidden sm:block ml-auto">
+                    <div className="hidden sm:block ms-auto">
                       <span className="font-body text-[11px] font-semibold text-brand-gold bg-brand-gold/8 border border-brand-gold/20 px-3 py-1.5 rounded-full">
                         {t.resultat}
                       </span>

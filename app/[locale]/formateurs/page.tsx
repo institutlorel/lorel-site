@@ -13,7 +13,7 @@ export async function generateMetadata({
   return buildMetadata({ ...m, path: "/formateurs" });
 }
 
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/LocaleLink";
 import { ArrowUpRight, Star } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";

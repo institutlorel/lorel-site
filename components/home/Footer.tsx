@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/LocaleLink";
 import { MapPin, Phone, Mail, ArrowRight, Send } from "lucide-react";
 
 const SOCIAL = [

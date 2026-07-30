@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/LocaleLink";
 import { Clock, Star, ArrowUpRight, MonitorPlay, Building, Layers } from "lucide-react";
 import type { Formation } from "@/lib/data/formations";
 import { getCategoryAccent } from "@/lib/data/accents";

@@ -13,7 +13,7 @@ export async function generateMetadata({
   return buildMetadata({ ...m, path: "/services" });
 }
 
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/LocaleLink";
 import {
   Award,
   Briefcase,

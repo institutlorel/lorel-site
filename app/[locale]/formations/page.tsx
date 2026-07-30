@@ -13,7 +13,7 @@ export async function generateMetadata({
   return buildMetadata({ ...m, path: "/formations" });
 }
 
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/LocaleLink";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Container } from "@/components/ui/Container";

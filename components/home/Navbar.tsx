@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import { LocaleLink as Link } from "@/components/LocaleLink";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles,
@@ -18,6 +19,8 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import { LANGUES as LOCALES, LANGUE_INFO, LANGUE_DEFAUT, type Langue } from "@/lib/i18n/config";
+import { localeHref, stripLocaleFromPathname } from "@/lib/i18n/href";
 
 const CATEGORIES = [
   { key: "en-ligne", label: "Formations en ligne", desc: "Vidéos, à votre rythme", icon: MonitorPlay },
@@ -26,12 +29,6 @@ const CATEGORIES = [
   { key: "individuel", label: "Formations individuelles", desc: "Séances 1-on-1", icon: Sparkles },
   { key: "vae", label: "VAE", desc: "Validation des acquis", icon: BookOpen },
   { key: "consulting", label: "Consulting", desc: "2h avec un expert", icon: TrendingUp },
-];
-
-const LANGUES = [
-  { code: "fr", label: "FR", full: "Français" },
-  { code: "ar", label: "AR", full: "العربية" },
-  { code: "en", label: "EN", full: "English" },
 ];
 
 const NAV_LINKS = [
@@ -46,9 +43,22 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
-  const [activeLang, setActiveLang] = useState("fr");
   const megaRef = useRef<HTMLDivElement>(null);
   const langRef = useRef<HTMLDivElement>(null);
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const routeParams = useParams<{ locale?: string }>();
+  const activeLang = (routeParams?.locale as Langue | undefined) ?? LANGUE_DEFAUT;
+
+  function switchLocale(target: Langue) {
+    const bare = stripLocaleFromPathname(pathname);
+    // Read the query string at click-time (not via useSearchParams, which would
+    // force this whole prerendered page to bail out to client-side rendering).
+    const qs = typeof window !== "undefined" ? window.location.search : "";
+    router.push(localeHref(bare, target) + qs);
+    setLangOpen(false);
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY >= 60);
@@ -138,7 +148,7 @@ export function Navbar() {
                   className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-[580px] bg-white rounded-xl shadow-card-hover border border-gray-100 overflow-hidden"
                 >
                   <div className="grid grid-cols-3 gap-0 p-4">
-                    <div className="col-span-2 grid grid-cols-2 gap-1 pr-4 border-r border-gray-100">
+                    <div className="col-span-2 grid grid-cols-2 gap-1 pe-4 border-e border-gray-100">
                       {CATEGORIES.map((cat) => {
                         const Icon = cat.icon;
                         return (
@@ -160,7 +170,7 @@ export function Navbar() {
                         );
                       })}
                     </div>
-                    <div className="pl-4 flex flex-col justify-center">
+                    <div className="ps-4 flex flex-col justify-center">
                       <Link
                         href="/formations"
                         className="group/item flex flex-col gap-3 p-4 rounded-xl bg-brand-gold/10 hover:bg-brand-gold/20 transition-colors duration-200 border border-brand-gold/20 hover:border-brand-gold/40"
@@ -220,20 +230,20 @@ export function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 4 }}
                   transition={{ duration: 0.15 }}
-                  className="absolute right-0 top-full mt-1 w-36 bg-brand-dark border border-white/10 rounded-lg overflow-hidden shadow-blue"
+                  className="absolute end-0 top-full mt-1 w-36 bg-brand-dark border border-white/10 rounded-lg overflow-hidden shadow-blue"
                 >
-                  {LANGUES.map((l) => (
+                  {LOCALES.map((code) => (
                     <button
-                      key={l.code}
-                      onClick={() => { setActiveLang(l.code); setLangOpen(false); }}
+                      key={code}
+                      onClick={() => switchLocale(code)}
                       className={`w-full flex items-center justify-between px-4 py-2.5 font-body text-[12px] transition-colors duration-150 ${
-                        activeLang === l.code
+                        activeLang === code
                           ? "text-brand-gold bg-white/5"
                           : "text-white/60 hover:text-white hover:bg-white/5"
                       }`}
                     >
-                      <span>{l.full}</span>
-                      <span className="text-[10px] font-bold tracking-wide opacity-50">{l.label}</span>
+                      <span>{LANGUE_INFO[code].nom}</span>
+                      <span className="text-[10px] font-bold tracking-wide opacity-50">{code.toUpperCase()}</span>
                     </button>
                   ))}
                 </motion.div>
@@ -243,7 +253,7 @@ export function Navbar() {
 
           <Link
             href="/contact"
-            className={`ml-2 inline-flex items-center border text-[12px] font-body font-semibold px-5 py-2 rounded-sm transition-all duration-200 tracking-wide ${ctaCls}`}
+            className={`ms-2 inline-flex items-center border text-[12px] font-body font-semibold px-5 py-2 rounded-sm transition-all duration-200 tracking-wide ${ctaCls}`}
           >
             S&apos;inscrire
           </Link>
@@ -282,7 +292,7 @@ export function Navbar() {
                   >
                     <Icon className="w-4 h-4 text-brand-gold/60 shrink-0" />
                     <span className="font-body text-sm">{cat.label}</span>
-                    <span className="ml-auto font-body text-[11px] text-white/25">{cat.desc}</span>
+                    <span className="ms-auto font-body text-[11px] text-white/25">{cat.desc}</span>
                   </Link>
                 );
               })}

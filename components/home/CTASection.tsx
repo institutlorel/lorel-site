@@ -1,7 +1,10 @@
 "use client";
 
 import { useRef } from "react";
+import { useParams } from "next/navigation";
 import { motion, useInView } from "framer-motion";
+import { LANGUE_DEFAUT, type Langue } from "@/lib/i18n/config";
+import { localeHref } from "@/lib/i18n/href";
 
 const WA_ICON = (
   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -19,6 +22,8 @@ const goldText: React.CSSProperties = {
 export function CTASection({ waNumber }: { waNumber?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const params = useParams<{ locale?: string }>();
+  const locale = (params?.locale as Langue | undefined) ?? LANGUE_DEFAUT;
 
   return (
     <section className="relative py-24 lg:py-36 bg-brand-dark overflow-hidden">
@@ -86,7 +91,7 @@ export function CTASection({ waNumber }: { waNumber?: string }) {
             </a>
           ) : (
             <a
-              href="/contact"
+              href={localeHref("/contact", locale)}
               className="group inline-flex items-center gap-3 bg-brand-gold hover:bg-brand-gold-light text-brand-dark font-body font-bold text-sm px-8 py-4 rounded-sm transition-colors duration-200 w-full sm:w-auto justify-center"
             >
               Nous contacter

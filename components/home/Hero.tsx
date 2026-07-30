@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Search, CalendarDays, Star, Building2, ArrowRight, BadgeCheck, Users } from "lucide-react";
-import Link from "next/link";
+import { LocaleLink as Link } from "@/components/LocaleLink";
 import { SITE_IMAGES } from "@/lib/data/images";
 
 const POPULAR = ["Photographie", "Marketing Digital", "Esthétique", "Comptabilité"];
@@ -118,7 +118,7 @@ export function Hero() {
               className="mb-4"
             >
               <div className="flex items-center bg-white rounded-xl shadow-gold overflow-hidden group">
-                <Search className="w-5 h-5 text-text-muted ml-4 shrink-0 group-focus-within:text-brand-blue transition-colors" />
+                <Search className="w-5 h-5 text-text-muted ms-4 shrink-0 group-focus-within:text-brand-blue transition-colors" />
                 <input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}

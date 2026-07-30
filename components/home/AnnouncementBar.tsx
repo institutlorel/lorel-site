@@ -1,10 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import { X, ArrowRight } from "lucide-react";
+import { LANGUE_DEFAUT, type Langue } from "@/lib/i18n/config";
+import { localeHref } from "@/lib/i18n/href";
 
 export function AnnouncementBar() {
   const [visible, setVisible] = useState(true);
+  const params = useParams<{ locale?: string }>();
+  const locale = (params?.locale as Langue | undefined) ?? LANGUE_DEFAUT;
 
   if (!visible) return null;
 
@@ -22,7 +27,7 @@ export function AnnouncementBar() {
 
         {/* CTA */}
         <a
-          href="/formations"
+          href={localeHref("/formations", locale)}
           className="hidden sm:inline-flex items-center gap-1 font-body text-[11px] font-semibold text-brand-gold hover:text-brand-gold-light transition-colors duration-200 tracking-wide"
         >
           En savoir plus
