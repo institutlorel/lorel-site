@@ -4,7 +4,12 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Container } from "@/components/ui/Container";
 
-export default function MerciPage() {
+export default async function MerciPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  await params; // locale threaded through for future use (I2+); not consumed yet
   return (
     <>
       <SiteHeader />

@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { getPageSeo } from "@/lib/data/platform-api";
 import { buildMetadata, resolvePageMeta } from "@/lib/seo";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  await params; // locale threaded through for future use (I2+); not consumed yet
   const seo = await getPageSeo();
   const m = resolvePageMeta(seo, "formations");
   return buildMetadata({ ...m, path: "/formations" });
@@ -18,10 +23,13 @@ import { FormationsClientGrid } from "./FormationsClientGrid";
 export const revalidate = 60;
 
 export default async function FormationsPage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ locale: string }>;
   searchParams: Promise<{ category?: string }>;
 }) {
+  await params; // locale threaded through for future use (I2+); not consumed yet
   const { category } = await searchParams;
   const formations = await getFormations(category ? { category } : undefined);
   const activeCategory = category ?? "";

@@ -5,7 +5,8 @@ import { CodeInjector } from "@/components/CodeInjector";
 import { JsonLd } from "@/components/JsonLd";
 import { getSiteSettings } from "@/lib/data/platform-api";
 import { organizationJsonLd } from "@/lib/seo";
-import "./globals.css";
+import { LANGUES, isRtl, type Langue } from "@/lib/i18n/config";
+import "../globals.css";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -61,11 +62,24 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export async function generateStaticParams() {
+  return LANGUES.map((locale) => ({ locale }));
+}
+
+export default async function RootLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const langue = locale as Langue;
   const { principal, code } = await getSiteSettings();
   return (
     <html
-      lang="fr"
+      lang={langue}
+      dir={isRtl(langue) ? "rtl" : "ltr"}
       className={`${cormorant.variable} ${inter.variable} ${tajawal.variable}`}
     >
       <body>

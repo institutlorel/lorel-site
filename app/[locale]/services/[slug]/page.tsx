@@ -16,7 +16,7 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
   const service = getServiceBySlug(slug);
@@ -32,7 +32,7 @@ export async function generateMetadata({
 export default async function ServiceDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ locale: string; slug: string }>;
 }) {
   const { slug } = await params;
   const service = getServiceBySlug(slug);

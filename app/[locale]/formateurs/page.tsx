@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { getPageSeo } from "@/lib/data/platform-api";
 import { buildMetadata, resolvePageMeta } from "@/lib/seo";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  await params; // locale threaded through for future use (I2+); not consumed yet
   const seo = await getPageSeo();
   const m = resolvePageMeta(seo, "formateurs");
   return buildMetadata({ ...m, path: "/formateurs" });
@@ -16,7 +21,12 @@ import { Container } from "@/components/ui/Container";
 import { FORMATEURS } from "@/lib/data/formateurs";
 import { getSiteSettings } from "@/lib/data/platform-api";
 
-export default async function FormateursPage() {
+export default async function FormateursPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  await params; // locale threaded through for future use (I2+); not consumed yet
   const { principal } = await getSiteSettings();
   return (
     <>

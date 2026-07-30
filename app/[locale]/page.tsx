@@ -4,7 +4,12 @@ import { buildMetadata, resolvePageMeta } from "@/lib/seo";
 
 export const revalidate = 60;
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  await params; // locale threaded through for future use (I2+); not consumed yet
   const seo = await getPageSeo();
   const m = resolvePageMeta(seo, "home");
   return buildMetadata({ ...m, path: "/" });
@@ -29,7 +34,12 @@ import { CTASection } from "@/components/home/CTASection";
 import { Footer } from "@/components/home/Footer";
 import { getSiteSettings, getTemoignages, getArticles } from "@/lib/data/platform-api";
 
-export default async function Home() {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  await params; // locale threaded through for future use (I2+); not consumed yet
   const [{ principal }, temoignages, previewArticles] = await Promise.all([
     getSiteSettings(),
     getTemoignages(),
