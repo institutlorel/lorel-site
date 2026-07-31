@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { LocaleLink as Link } from "@/components/LocaleLink";
 import { ArrowUpRight, Clock, Calendar } from "lucide-react";
-import { SiteHeader } from "@/components/layout/SiteHeader";
-import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Container } from "@/components/ui/Container";
 import type { SiteArticle } from "@/lib/data/platform-api";
 
@@ -43,8 +41,6 @@ export function BlogListClient({ articles }: Props) {
 
   return (
     <>
-      <SiteHeader />
-
       {/* Hero */}
       <div className="bg-brand-dark relative overflow-hidden">
         <div className="absolute inset-0 bg-hero-gradient" />
@@ -236,8 +232,6 @@ export function BlogListClient({ articles }: Props) {
           </Link>
         </Container>
       </section>
-
-      <SiteFooter />
     </>
   );
 }

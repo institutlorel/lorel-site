@@ -4,8 +4,6 @@ import { useRef, useEffect, useState } from "react";
 import { useInView } from "framer-motion";
 import { LocaleLink as Link } from "@/components/LocaleLink";
 import { MapPin, Award, Target, Heart } from "lucide-react";
-import { SiteHeader } from "@/components/layout/SiteHeader";
-import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Container } from "@/components/ui/Container";
 import { CentersSection } from "@/components/home/CentersSection";
 
@@ -57,8 +55,6 @@ interface Props {
 export function AboutClient({ waNumber }: Props) {
   return (
     <>
-      <SiteHeader />
-
       {/* Hero */}
       <div className="bg-brand-dark relative overflow-hidden">
         <div className="absolute inset-0 bg-hero-gradient" />
@@ -261,8 +257,6 @@ export function AboutClient({ waNumber }: Props) {
           </div>
         </Container>
       </section>
-
-      <SiteFooter />
     </>
   );
 }

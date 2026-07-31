@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type { Formation } from "./formations";
 
 export type SiteFormation = Formation;
@@ -57,10 +58,14 @@ const DEFAULT_SETTINGS: SiteSettings = {
   code: { head: null, bodyStart: null, footer: null },
 };
 
-export async function getSiteSettings(): Promise<SiteSettings> {
+// Wrapped in React's cache() so multiple call sites within one server render
+// (layout + page + SiteFooter, etc.) share a single request instead of firing
+// one each.
+export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
   try {
     const res = await fetch(`${BASE}/api/public/site-settings`, {
       next: { revalidate: 60 },
+      signal: AbortSignal.timeout(6000),
     });
     if (!res.ok) return DEFAULT_SETTINGS;
     const data = await res.json();
@@ -81,7 +86,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   } catch {
     return DEFAULT_SETTINGS;
   }
-}
+});
 
 function initials(name?: string): string {
   if (!name) return "IL";
@@ -181,7 +186,7 @@ export async function getFormations(params?: {
     if (params?.ville) qs.set("ville", params.ville);
     if (params?.individuel) qs.set("individuel", "true");
     const url = `${BASE}/api/public/formations${qs.toString() ? "?" + qs : ""}`;
-    const res = await fetch(url, { next: { revalidate: 60 } });
+    const res = await fetch(url, { next: { revalidate: 60 }, signal: AbortSignal.timeout(6000) });
     if (!res.ok) return [];
     const data = await res.json();
     return (data.formations ?? []).map(mapFormation);
@@ -195,6 +200,7 @@ export async function getFormation(slug: string): Promise<SiteFormation | null> 
   try {
     const res = await fetch(`${BASE}/api/public/formations/${slug}`, {
       next: { revalidate: 60 },
+      signal: AbortSignal.timeout(6000),
     });
     if (!res.ok) return null;
     const data = await res.json();
@@ -258,6 +264,7 @@ export async function getTemoignages(): Promise<SiteTemoignage[]> {
   try {
     const res = await fetch(`${BASE}/api/public/temoignages`, {
       next: { revalidate: 300 },
+      signal: AbortSignal.timeout(6000),
     });
     if (!res.ok) return [];
     const data = await res.json();
@@ -276,10 +283,13 @@ export interface PageSeoEntry {
 
 export type PageSeoMap = Record<string, PageSeoEntry>;
 
-export async function getPageSeo(): Promise<PageSeoMap> {
+// Also cache()-wrapped — called from generateMetadata AND the page body on
+// nearly every route.
+export const getPageSeo = cache(async (): Promise<PageSeoMap> => {
   try {
     const res = await fetch(`${BASE}/api/public/page-seo`, {
       next: { revalidate: 300 },
+      signal: AbortSignal.timeout(6000),
     });
     if (!res.ok) return {};
     const data = await res.json();
@@ -287,7 +297,7 @@ export async function getPageSeo(): Promise<PageSeoMap> {
   } catch {
     return {};
   }
-}
+});
 
 export interface SiteArticle {
   id: string;
@@ -335,7 +345,10 @@ function mapArticle(api: any): SiteArticle {
 export async function getArticles(category?: string): Promise<SiteArticle[]> {
   try {
     const qs = category ? `?category=${encodeURIComponent(category)}` : "";
-    const res = await fetch(`${BASE}/api/public/blog${qs}`, { next: { revalidate: 300 } });
+    const res = await fetch(`${BASE}/api/public/blog${qs}`, {
+      next: { revalidate: 300 },
+      signal: AbortSignal.timeout(6000),
+    });
     if (!res.ok) return [];
     const data = await res.json();
     return (data.articles ?? []).map(mapArticle);
@@ -346,7 +359,10 @@ export async function getArticles(category?: string): Promise<SiteArticle[]> {
 
 export async function getArticle(slug: string): Promise<SiteArticleFull | null> {
   try {
-    const res = await fetch(`${BASE}/api/public/blog/${slug}`, { next: { revalidate: 300 } });
+    const res = await fetch(`${BASE}/api/public/blog/${slug}`, {
+      next: { revalidate: 300 },
+      signal: AbortSignal.timeout(6000),
+    });
     if (!res.ok) return null;
     const data = await res.json();
     if (!data.article) return null;
@@ -360,7 +376,7 @@ export async function getArticlePreview(slug: string, token: string): Promise<Si
   try {
     const res = await fetch(
       `${BASE}/api/public/blog/preview/${slug}?token=${encodeURIComponent(token)}`,
-      { cache: "no-store" }
+      { cache: "no-store", signal: AbortSignal.timeout(6000) }
     );
     if (!res.ok) return null;
     const data = await res.json();

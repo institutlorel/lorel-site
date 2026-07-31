@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getPageSeo, getArticles } from "@/lib/data/platform-api";
 import { buildMetadata, resolvePageMeta } from "@/lib/seo";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 import { BlogListClient } from "./BlogListClient";
 
 export const revalidate = 300;
@@ -23,5 +25,11 @@ export default async function BlogPage({
 }) {
   await params; // locale threaded through for future use (I2+); not consumed yet
   const articles = await getArticles();
-  return <BlogListClient articles={articles} />;
+  return (
+    <>
+      <SiteHeader />
+      <BlogListClient articles={articles} />
+      <SiteFooter />
+    </>
+  );
 }

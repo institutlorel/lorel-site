@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getPageSeo, getSiteSettings } from "@/lib/data/platform-api";
 import { buildMetadata, resolvePageMeta } from "@/lib/seo";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 import { AboutClient } from "./AboutClient";
 
 export async function generateMetadata({
@@ -21,5 +23,11 @@ export default async function AboutPage({
 }) {
   await params; // locale threaded through for future use (I2+); not consumed yet
   const { principal } = await getSiteSettings();
-  return <AboutClient waNumber={principal} />;
+  return (
+    <>
+      <SiteHeader />
+      <AboutClient waNumber={principal} />
+      <SiteFooter />
+    </>
+  );
 }
