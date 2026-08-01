@@ -251,8 +251,15 @@ export function Navbar() {
             </AnimatePresence>
           </div>
 
+          <a
+            href="https://app.institutlorel.com/login"
+            className={`px-2.5 py-2 font-body text-[12px] font-semibold transition-colors duration-200 ${navLink}`}
+          >
+            Se connecter
+          </a>
+
           <Link
-            href="/contact"
+            href="/formations"
             className={`ms-2 inline-flex items-center border text-[12px] font-body font-semibold px-5 py-2 rounded-sm transition-all duration-200 tracking-wide ${ctaCls}`}
           >
             S&apos;inscrire
@@ -310,10 +317,18 @@ export function Navbar() {
                 </Link>
               ))}
 
-              <Link
-                href="/contact"
+              <a
+                href="https://app.institutlorel.com/login"
                 onClick={() => setMenuOpen(false)}
-                className="mt-5 min-h-[48px] flex items-center justify-center text-center border border-brand-gold text-brand-gold font-body font-semibold text-sm py-3.5 rounded-sm"
+                className="mt-5 min-h-[44px] flex items-center justify-center text-center text-white/60 hover:text-white font-body text-sm transition-colors"
+              >
+                Se connecter
+              </a>
+
+              <Link
+                href="/formations"
+                onClick={() => setMenuOpen(false)}
+                className="mt-2 min-h-[48px] flex items-center justify-center text-center border border-brand-gold text-brand-gold font-body font-semibold text-sm py-3.5 rounded-sm"
               >
                 S&apos;inscrire maintenant
               </Link>

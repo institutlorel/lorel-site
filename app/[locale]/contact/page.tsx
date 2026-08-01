@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getPageSeo, getSiteSettings } from "@/lib/data/platform-api";
 import { buildMetadata, resolvePageMeta } from "@/lib/seo";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ContactClient } from "./ContactClient";
 
 export async function generateMetadata({
@@ -21,5 +23,11 @@ export default async function ContactPage({
 }) {
   await params; // locale threaded through for future use (I2+); not consumed yet
   const { casablanca, marrakech, enLigne } = await getSiteSettings();
-  return <ContactClient waSettings={{ casablanca, marrakech, enLigne }} />;
+  return (
+    <>
+      <SiteHeader />
+      <ContactClient waSettings={{ casablanca, marrakech, enLigne }} />
+      <SiteFooter />
+    </>
+  );
 }

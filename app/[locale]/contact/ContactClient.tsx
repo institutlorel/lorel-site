@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { LocaleLink as Link } from "@/components/LocaleLink";
 import { CheckCircle, MapPin, Mail } from "lucide-react";
-import { SiteHeader } from "@/components/layout/SiteHeader";
-import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Container } from "@/components/ui/Container";
 import { FORMATIONS } from "@/lib/data/formations";
 
@@ -97,8 +95,6 @@ export function ContactClient({ waSettings }: Props) {
 
   return (
     <>
-      <SiteHeader />
-
       <div className="bg-brand-dark relative overflow-hidden">
         <div className="absolute inset-0 bg-hero-gradient" />
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-brand-gold/25 to-transparent" />
@@ -247,8 +243,6 @@ export function ContactClient({ waSettings }: Props) {
           </div>
         </Container>
       </section>
-
-      <SiteFooter />
     </>
   );
 }

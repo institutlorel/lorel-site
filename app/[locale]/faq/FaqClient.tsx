@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { LocaleLink as Link } from "@/components/LocaleLink";
 import { ChevronDown } from "lucide-react";
-import { SiteHeader } from "@/components/layout/SiteHeader";
-import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Container } from "@/components/ui/Container";
 
 interface FaqItem { q: string; a: string; }
@@ -95,8 +93,6 @@ export function FaqClient({ waNumber }: Props) {
 
   return (
     <>
-      <SiteHeader />
-
       <div className="bg-brand-dark relative overflow-hidden">
         <div className="absolute inset-0 bg-hero-gradient" />
         <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-brand-gold/25 to-transparent" />
@@ -165,8 +161,6 @@ export function FaqClient({ waNumber }: Props) {
           </div>
         </Container>
       </section>
-
-      <SiteFooter />
     </>
   );
 }
