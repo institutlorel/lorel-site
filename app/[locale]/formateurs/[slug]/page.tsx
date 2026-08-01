@@ -8,6 +8,8 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Container } from "@/components/ui/Container";
 import { FORMATEURS, getFormateurBySlug } from "@/lib/data/formateurs";
 import { getSiteSettings } from "@/lib/data/platform-api";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import type { Langue } from "@/lib/i18n/config";
 
 export function generateStaticParams() {
   return FORMATEURS.map((f) => ({ slug: f.slug }));
@@ -34,14 +36,15 @@ export default async function FormateurPage({
 }: {
   params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+  const dict = getDictionary(locale as Langue);
   const formateur = getFormateurBySlug(slug);
   if (!formateur) notFound();
   const { principal } = await getSiteSettings();
 
   return (
     <>
-      <SiteHeader />
+      <SiteHeader dict={dict} />
 
       {/* Hero — full photo background */}
       <div className="relative min-h-[400px] flex items-end overflow-hidden">
@@ -254,7 +257,7 @@ export default async function FormateurPage({
         </Container>
       </section>
 
-      <SiteFooter />
+      <SiteFooter dict={dict} />
     </>
   );
 }

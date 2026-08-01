@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { LocaleLink as Link } from "@/components/LocaleLink";
 import { Container } from "@/components/ui/Container";
 import { SITE_IMAGES } from "@/lib/data/images";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 const goldText: React.CSSProperties = {
   background: "linear-gradient(135deg, #B8941F 0%, #C9A84C 45%, #E8D08A 70%, #C9A84C 100%)",
@@ -14,32 +15,15 @@ const goldText: React.CSSProperties = {
   backgroundClip: "text",
 };
 
-const VALUES = [
-  {
-    num: "01",
-    titre: "Certifications reconnues",
-    desc: "Nos diplômes sont validés par des organismes nationaux et internationaux, reconnus par les employeurs marocains et à l'étranger.",
-  },
-  {
-    num: "02",
-    titre: "Formateurs experts actifs",
-    desc: "Chaque formateur exerce son métier en parallèle. Vous bénéficiez d'une pédagogie ancrée dans la réalité du marché.",
-  },
-  {
-    num: "03",
-    titre: "Réseau de 200+ entreprises",
-    desc: "Un réseau dense de partenaires à Marrakech et Casablanca pour faciliter votre insertion ou votre reconversion professionnelle.",
-  },
-  {
-    num: "04",
-    titre: "Accompagnement personnalisé",
-    desc: "De l'orientation à la certification, nos conseillers vous suivent à chaque étape pour maximiser vos chances de réussite.",
-  },
-];
-
-export function WhyLorel() {
+export function WhyLorel({ dict }: { dict: Dictionary }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const VALUES = [
+    { num: "01", ...dict.whyLorel.values.certifications },
+    { num: "02", ...dict.whyLorel.values.formateurs },
+    { num: "03", ...dict.whyLorel.values.reseau },
+    { num: "04", ...dict.whyLorel.values.accompagnement },
+  ];
 
   return (
     <section className="py-16 sm:py-24 lg:py-36 bg-brand-cream overflow-hidden">
@@ -53,7 +37,7 @@ export function WhyLorel() {
               animate={inView ? { opacity: 1 } : {}}
               className="font-body text-label-caps text-brand-gold mb-5"
             >
-              POURQUOI LOREL
+              {dict.whyLorel.badge}
             </motion.p>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -62,10 +46,10 @@ export function WhyLorel() {
               className="font-display font-bold text-brand-blue leading-[1.05] mb-8"
               style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
             >
-              L&apos;excellence à chaque
+              {dict.whyLorel.titreLigne1}
               <br />
-              étape de votre{" "}
-              <span style={goldText}>parcours.</span>
+              {dict.whyLorel.titreLigne2}{" "}
+              <span style={goldText}>{dict.whyLorel.titreAccent}</span>
             </motion.h2>
             <motion.p
               initial={{ opacity: 0 }}
@@ -73,8 +57,7 @@ export function WhyLorel() {
               transition={{ delay: 0.2 }}
               className="font-body text-text-secondary text-sm leading-relaxed mb-10 max-w-md"
             >
-              Depuis 2015, Institut Lorel forme des professionnels qualifiés dans les secteurs porteurs
-              de l&apos;économie marocaine. Notre approche combine rigueur académique et pratique terrain.
+              {dict.whyLorel.description}
             </motion.p>
 
             <div className="space-y-0">
@@ -107,7 +90,7 @@ export function WhyLorel() {
                 href="/about"
                 className="group inline-flex items-center gap-3 font-body font-semibold text-sm text-brand-blue hover:text-brand-gold transition-colors duration-200"
               >
-                En savoir plus sur l&apos;Institut
+                {dict.whyLorel.ctaInstitut}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
               </Link>
             </motion.div>
@@ -143,7 +126,7 @@ export function WhyLorel() {
               className="absolute -right-4 lg:-right-8 top-16 bg-white rounded-xl shadow-card-hover px-5 py-4 min-w-[160px] border border-gray-100"
             >
               <div className="font-display text-2xl font-bold text-brand-blue leading-none mb-1">95%</div>
-              <div className="font-body text-[11px] text-text-secondary">Taux d&apos;insertion professionnelle</div>
+              <div className="font-body text-[11px] text-text-secondary">{dict.whyLorel.tauxInsertion}</div>
               <div className="mt-3 w-full h-1 bg-gray-100 rounded-full overflow-hidden">
                 <div className="h-full w-[95%] bg-brand-gold rounded-full" />
               </div>
@@ -155,7 +138,7 @@ export function WhyLorel() {
               className="absolute -left-4 lg:-left-6 bottom-16 bg-brand-dark rounded-xl shadow-blue px-5 py-4 border border-white/8"
             >
               <div className="font-display text-xl font-bold text-brand-gold leading-none mb-1">500+</div>
-              <div className="font-body text-[11px] text-white/50">Diplômés depuis 2015</div>
+              <div className="font-body text-[11px] text-white/50">{dict.whyLorel.diplomesDepuis}</div>
             </motion.div>
           </motion.div>
         </div>

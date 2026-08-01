@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { motion, useInView } from "framer-motion";
 import { LANGUE_DEFAUT, type Langue } from "@/lib/i18n/config";
 import { localeHref } from "@/lib/i18n/href";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 const WA_ICON = (
   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -19,7 +20,7 @@ const goldText: React.CSSProperties = {
   backgroundClip: "text",
 };
 
-export function CTASection({ waNumber }: { waNumber?: string }) {
+export function CTASection({ waNumber, dict }: { waNumber?: string; dict: Dictionary }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const params = useParams<{ locale?: string }>();
@@ -48,7 +49,7 @@ export function CTASection({ waNumber }: { waNumber?: string }) {
           animate={inView ? { opacity: 1 } : {}}
           className="font-body text-label-caps text-brand-gold/60 mb-6"
         >
-          COMMENCEZ AUJOURD&apos;HUI
+          {dict.ctaSection.badge}
         </motion.p>
 
         <motion.h2
@@ -58,9 +59,9 @@ export function CTASection({ waNumber }: { waNumber?: string }) {
           className="font-display font-bold text-white leading-[0.95] mb-7"
           style={{ fontSize: "clamp(2.8rem, 6vw, 5.5rem)" }}
         >
-          Prêt à transformer
+          {dict.ctaSection.titreLigne1}
           <br />
-          <span style={goldText}>votre avenir ?</span>
+          <span style={goldText}>{dict.ctaSection.titreAccent}</span>
         </motion.h2>
 
         <motion.p
@@ -69,8 +70,7 @@ export function CTASection({ waNumber }: { waNumber?: string }) {
           transition={{ delay: 0.3 }}
           className="font-body text-white/40 text-sm max-w-sm mx-auto mb-12 leading-relaxed"
         >
-          Nos conseillers sont disponibles 7j/7 pour vous orienter vers la formation
-          qui correspond à votre projet.
+          {dict.ctaSection.description}
         </motion.p>
 
         <motion.div
@@ -87,14 +87,14 @@ export function CTASection({ waNumber }: { waNumber?: string }) {
               className="group inline-flex items-center gap-3 bg-brand-gold hover:bg-brand-gold-light text-brand-dark font-body font-bold text-sm px-8 py-4 rounded-sm transition-colors duration-200 w-full sm:w-auto justify-center"
             >
               {WA_ICON}
-              Écrire sur WhatsApp
+              {dict.ctaSection.ecrireSurWhatsapp}
             </a>
           ) : (
             <a
               href={localeHref("/contact", locale)}
               className="group inline-flex items-center gap-3 bg-brand-gold hover:bg-brand-gold-light text-brand-dark font-body font-bold text-sm px-8 py-4 rounded-sm transition-colors duration-200 w-full sm:w-auto justify-center"
             >
-              Nous contacter
+              {dict.ctaSection.nousContacter}
             </a>
           )}
         </motion.div>
@@ -107,9 +107,9 @@ export function CTASection({ waNumber }: { waNumber?: string }) {
           className="flex flex-wrap items-center justify-center gap-8 mt-14 pt-10 border-t border-white/8"
         >
           {[
-            { val: "Réponse", sub: "sous 24h" },
-            { val: "Gratuit", sub: "Consultation initiale" },
-            { val: "Sans", sub: "engagement" },
+            dict.ctaSection.trust.reponse,
+            dict.ctaSection.trust.gratuit,
+            dict.ctaSection.trust.sansEngagement,
           ].map((s) => (
             <div key={s.val} className="text-center">
               <div className="font-display text-lg font-bold text-white/60">{s.val}</div>

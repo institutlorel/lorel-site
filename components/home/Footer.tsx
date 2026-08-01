@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { LocaleLink as Link } from "@/components/LocaleLink";
 import { MapPin, Phone, Mail, ArrowRight, Send } from "lucide-react";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 const SOCIAL = [
   {
@@ -20,33 +21,39 @@ const SOCIAL = [
   },
 ];
 
-const FORMATIONS_LINKS = [
-  { label: "Photographie", href: "/formations/photographie-professionnelle" },
-  { label: "Marketing Digital", href: "/formations/marketing-digital" },
-  { label: "Esthétique", href: "/formations/esthetique-soins" },
-  { label: "Montage Vidéo", href: "/formations/montage-video" },
-  { label: "Comptabilité", href: "/formations/comptabilite-gestion" },
-  { label: "Stylisme", href: "/formations/stylisme-mode" },
-];
-
-const SERVICES_LINKS = [
-  { label: "VAE", href: "/services/vae" },
-  { label: "Formation Entreprises", href: "/services/formation-entreprises" },
-  { label: "Accompagnement", href: "/services/accompagnement" },
-  { label: "Certifications", href: "/services/certification" },
-];
-
-const INSTITUT_LINKS = [
-  { label: "À propos", href: "/about" },
-  { label: "Formateurs", href: "/formateurs" },
-  { label: "Blog", href: "/blog" },
-  { label: "FAQ", href: "/faq" },
-  { label: "Contact", href: "/contact" },
-];
-
-export function Footer({ waNumber }: { waNumber?: string }) {
+export function Footer({ waNumber, dict }: { waNumber?: string; dict: Dictionary }) {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
+
+  const FORMATIONS_LINKS = [
+    { label: dict.footer.formationsLinks.photographie, href: "/formations/photographie-professionnelle" },
+    { label: dict.footer.formationsLinks.marketingDigital, href: "/formations/marketing-digital" },
+    { label: dict.footer.formationsLinks.esthetique, href: "/formations/esthetique-soins" },
+    { label: dict.footer.formationsLinks.montageVideo, href: "/formations/montage-video" },
+    { label: dict.footer.formationsLinks.comptabilite, href: "/formations/comptabilite-gestion" },
+    { label: dict.footer.formationsLinks.stylisme, href: "/formations/stylisme-mode" },
+  ];
+
+  const SERVICES_LINKS = [
+    { label: dict.footer.servicesLinks.vae, href: "/services/vae" },
+    { label: dict.footer.servicesLinks.entreprises, href: "/services/formation-entreprises" },
+    { label: dict.footer.servicesLinks.accompagnement, href: "/services/accompagnement" },
+    { label: dict.footer.servicesLinks.certifications, href: "/services/certification" },
+  ];
+
+  const INSTITUT_LINKS = [
+    { label: dict.nav.about, href: "/about" },
+    { label: dict.nav.formateurs, href: "/formateurs" },
+    { label: dict.nav.blog, href: "/blog" },
+    { label: "FAQ", href: "/faq" },
+    { label: dict.nav.contact, href: "/contact" },
+  ];
+
+  const LEGAL_LINKS = [
+    { label: dict.footer.legalLinks.mentionsLegales, href: "/mentions-legales" },
+    { label: dict.footer.legalLinks.confidentialite, href: "/confidentialite" },
+    { label: dict.footer.legalLinks.plan, href: "/sitemap" },
+  ];
 
   const handleNewsletter = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,15 +68,15 @@ export function Footer({ waNumber }: { waNumber?: string }) {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div>
               <p className="font-display text-base font-semibold text-white mb-0.5">
-                Restez informé des nouvelles formations
+                {dict.footer.newsletterTitle}
               </p>
               <p className="font-body text-[12px] text-white/35">
-                Newsletter mensuelle · Pas de spam · Désabonnement en 1 clic
+                {dict.footer.newsletterSub}
               </p>
             </div>
             {sent ? (
               <p className="font-body text-sm text-brand-gold flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-brand-gold" /> Merci, vous êtes inscrit !
+                <span className="w-2 h-2 rounded-full bg-brand-gold" /> {dict.footer.merciInscrit}
               </p>
             ) : (
               <form onSubmit={handleNewsletter} className="flex items-center w-full sm:w-auto max-w-sm gap-2">
@@ -77,14 +84,14 @@ export function Footer({ waNumber }: { waNumber?: string }) {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Votre adresse email"
+                  placeholder={dict.footer.newsletterPlaceholder}
                   required
                   className="flex-1 bg-white/5 border border-white/10 text-white text-sm font-body px-4 py-2.5 rounded-sm placeholder-white/25 outline-none focus:border-brand-gold/40 transition-colors"
                 />
                 <button
                   type="submit"
                   className="bg-brand-gold hover:bg-brand-gold-light text-brand-dark p-2.5 rounded-sm transition-colors duration-200"
-                  aria-label="S'abonner"
+                  aria-label={dict.footer.sAbonner}
                 >
                   <Send className="w-4 h-4" />
                 </button>
@@ -114,7 +121,7 @@ export function Footer({ waNumber }: { waNumber?: string }) {
               </div>
             </Link>
             <p className="font-body text-[12px] text-white/30 leading-relaxed mb-6 max-w-[220px]">
-              Institut de formation professionnelle certifiée. Marrakech & Casablanca, Maroc.
+              {dict.footer.institutDesc}
             </p>
             <div className="flex gap-2.5">
               {SOCIAL.map((s) => (
@@ -135,7 +142,7 @@ export function Footer({ waNumber }: { waNumber?: string }) {
 
           {/* Formations */}
           <div className="lg:col-span-2 lg:col-start-5">
-            <h4 className="font-body text-label-caps text-white/40 mb-5">Formations</h4>
+            <h4 className="font-body text-label-caps text-white/40 mb-5">{dict.footer.formationsHeading}</h4>
             <ul className="space-y-2.5">
               {FORMATIONS_LINKS.map((l) => (
                 <li key={l.label}>
@@ -149,7 +156,7 @@ export function Footer({ waNumber }: { waNumber?: string }) {
 
           {/* Services */}
           <div className="lg:col-span-2">
-            <h4 className="font-body text-label-caps text-white/40 mb-5">Services</h4>
+            <h4 className="font-body text-label-caps text-white/40 mb-5">{dict.footer.servicesHeading}</h4>
             <ul className="space-y-2.5">
               {SERVICES_LINKS.map((l) => (
                 <li key={l.label}>
@@ -163,7 +170,7 @@ export function Footer({ waNumber }: { waNumber?: string }) {
 
           {/* Institut */}
           <div className="lg:col-span-2">
-            <h4 className="font-body text-label-caps text-white/40 mb-5">Institut</h4>
+            <h4 className="font-body text-label-caps text-white/40 mb-5">{dict.footer.institutHeading}</h4>
             <ul className="space-y-2.5">
               {INSTITUT_LINKS.map((l) => (
                 <li key={l.label}>
@@ -177,7 +184,7 @@ export function Footer({ waNumber }: { waNumber?: string }) {
 
           {/* Contact */}
           <div className="lg:col-span-3">
-            <h4 className="font-body text-label-caps text-white/40 mb-5">Contact</h4>
+            <h4 className="font-body text-label-caps text-white/40 mb-5">{dict.footer.contactHeading}</h4>
             <ul className="space-y-3.5">
               {[
                 { icon: MapPin, text: "Marrakech, Gueliz" },
@@ -202,7 +209,7 @@ export function Footer({ waNumber }: { waNumber?: string }) {
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                 </svg>
-                Écrire sur WhatsApp
+                {dict.footer.ecrireSurWhatsapp}
                 <ArrowRight className="w-3 h-3" />
               </a>
             )}
@@ -214,14 +221,10 @@ export function Footer({ waNumber }: { waNumber?: string }) {
       <div className="border-t border-white/5">
         <div className="max-w-screen-xl mx-auto px-6 lg:px-10 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="font-body text-[11px] text-white/20">
-            © {new Date().getFullYear()} Institut Lorel. Tous droits réservés.
+            © {new Date().getFullYear()} Institut Lorel. {dict.footer.droitsReserves}.
           </p>
           <div className="flex items-center gap-5">
-            {[
-              { label: "Mentions légales", href: "/mentions-legales" },
-              { label: "Confidentialité", href: "/confidentialite" },
-              { label: "Plan du site", href: "/sitemap" },
-            ].map((l) => (
+            {LEGAL_LINKS.map((l) => (
               <Link key={l.label} href={l.href} className="font-body text-[11px] text-white/20 hover:text-white/45 transition-colors duration-200">
                 {l.label}
               </Link>

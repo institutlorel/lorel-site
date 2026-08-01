@@ -21,24 +21,17 @@ import {
 } from "lucide-react";
 import { LANGUES as LOCALES, LANGUE_INFO, LANGUE_DEFAUT, type Langue } from "@/lib/i18n/config";
 import { localeHref, stripLocaleFromPathname } from "@/lib/i18n/href";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-const CATEGORIES = [
-  { key: "en-ligne", label: "Formations en ligne", desc: "Vidéos, à votre rythme", icon: MonitorPlay },
-  { key: "continue", label: "Formations encadrées", desc: "Live avec formateur", icon: Users },
-  { key: "diplomante", label: "Formations diplômantes", desc: "Diplôme reconnu", icon: Award },
-  { key: "individuel", label: "Formations individuelles", desc: "Séances 1-on-1", icon: Sparkles },
-  { key: "vae", label: "VAE", desc: "Validation des acquis", icon: BookOpen },
-  { key: "consulting", label: "Consulting", desc: "2h avec un expert", icon: TrendingUp },
-];
-
-const NAV_LINKS = [
-  { label: "Formations", href: "/formations" },
-  { label: "Services", href: "/services" },
-  { label: "Blog", href: "/blog" },
-  { label: "À propos", href: "/about" },
-];
-
-export function Navbar() {
+export function Navbar({ dict }: { dict: Dictionary }) {
+  const CATEGORIES = [
+    { key: "en-ligne", ...dict.nav.categories.enLigne, icon: MonitorPlay },
+    { key: "continue", ...dict.nav.categories.continue, icon: Users },
+    { key: "diplomante", ...dict.nav.categories.diplomante, icon: Award },
+    { key: "individuel", ...dict.nav.categories.individuel, icon: Sparkles },
+    { key: "vae", ...dict.nav.categories.vae, icon: BookOpen },
+    { key: "consulting", ...dict.nav.categories.consulting, icon: TrendingUp },
+  ];
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
@@ -50,6 +43,13 @@ export function Navbar() {
   const pathname = usePathname();
   const routeParams = useParams<{ locale?: string }>();
   const activeLang = (routeParams?.locale as Langue | undefined) ?? LANGUE_DEFAUT;
+
+  const NAV_LINKS = [
+    { label: dict.nav.formations, href: "/formations" },
+    { label: dict.nav.services, href: "/services" },
+    { label: dict.nav.blog, href: "/blog" },
+    { label: dict.nav.about, href: "/about" },
+  ];
 
   function switchLocale(target: Langue) {
     const bare = stripLocaleFromPathname(pathname);
@@ -130,7 +130,7 @@ export function Navbar() {
               onMouseLeave={() => setMegaOpen(false)}
               className={`flex items-center gap-1 font-body text-[13px] font-medium transition-colors duration-200 tracking-wide py-5 ${navLink}`}
             >
-              Domaines
+              {dict.nav.domaines}
               <ChevronDown
                 className={`w-3.5 h-3.5 transition-transform duration-200 ${megaOpen ? "rotate-180" : ""}`}
               />
@@ -180,9 +180,9 @@ export function Navbar() {
                         </div>
                         <div>
                           <div className="font-display text-sm font-semibold text-brand-blue leading-snug">
-                            Voir toutes les formations
+                            {dict.nav.voirToutesLesFormations}
                           </div>
-                          <div className="font-body text-[11px] text-text-secondary mt-1">Tout le catalogue</div>
+                          <div className="font-body text-[11px] text-text-secondary mt-1">{dict.nav.toutLeCatalogue}</div>
                         </div>
                       </Link>
                     </div>
@@ -205,7 +205,7 @@ export function Navbar() {
 
         {/* Right actions */}
         <div className="hidden lg:flex items-center gap-1">
-          <button aria-label="Rechercher" className={`p-2.5 transition-colors duration-200 ${iconCls}`}>
+          <button aria-label={dict.nav.rechercher} className={`p-2.5 transition-colors duration-200 ${iconCls}`}>
             <Search className="w-4 h-4" />
           </button>
 
@@ -255,14 +255,14 @@ export function Navbar() {
             href="https://app.institutlorel.com/login"
             className={`px-2.5 py-2 font-body text-[12px] font-semibold transition-colors duration-200 ${navLink}`}
           >
-            Se connecter
+            {dict.nav.seConnecter}
           </a>
 
           <Link
             href="/formations"
             className={`ms-2 inline-flex items-center border text-[12px] font-body font-semibold px-5 py-2 rounded-sm transition-all duration-200 tracking-wide ${ctaCls}`}
           >
-            S&apos;inscrire
+            {dict.nav.sInscrire}
           </Link>
         </div>
 
@@ -270,7 +270,7 @@ export function Navbar() {
         <button
           onClick={() => setMenuOpen((v) => !v)}
           className={`lg:hidden p-2.5 transition-colors duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${hamburgerCls}`}
-          aria-label="Menu"
+          aria-label={dict.nav.menu}
         >
           {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
@@ -287,7 +287,7 @@ export function Navbar() {
             className="lg:hidden bg-brand-dark border-t border-white/8 overflow-hidden"
           >
             <div className="px-5 py-5 flex flex-col gap-0.5">
-              <p className="font-body text-label-caps text-brand-gold/50 mb-3 mt-1">FORMATIONS</p>
+              <p className="font-body text-label-caps text-brand-gold/50 mb-3 mt-1">{dict.nav.formationsSection}</p>
               {CATEGORIES.map((cat) => {
                 const Icon = cat.icon;
                 return (
@@ -304,8 +304,8 @@ export function Navbar() {
                 );
               })}
 
-              <p className="font-body text-label-caps text-brand-gold/50 mb-2 mt-5">PAGES</p>
-              {[{ label: "Formations", href: "/formations" }, ...NAV_LINKS].map((l) => (
+              <p className="font-body text-label-caps text-brand-gold/50 mb-2 mt-5">{dict.nav.pagesSection}</p>
+              {NAV_LINKS.map((l) => (
                 <Link
                   key={l.href}
                   href={l.href}
@@ -322,7 +322,7 @@ export function Navbar() {
                 onClick={() => setMenuOpen(false)}
                 className="mt-5 min-h-[44px] flex items-center justify-center text-center text-white/60 hover:text-white font-body text-sm transition-colors"
               >
-                Se connecter
+                {dict.nav.seConnecter}
               </a>
 
               <Link
@@ -330,7 +330,7 @@ export function Navbar() {
                 onClick={() => setMenuOpen(false)}
                 className="mt-2 min-h-[48px] flex items-center justify-center text-center border border-brand-gold text-brand-gold font-body font-semibold text-sm py-3.5 rounded-sm"
               >
-                S&apos;inscrire maintenant
+                {dict.common.sInscrireNow}
               </Link>
             </div>
           </motion.div>

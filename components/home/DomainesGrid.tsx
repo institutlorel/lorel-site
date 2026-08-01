@@ -13,64 +13,27 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-const DOMAINES = [
-  {
-    slug: "beaute-esthetique",
-    nom: "Beauté & Esthétique",
-    description: "Soins, maquillage, conseil en image",
-    count: 4,
-    icon: Sparkles,
-    accent: "#E07A9B",
-  },
-  {
-    slug: "arts-visuels",
-    nom: "Arts Visuels",
-    description: "Photographie, vidéo, montage",
-    count: 3,
-    icon: Camera,
-    accent: "#6B8FD4",
-  },
-  {
-    slug: "digital-marketing",
-    nom: "Digital & Marketing",
-    description: "Réseaux sociaux, publicité, contenu",
-    count: 5,
-    icon: Smartphone,
-    accent: "#4CAF9D",
-  },
-  {
-    slug: "mode-stylisme",
-    nom: "Mode & Stylisme",
-    description: "Stylisme, couture, tendances",
-    count: 2,
-    icon: Shirt,
-    accent: "#9B6BD4",
-  },
-  {
-    slug: "finance-gestion",
-    nom: "Finance & Gestion",
-    description: "Comptabilité, gestion PME",
-    count: 3,
-    icon: Calculator,
-    accent: "#5BA85B",
-  },
-  {
-    slug: "developpement-personnel",
-    nom: "Développement Personnel",
-    description: "Leadership, communication",
-    count: 4,
-    icon: Users,
-    accent: "#E0A04C",
-  },
-];
+function buildDomaines(dict: Dictionary) {
+  return [
+    { slug: "beaute-esthetique", ...dict.domainesGrid.domaines.beauteEsthetique, count: 4, icon: Sparkles, accent: "#E07A9B" },
+    { slug: "arts-visuels", ...dict.domainesGrid.domaines.artsVisuels, count: 3, icon: Camera, accent: "#6B8FD4" },
+    { slug: "digital-marketing", ...dict.domainesGrid.domaines.digitalMarketing, count: 5, icon: Smartphone, accent: "#4CAF9D" },
+    { slug: "mode-stylisme", ...dict.domainesGrid.domaines.modeStylisme, count: 2, icon: Shirt, accent: "#9B6BD4" },
+    { slug: "finance-gestion", ...dict.domainesGrid.domaines.financeGestion, count: 3, icon: Calculator, accent: "#5BA85B" },
+    { slug: "developpement-personnel", ...dict.domainesGrid.domaines.developpementPersonnel, count: 4, icon: Users, accent: "#E0A04C" },
+  ];
+}
 
 function DomaineCard({
   domaine,
   index,
+  formationsSuffix,
 }: {
-  domaine: (typeof DOMAINES)[number];
+  domaine: ReturnType<typeof buildDomaines>[number];
   index: number;
+  formationsSuffix: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
@@ -129,7 +92,7 @@ function DomaineCard({
         {/* Count */}
         <div className="flex items-center gap-1.5">
           <span className="font-body text-xs font-semibold" style={{ color: domaine.accent }}>
-            {domaine.count} formations
+            {domaine.count} {formationsSuffix}
           </span>
           <span
             className="w-12 h-px transition-colors duration-300"
@@ -147,9 +110,10 @@ function DomaineCard({
   );
 }
 
-export function DomainesGrid() {
+export function DomainesGrid({ dict }: { dict: Dictionary }) {
   const headerRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(headerRef, { once: true });
+  const DOMAINES = buildDomaines(dict);
 
   return (
     <section className="py-24 lg:py-32 bg-brand-cream">
@@ -162,7 +126,7 @@ export function DomainesGrid() {
             transition={{ duration: 0.6 }}
             className="font-body text-label-caps text-brand-gold mb-4"
           >
-            NOS DOMAINES
+            {dict.domainesGrid.badge}
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -171,7 +135,7 @@ export function DomainesGrid() {
             className="font-display font-bold text-brand-blue leading-tight mb-5"
             style={{ fontSize: "clamp(2rem, 4vw, 3rem)" }}
           >
-            Explorez nos domaines
+            {dict.domainesGrid.titreLigne1}
             <br />
             <span
               style={{
@@ -181,7 +145,7 @@ export function DomainesGrid() {
                 backgroundClip: "text",
               }}
             >
-              de formation.
+              {dict.domainesGrid.titreAccent}
             </span>
           </motion.h2>
           <motion.p
@@ -190,15 +154,14 @@ export function DomainesGrid() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="font-body text-text-secondary text-sm leading-relaxed"
           >
-            Des programmes dans les secteurs les plus porteurs de l&apos;économie marocaine.
-            Choisissez votre domaine et transformez votre passion en carrière.
+            {dict.domainesGrid.description}
           </motion.p>
         </div>
 
         {/* Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
           {DOMAINES.map((d, i) => (
-            <DomaineCard key={d.slug} domaine={d} index={i} />
+            <DomaineCard key={d.slug} domaine={d} index={i} formationsSuffix={dict.common.formations} />
           ))}
         </div>
 
@@ -208,7 +171,7 @@ export function DomainesGrid() {
             href="/domaines"
             className="group inline-flex items-center gap-3 border border-brand-blue/30 hover:border-brand-blue text-brand-blue font-body font-semibold text-sm px-8 py-3.5 rounded-sm hover:bg-brand-blue/5 transition-all duration-200"
           >
-            Voir tous les domaines
+            {dict.domainesGrid.voirTousLesDomaines}
             <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </Link>
         </div>

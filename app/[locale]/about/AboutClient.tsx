@@ -6,6 +6,7 @@ import { LocaleLink as Link } from "@/components/LocaleLink";
 import { MapPin, Award, Target, Heart } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { CentersSection } from "@/components/home/CentersSection";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -50,9 +51,10 @@ const TEAM_PREVIEW = [
 
 interface Props {
   waNumber: string;
+  dict: Dictionary;
 }
 
-export function AboutClient({ waNumber }: Props) {
+export function AboutClient({ waNumber, dict }: Props) {
   return (
     <>
       {/* Hero */}
@@ -230,7 +232,7 @@ export function AboutClient({ waNumber }: Props) {
         </Container>
       </section>
 
-      <CentersSection />
+      <CentersSection dict={dict} />
 
       {/* CTA */}
       <section className="py-16 sm:py-20 bg-brand-dark relative overflow-hidden">

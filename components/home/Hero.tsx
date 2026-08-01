@@ -5,8 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Search, CalendarDays, Star, Building2, ArrowRight, BadgeCheck, Users } from "lucide-react";
 import { LocaleLink as Link } from "@/components/LocaleLink";
 import { SITE_IMAGES } from "@/lib/data/images";
-
-const POPULAR = ["Photographie", "Marketing Digital", "Esthétique", "Comptabilité"];
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 const goldText: React.CSSProperties = {
   background: "linear-gradient(135deg, #B8941F 0%, #C9A84C 45%, #E8D08A 70%, #C9A84C 100%)",
@@ -41,12 +40,18 @@ function FloatingCard({
   );
 }
 
-export function Hero() {
+export function Hero({ dict }: { dict: Dictionary }) {
   const [query, setQuery] = useState("");
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  const POPULAR = [
+    dict.hero.popularTerms.photographie,
+    dict.hero.popularTerms.marketingDigital,
+    dict.hero.popularTerms.esthetique,
+    dict.hero.popularTerms.comptabilite,
+  ];
 
   return (
     <section
@@ -83,7 +88,7 @@ export function Hero() {
               transition={{ duration: 0.7, delay: 0.1 }}
               className="font-body text-label-caps text-brand-gold/70 mb-5"
             >
-              INSTITUT DE FORMATION · DEPUIS 2015
+              {dict.hero.badge}
             </motion.p>
 
             <motion.h1
@@ -93,10 +98,10 @@ export function Hero() {
               className="font-display font-bold text-white leading-[1.0] mb-6"
               style={{ fontSize: "clamp(2rem, 5.5vw, 4.8rem)" }}
             >
-              Votre avenir commence
+              {dict.hero.titreLigne1}
               <br />
-              par une formation{" "}
-              <span style={goldText}>d&apos;excellence.</span>
+              {dict.hero.titreLigne2}{" "}
+              <span style={goldText}>{dict.hero.titreAccent}</span>
             </motion.h1>
 
             <motion.p
@@ -105,9 +110,8 @@ export function Hero() {
               transition={{ duration: 0.7, delay: 0.35 }}
               className="font-body text-white/50 text-sm sm:text-base leading-[1.8] max-w-md mb-8"
             >
-              Formations présentiel, en ligne et hybride à Marrakech et Casablanca.
-              Certifications reconnues, formateurs experts,{" "}
-              <span className="text-white/75">accompagnement VAE.</span>
+              {dict.hero.descriptionLead}{" "}
+              <span className="text-white/75">{dict.hero.descriptionAccent}</span>
             </motion.p>
 
             {/* Search bar */}
@@ -122,21 +126,21 @@ export function Hero() {
                 <input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Quelle formation recherchez-vous ?"
+                  placeholder={dict.hero.rechercherPlaceholder}
                   className="flex-1 py-4 px-3 font-body text-sm text-text-primary placeholder-text-muted outline-none bg-transparent min-w-0"
                 />
                 <Link
                   href={`/formations${query ? `?q=${encodeURIComponent(query)}` : ""}`}
                   className="m-1.5 bg-brand-gold hover:bg-brand-gold-dark text-brand-dark font-body font-bold text-[13px] px-5 py-3 rounded-lg flex items-center gap-2 transition-colors duration-200 shrink-0 whitespace-nowrap"
                 >
-                  Chercher
+                  {dict.hero.chercher}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
 
               {/* Popular */}
               <div className="flex flex-wrap items-center gap-2 mt-3">
-                <span className="font-body text-[11px] text-white/30">Populaires :</span>
+                <span className="font-body text-[11px] text-white/30">{dict.hero.populaires}</span>
                 {POPULAR.map((term) => (
                   <Link
                     key={term}
@@ -157,9 +161,9 @@ export function Hero() {
               className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-1"
             >
               {[
-                { icon: BadgeCheck, label: "Certifié OFPPT" },
-                { icon: Users, label: "+500 diplômés" },
-                { icon: Star, label: "4.9/5 · 200+ avis" },
+                { icon: BadgeCheck, label: dict.hero.trust.certifieOfppt },
+                { icon: Users, label: dict.hero.trust.diplomes },
+                { icon: Star, label: dict.hero.trust.avis },
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex items-center gap-1.5">
                   <Icon className="w-3.5 h-3.5 text-brand-gold shrink-0" />
@@ -176,9 +180,9 @@ export function Hero() {
               className="flex flex-wrap items-center gap-0 mt-5 pt-5 border-t border-white/10"
             >
               {[
-                { value: "500+", label: "Diplômés" },
-                { value: "15+", label: "Formations" },
-                { value: "95%", label: "Satisfaction" },
+                { value: "500+", label: dict.hero.stats.diplomes },
+                { value: "15+", label: dict.hero.stats.formations },
+                { value: "95%", label: dict.hero.stats.satisfaction },
               ].map((s, i) => (
                 <div key={i} className="flex items-center">
                   {i > 0 && <div className="w-px h-8 bg-white/10 mx-5" />}
@@ -209,14 +213,14 @@ export function Hero() {
               <div className="absolute inset-0 bg-gradient-to-br from-brand-blue via-brand-blue-light to-brand-dark" />
               <img
                 src={SITE_IMAGES.hero.main}
-                alt="Étudiante Institut Lorel"
+                alt={dict.hero.etudiantePromo}
                 className="absolute inset-0 w-full h-full object-cover"
                 loading="eager"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/60 via-transparent to-transparent" />
               <div className="absolute top-4 left-4 right-4">
                 <span className="font-body text-[9px] text-white/60 tracking-widest uppercase">
-                  Étudiante · Promotion 2025
+                  {dict.hero.etudiantePromo}
                 </span>
               </div>
             </motion.div>
@@ -228,7 +232,7 @@ export function Hero() {
                   <CalendarDays className="w-4 h-4 text-brand-blue" />
                 </div>
                 <div>
-                  <div className="font-body text-[10px] text-text-muted uppercase tracking-wide">Prochaine session</div>
+                  <div className="font-body text-[10px] text-text-muted uppercase tracking-wide">{dict.hero.prochaineSession}</div>
                   <div className="font-display text-sm font-semibold text-text-primary">15 Jan 2026</div>
                 </div>
               </div>
@@ -245,7 +249,7 @@ export function Hero() {
                 <div className="font-display text-lg font-bold text-text-primary leading-none">
                   4.9<span className="text-text-muted font-body text-xs">/5</span>
                 </div>
-                <div className="font-body text-[10px] text-text-muted mt-0.5">Note moyenne</div>
+                <div className="font-body text-[10px] text-text-muted mt-0.5">{dict.hero.noteMoyenne}</div>
               </div>
             </FloatingCard>
 
@@ -257,7 +261,7 @@ export function Hero() {
                 </div>
                 <div>
                   <div className="font-display text-sm font-bold text-brand-dark leading-none">+200</div>
-                  <div className="font-body text-[10px] text-brand-dark/70">Entreprises partenaires</div>
+                  <div className="font-body text-[10px] text-brand-dark/70">{dict.hero.entreprisesPartenaires}</div>
                 </div>
               </div>
             </FloatingCard>

@@ -6,22 +6,21 @@ import { LocaleLink as Link } from "@/components/LocaleLink";
 import { Clock, Star, ArrowUpRight, ArrowRight, MonitorPlay, Building, Layers } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import type { Formation } from "@/lib/data/formations";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-const MODE_ICONS: Record<Formation["mode"], typeof MonitorPlay> = {
-  EN_LIGNE: MonitorPlay,
-  PRESENTIEL: Building,
-  HYBRIDE: Layers,
-};
-
-const MODE_LABELS: Record<Formation["mode"], string> = {
-  EN_LIGNE: "En ligne",
-  PRESENTIEL: "Présentiel",
-  HYBRIDE: "Hybride",
-};
-
-function FormationCard({ f, index }: { f: Formation; index: number }) {
+function FormationCard({ f, index, dict }: { f: Formation; index: number; dict: Dictionary }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
+  const MODE_ICONS: Record<Formation["mode"], typeof MonitorPlay> = {
+    EN_LIGNE: MonitorPlay,
+    PRESENTIEL: Building,
+    HYBRIDE: Layers,
+  };
+  const MODE_LABELS: Record<Formation["mode"], string> = {
+    EN_LIGNE: dict.formationsPopulaires.modeLabels.enLigne,
+    PRESENTIEL: dict.formationsPopulaires.modeLabels.presentiel,
+    HYBRIDE: dict.formationsPopulaires.modeLabels.hybride,
+  };
   const ModeIcon = MODE_ICONS[f.mode] ?? MonitorPlay;
   const modeLabel = MODE_LABELS[f.mode] ?? f.mode;
 
@@ -81,9 +80,9 @@ function FormationCard({ f, index }: { f: Formation; index: number }) {
             </div>
             <div>
               <div className="font-body text-[12px] font-semibold text-text-primary">
-                {f.formateur || "Institut Lorel"}
+                {f.formateur || dict.formationsPopulaires.institutLorel}
               </div>
-              <div className="font-body text-[10px] text-text-muted">Formateur</div>
+              <div className="font-body text-[10px] text-text-muted">{dict.formationsPopulaires.formateur}</div>
             </div>
           </div>
 
@@ -113,7 +112,7 @@ function FormationCard({ f, index }: { f: Formation; index: number }) {
 
           <div className="flex items-center justify-between">
             <div>
-              <div className="font-body text-[10px] text-text-muted uppercase tracking-wide">À partir de</div>
+              <div className="font-body text-[10px] text-text-muted uppercase tracking-wide">{dict.formationsPopulaires.aPartirDe}</div>
               <div className="font-display text-lg font-bold text-brand-gold leading-none">{f.priceDisplay}</div>
             </div>
             <div className="w-9 h-9 rounded-full bg-brand-blue/8 group-hover:bg-brand-gold flex items-center justify-center transition-all duration-300 border border-brand-blue/15 group-hover:border-brand-gold">
@@ -126,7 +125,7 @@ function FormationCard({ f, index }: { f: Formation; index: number }) {
   );
 }
 
-export function FormationsPopulaires({ formations }: { formations: Formation[] }) {
+export function FormationsPopulaires({ formations, dict }: { formations: Formation[]; dict: Dictionary }) {
   const headerRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(headerRef, { once: true });
 
@@ -142,7 +141,7 @@ export function FormationsPopulaires({ formations }: { formations: Formation[] }
               animate={headerInView ? { opacity: 1 } : {}}
               className="font-body text-label-caps text-brand-gold mb-4"
             >
-              FORMATIONS POPULAIRES
+              {dict.formationsPopulaires.badge}
             </motion.p>
             <motion.h2
               initial={{ opacity: 0, y: 18 }}
@@ -151,7 +150,7 @@ export function FormationsPopulaires({ formations }: { formations: Formation[] }
               className="font-display font-bold text-brand-blue leading-tight"
               style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)" }}
             >
-              Les plus demandées.
+              {dict.formationsPopulaires.titre}
             </motion.h2>
           </div>
           <motion.div
@@ -163,7 +162,7 @@ export function FormationsPopulaires({ formations }: { formations: Formation[] }
               href="/formations"
               className="group flex items-center gap-2 font-body text-sm font-semibold text-brand-blue hover:text-brand-gold transition-colors duration-200"
             >
-              Voir toutes les formations
+              {dict.formationsPopulaires.voirToutesLesFormations}
               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </Link>
           </motion.div>
@@ -171,7 +170,7 @@ export function FormationsPopulaires({ formations }: { formations: Formation[] }
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           {formations.map((f, i) => (
-            <FormationCard key={f.slug} f={f} index={i} />
+            <FormationCard key={f.slug} f={f} index={i} dict={dict} />
           ))}
         </div>
 
@@ -180,7 +179,7 @@ export function FormationsPopulaires({ formations }: { formations: Formation[] }
             href="/formations"
             className="group inline-flex items-center gap-2 border border-brand-blue/30 text-brand-blue hover:bg-brand-blue hover:text-white rounded-sm px-8 py-3.5 font-body font-semibold text-sm transition-all duration-200"
           >
-            Voir toutes les formations
+            {dict.formationsPopulaires.voirToutesLesFormations}
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
           </Link>
         </div>

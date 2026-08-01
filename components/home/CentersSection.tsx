@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { MapPin, Phone, Clock } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 function ExternalLinkIcon() {
   return (
@@ -21,7 +22,6 @@ const CENTERS = [
     quartier: "Guéliz",
     adresse: "Avenue Mohammed VI, Guéliz, Marrakech 40000",
     tel: "+212 5 24 43 XX XX",
-    horaires: "Lun – Sam : 8h30 – 18h",
     image:
       "https://images.pexels.com/photos/3875086/pexels-photo-3875086.jpeg?auto=compress&cs=tinysrgb&w=600",
     gradient: "from-[#C9A84C] via-[#B8941F] to-[#8B6914]",
@@ -33,7 +33,6 @@ const CENTERS = [
     quartier: "Maarif",
     adresse: "Boulevard Zerktouni, Maarif, Casablanca 20100",
     tel: "+212 5 22 48 XX XX",
-    horaires: "Lun – Sam : 8h30 – 18h",
     image:
       "https://images.pexels.com/photos/2129796/pexels-photo-2129796.jpeg?auto=compress&cs=tinysrgb&w=600",
     gradient: "from-[#1B3A5C] via-[#2C5378] to-[#0a1628]",
@@ -45,9 +44,11 @@ const CENTERS = [
 function CenterCard({
   center,
   index,
+  dict,
 }: {
   center: (typeof CENTERS)[number];
   index: number;
+  dict: Dictionary;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
@@ -108,7 +109,7 @@ function CenterCard({
             </div>
             <div className="flex items-center gap-3">
               <Clock className="w-4 h-4 text-brand-gold shrink-0" />
-              <span className="font-body text-[12px] text-text-muted">{center.horaires}</span>
+              <span className="font-body text-[12px] text-text-muted">{dict.centersSection.horaires}</span>
             </div>
           </div>
 
@@ -119,7 +120,7 @@ function CenterCard({
             className="inline-flex items-center gap-2 font-body text-[12px] font-semibold text-brand-blue hover:text-brand-gold border border-brand-blue/20 hover:border-brand-gold/40 px-4 py-2 rounded-sm transition-all duration-200"
           >
             <ExternalLinkIcon />
-            Voir sur Google Maps
+            {dict.centersSection.voirSurMaps}
           </a>
         </div>
       </div>
@@ -127,7 +128,7 @@ function CenterCard({
   );
 }
 
-export function CentersSection() {
+export function CentersSection({ dict }: { dict: Dictionary }) {
   const headerRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(headerRef, { once: true });
 
@@ -150,7 +151,7 @@ export function CentersSection() {
             animate={headerInView ? { opacity: 1 } : {}}
             className="font-body text-label-caps text-brand-gold mb-4"
           >
-            NOS CENTRES
+            {dict.centersSection.badge}
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 18 }}
@@ -159,7 +160,7 @@ export function CentersSection() {
             className="font-display font-bold text-white leading-tight mb-4"
             style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)" }}
           >
-            Deux centres à votre service.
+            {dict.centersSection.titreLigne1}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -167,14 +168,13 @@ export function CentersSection() {
             transition={{ delay: 0.2 }}
             className="font-body text-white/50 text-sm leading-relaxed"
           >
-            Des espaces équipés à Marrakech et Casablanca pour vous accueillir en présentiel.
-            Formez-vous dans un cadre professionnel et motivant.
+            {dict.centersSection.description}
           </motion.p>
         </div>
 
         <div className="grid sm:grid-cols-2 gap-6 sm:gap-8">
           {CENTERS.map((c, i) => (
-            <CenterCard key={c.ville} center={c} index={i} />
+            <CenterCard key={c.ville} center={c} index={i} dict={dict} />
           ))}
         </div>
 
@@ -186,7 +186,7 @@ export function CentersSection() {
           className="mt-10 pt-8 border-t border-white/8 flex flex-col sm:flex-row items-center justify-between gap-4"
         >
           <p className="font-body text-sm text-white/50 text-center sm:text-left">
-            Une question ? Appelez-nous directement — réponse garantie sous 24h.
+            {dict.centersSection.question}
           </p>
           <a
             href="tel:+212600000000"

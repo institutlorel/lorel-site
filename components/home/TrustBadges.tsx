@@ -1,30 +1,15 @@
 import { BadgeCheck, Award, MapPin, ShieldCheck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-const BADGES = [
-  {
-    icon: BadgeCheck,
-    label: "Certifications reconnues",
-    sub: "OFPPT & organismes nationaux",
-  },
-  {
-    icon: Award,
-    label: "15 ans d'expérience",
-    sub: "Formateurs en activité",
-  },
-  {
-    icon: MapPin,
-    label: "2 centres physiques",
-    sub: "Marrakech & Casablanca",
-  },
-  {
-    icon: ShieldCheck,
-    label: "Paiement sécurisé",
-    sub: "Facilités & versements",
-  },
-];
+export function TrustBadges({ dict }: { dict: Dictionary }) {
+  const BADGES = [
+    { icon: BadgeCheck, ...dict.trustBadges.certifications },
+    { icon: Award, ...dict.trustBadges.experience },
+    { icon: MapPin, ...dict.trustBadges.centres },
+    { icon: ShieldCheck, ...dict.trustBadges.paiement },
+  ];
 
-export function TrustBadges() {
   return (
     <section className="bg-brand-cream border-y border-brand-gold/15">
       <Container className="py-5 sm:py-6">

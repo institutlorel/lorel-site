@@ -4,39 +4,19 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Search, ClipboardCheck, GraduationCap, Trophy } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-const STEPS = [
-  {
-    num: "01",
-    icon: Search,
-    titre: "Choisissez",
-    desc: "Explorez nos formations et trouvez celle qui correspond à vos objectifs et votre emploi du temps.",
-  },
-  {
-    num: "02",
-    icon: ClipboardCheck,
-    titre: "Inscrivez-vous",
-    desc: "Remplissez le formulaire d'inscription. Nos conseillers vous contactent sous 24h.",
-  },
-  {
-    num: "03",
-    icon: GraduationCap,
-    titre: "Formez-vous",
-    desc: "Suivez votre formation en présentiel, en ligne ou hybride selon votre disponibilité.",
-  },
-  {
-    num: "04",
-    icon: Trophy,
-    titre: "Réussissez",
-    desc: "Obtenez votre certification et intégrez le marché du travail avec l'appui de notre réseau.",
-  },
-];
-
-export function Process() {
+export function Process({ dict }: { dict: Dictionary }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const lineRef = useRef<HTMLDivElement>(null);
   const lineInView = useInView(lineRef, { once: true, margin: "-100px" });
+  const STEPS = [
+    { num: "01", icon: Search, ...dict.process.steps.choisir },
+    { num: "02", icon: ClipboardCheck, ...dict.process.steps.inscrire },
+    { num: "03", icon: GraduationCap, ...dict.process.steps.former },
+    { num: "04", icon: Trophy, ...dict.process.steps.reussir },
+  ];
 
   return (
     <section className="py-24 lg:py-32 bg-brand-cream">
@@ -48,7 +28,7 @@ export function Process() {
             animate={inView ? { opacity: 1 } : {}}
             className="font-body text-label-caps text-brand-gold mb-4"
           >
-            SIMPLE &amp; RAPIDE
+            {dict.process.badge}
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 18 }}
@@ -57,7 +37,7 @@ export function Process() {
             className="font-display font-bold text-brand-blue leading-tight"
             style={{ fontSize: "clamp(2rem, 4vw, 3rem)" }}
           >
-            Votre parcours en 4 étapes.
+            {dict.process.titre}
           </motion.h2>
         </div>
 

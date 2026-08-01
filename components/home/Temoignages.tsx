@@ -5,12 +5,14 @@ import { motion, AnimatePresence, useInView } from "framer-motion";
 import { Star, Quote, CheckCircle } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import type { SiteTemoignage } from "@/lib/data/platform-api";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 interface Props {
   temoignages: SiteTemoignage[];
+  dict: Dictionary;
 }
 
-export function Temoignages({ temoignages }: Props) {
+export function Temoignages({ temoignages, dict }: Props) {
   const [active, setActive] = useState(0);
   const headerRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(headerRef, { once: true });
@@ -55,14 +57,14 @@ export function Temoignages({ temoignages }: Props) {
             </div>
             <div>
               <div className="font-body text-xs font-semibold text-text-primary">
-                Rejoignez{" "}
-                <span className="text-brand-gold">500+ diplômés</span> satisfaits
+                {dict.temoignages.rejoignez}{" "}
+                <span className="text-brand-gold">{dict.temoignages.diplomes}</span> {dict.temoignages.satisfaits}
               </div>
               <div className="flex items-center gap-0.5 mt-0.5">
                 {[1, 2, 3, 4, 5].map((s) => (
                   <Star key={s} className="w-3 h-3 text-brand-gold fill-brand-gold" />
                 ))}
-                <span className="font-body text-[10px] text-text-muted ms-1.5">Note moyenne 4.9/5</span>
+                <span className="font-body text-[10px] text-text-muted ms-1.5">{dict.temoignages.noteMoyenne}</span>
               </div>
             </div>
           </motion.div>
@@ -72,7 +74,7 @@ export function Temoignages({ temoignages }: Props) {
             animate={headerInView ? { opacity: 1 } : {}}
             className="font-body text-label-caps text-brand-gold mb-4"
           >
-            TÉMOIGNAGES
+            {dict.temoignages.badge}
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 18 }}
@@ -81,7 +83,7 @@ export function Temoignages({ temoignages }: Props) {
             className="font-display font-bold text-brand-blue leading-tight"
             style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)" }}
           >
-            Ils ont transformé leur carrière.
+            {dict.temoignages.titre}
           </motion.h2>
         </div>
 
@@ -142,7 +144,7 @@ export function Temoignages({ temoignages }: Props) {
                   </div>
                   <div className="flex items-center gap-1 bg-green-50 border border-green-200 px-2.5 py-1 rounded-full">
                     <CheckCircle className="w-3 h-3 text-green-600 shrink-0" />
-                    <span className="font-body text-[10px] font-semibold text-green-700">Avis vérifié</span>
+                    <span className="font-body text-[10px] font-semibold text-green-700">{dict.temoignages.avisVerifie}</span>
                   </div>
                 </div>
               </motion.div>
@@ -193,7 +195,7 @@ export function Temoignages({ temoignages }: Props) {
                     </div>
                     <div className="flex items-center gap-1 bg-green-50 border border-green-100 px-2 py-0.5 rounded-full shrink-0">
                       <CheckCircle className="w-2.5 h-2.5 text-green-500" />
-                      <span className="font-body text-[9px] text-green-600">Vérifié</span>
+                      <span className="font-body text-[9px] text-green-600">{dict.temoignages.verifie}</span>
                     </div>
                   </div>
                   <p className="font-body text-xs text-text-secondary leading-relaxed line-clamp-2">

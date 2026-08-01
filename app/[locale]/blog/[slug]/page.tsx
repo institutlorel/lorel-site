@@ -21,6 +21,8 @@ import {
   DEFAULT_OG_IMAGE,
 } from "@/lib/seo";
 import { extractToc } from "@/lib/toc";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import type { Langue } from "@/lib/i18n/config";
 
 export const revalidate = 300;
 
@@ -97,7 +99,8 @@ export default async function BlogArticlePage({
   params: Promise<{ locale: string; slug: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+  const dict = getDictionary(locale as Langue);
   const sp = await searchParams;
   const previewToken = typeof sp.preview === "string" ? sp.preview : undefined;
   const isPreview =
@@ -145,7 +148,7 @@ export default async function BlogArticlePage({
         </div>
       )}
 
-      <SiteHeader />
+      <SiteHeader dict={dict} />
 
       {/* Hero — shifted down on preview to clear banner */}
       <div className={`bg-brand-dark relative overflow-hidden${isPreview ? " mt-9" : ""}`}>
@@ -397,7 +400,7 @@ export default async function BlogArticlePage({
         </Container>
       </section>
 
-      <SiteFooter />
+      <SiteFooter dict={dict} />
     </>
   );
 }

@@ -3,6 +3,8 @@ import { getPageSeo, getSiteSettings } from "@/lib/data/platform-api";
 import { buildMetadata, resolvePageMeta } from "@/lib/seo";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import type { Langue } from "@/lib/i18n/config";
 import { ContactClient } from "./ContactClient";
 
 export async function generateMetadata({
@@ -21,13 +23,14 @@ export default async function ContactPage({
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  await params; // locale threaded through for future use (I2+); not consumed yet
+  const { locale } = await params;
+  const dict = getDictionary(locale as Langue);
   const { casablanca, marrakech, enLigne } = await getSiteSettings();
   return (
     <>
-      <SiteHeader />
+      <SiteHeader dict={dict} />
       <ContactClient waSettings={{ casablanca, marrakech, enLigne }} />
-      <SiteFooter />
+      <SiteFooter dict={dict} />
     </>
   );
 }

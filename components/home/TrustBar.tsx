@@ -1,5 +1,7 @@
 "use client";
 
+import type { Dictionary } from "@/lib/i18n/dictionaries";
+
 const PARTNERS = [
   "OFPPT",
   "CCIS",
@@ -9,7 +11,7 @@ const PARTNERS = [
   "Google",
 ];
 
-export function TrustBar() {
+export function TrustBar({ dict }: { dict: Dictionary }) {
   // Duplicate for seamless marquee loop
   const items = [...PARTNERS, ...PARTNERS];
 
@@ -17,7 +19,7 @@ export function TrustBar() {
     <div className="bg-white border-y border-gray-100 py-5 overflow-hidden">
       <div className="max-w-screen-xl mx-auto px-6 lg:px-10 mb-4">
         <p className="font-body text-label-caps text-text-muted text-center">
-          Ils nous font confiance
+          {dict.trustBar.confiance}
         </p>
       </div>
 

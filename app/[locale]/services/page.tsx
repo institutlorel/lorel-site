@@ -29,6 +29,8 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Container } from "@/components/ui/Container";
 import { SERVICES } from "@/lib/data/services";
 import { getSiteSettings } from "@/lib/data/platform-api";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import type { Langue } from "@/lib/i18n/config";
 
 const ICON_MAP: Record<
   string,
@@ -46,11 +48,12 @@ export default async function ServicesPage({
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  await params; // locale threaded through for future use (I2+); not consumed yet
+  const { locale } = await params;
+  const dict = getDictionary(locale as Langue);
   const { principal } = await getSiteSettings();
   return (
     <>
-      <SiteHeader />
+      <SiteHeader dict={dict} />
 
       {/* Hero */}
       <div className="bg-brand-dark relative overflow-hidden">
@@ -214,7 +217,7 @@ export default async function ServicesPage({
         </Container>
       </section>
 
-      <SiteFooter />
+      <SiteFooter dict={dict} />
     </>
   );
 }

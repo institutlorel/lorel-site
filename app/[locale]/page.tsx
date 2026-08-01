@@ -33,13 +33,16 @@ import { CentersSection } from "@/components/home/CentersSection";
 import { CTASection } from "@/components/home/CTASection";
 import { Footer } from "@/components/home/Footer";
 import { getSiteSettings, getTemoignages, getArticles } from "@/lib/data/platform-api";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import type { Langue } from "@/lib/i18n/config";
 
 export default async function Home({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  await params; // locale threaded through for future use (I2+); not consumed yet
+  const { locale } = await params;
+  const dict = getDictionary(locale as Langue);
   const [{ principal }, temoignages, previewArticles] = await Promise.all([
     getSiteSettings(),
     getTemoignages(),
@@ -47,25 +50,25 @@ export default async function Home({
   ]);
   return (
     <>
-      <AnnouncementBar />
-      <Navbar />
+      <AnnouncementBar dict={dict} />
+      <Navbar dict={dict} />
       <main>
-        <Hero />
-        <TrustBar />
-        <TrustBadges />
-        <DomainesGrid />
-        <FormationsPopulairesWrapper />
-        <ModesSection />
-        <WhyLorel />
-        <ServicesVAE />
-        <FormateursSection />
-        <Temoignages temoignages={temoignages} />
-        <Process />
-        <BlogPreview articles={previewArticles.slice(0, 3)} />
-        <CentersSection />
-        <CTASection waNumber={principal} />
+        <Hero dict={dict} />
+        <TrustBar dict={dict} />
+        <TrustBadges dict={dict} />
+        <DomainesGrid dict={dict} />
+        <FormationsPopulairesWrapper dict={dict} />
+        <ModesSection dict={dict} />
+        <WhyLorel dict={dict} />
+        <ServicesVAE dict={dict} />
+        <FormateursSection dict={dict} />
+        <Temoignages temoignages={temoignages} dict={dict} />
+        <Process dict={dict} />
+        <BlogPreview articles={previewArticles.slice(0, 3)} dict={dict} />
+        <CentersSection dict={dict} />
+        <CTASection waNumber={principal} dict={dict} />
       </main>
-      <Footer waNumber={principal} />
+      <Footer waNumber={principal} dict={dict} />
     </>
   );
 }

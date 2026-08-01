@@ -6,6 +6,8 @@ import { getFormations, getFormation, getRelatedFormations, getSiteSettings } fr
 import { FormationDetailClient } from "./FormationDetailClient";
 import { buildMetadata, courseJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/JsonLd";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import type { Langue } from "@/lib/i18n/config";
 
 export const revalidate = 60;
 
@@ -35,7 +37,8 @@ export default async function FormationDetailPage({
 }: {
   params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+  const dict = getDictionary(locale as Langue);
   const formation = await getFormation(slug);
   if (!formation) notFound();
 
@@ -45,11 +48,11 @@ export default async function FormationDetailPage({
   return (
     <>
       <JsonLd data={courseJsonLd(formation)} />
-      <SiteHeader />
+      <SiteHeader dict={dict} />
       <main>
         <FormationDetailClient formation={formation} related={related} waNumber={principal} />
       </main>
-      <SiteFooter />
+      <SiteFooter dict={dict} />
     </>
   );
 }

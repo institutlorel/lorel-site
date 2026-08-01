@@ -5,50 +5,21 @@ import { motion, useInView } from "framer-motion";
 import { Award, Briefcase, Users, BadgeCheck, ArrowRight } from "lucide-react";
 import { LocaleLink as Link } from "@/components/LocaleLink";
 import { Container } from "@/components/ui/Container";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-const SERVICES = [
-  {
-    slug: "vae",
-    icon: Award,
-    titre: "VAE — Validation des Acquis",
-    shortTitre: "VAE",
-    description:
-      "Transformez votre expérience professionnelle en diplôme reconnu. Un processus accompagné de A à Z.",
-    featured: true,
-    badge: "Populaire",
-  },
-  {
-    slug: "formation-entreprises",
-    icon: Briefcase,
-    titre: "Formation Entreprises",
-    shortTitre: "Entreprises",
-    description:
-      "Programmes sur-mesure pour former vos équipes selon vos objectifs stratégiques et votre secteur.",
-    featured: false,
-  },
-  {
-    slug: "accompagnement",
-    icon: Users,
-    titre: "Accompagnement & Coaching",
-    shortTitre: "Coaching",
-    description:
-      "Coaching professionnel et orientation personnalisée pour clarifier votre projet et accélérer votre réussite.",
-    featured: false,
-  },
-  {
-    slug: "certification",
-    icon: BadgeCheck,
-    titre: "Préparation aux Certifications",
-    shortTitre: "Certifications",
-    description:
-      "Préparez et passez vos certifications professionnelles nationales et internationales avec nos formateurs.",
-    featured: false,
-  },
-];
+function buildServices(dict: Dictionary) {
+  return [
+    { slug: "vae", icon: Award, ...dict.servicesVAE.items.vae, featured: true, badge: dict.servicesVAE.populaire as string | undefined },
+    { slug: "formation-entreprises", icon: Briefcase, ...dict.servicesVAE.items.entreprises, featured: false, badge: undefined as string | undefined },
+    { slug: "accompagnement", icon: Users, ...dict.servicesVAE.items.accompagnement, featured: false, badge: undefined as string | undefined },
+    { slug: "certification", icon: BadgeCheck, ...dict.servicesVAE.items.certification, featured: false, badge: undefined as string | undefined },
+  ];
+}
 
-export function ServicesVAE() {
+export function ServicesVAE({ dict }: { dict: Dictionary }) {
   const headerRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(headerRef, { once: true });
+  const SERVICES = buildServices(dict);
 
   return (
     <section className="relative py-24 lg:py-32 bg-brand-dark overflow-hidden grain-bg">
@@ -66,7 +37,7 @@ export function ServicesVAE() {
             animate={headerInView ? { opacity: 1 } : {}}
             className="font-body text-label-caps text-brand-gold mb-4"
           >
-            NOS SERVICES
+            {dict.servicesVAE.badge}
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 18 }}
@@ -75,7 +46,7 @@ export function ServicesVAE() {
             className="font-display font-bold text-white leading-tight mb-5"
             style={{ fontSize: "clamp(2rem, 4vw, 3rem)" }}
           >
-            Au-delà de la formation.
+            {dict.servicesVAE.titre}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -83,8 +54,7 @@ export function ServicesVAE() {
             transition={{ delay: 0.2 }}
             className="font-body text-white/45 text-sm leading-relaxed"
           >
-            L&apos;Institut Lorel vous accompagne tout au long de votre parcours professionnel,
-            de la formation initiale à la validation de vos acquis.
+            {dict.servicesVAE.description}
           </motion.p>
         </div>
 
@@ -134,7 +104,7 @@ export function ServicesVAE() {
                   <div className={`flex items-center gap-2 font-body text-[12px] font-semibold transition-colors duration-200 ${
                     s.featured ? "text-brand-gold" : "text-white/40 group-hover:text-brand-gold"
                   }`}>
-                    En savoir plus
+                    {dict.common.enSavoirPlus}
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200" />
                   </div>
                 </Link>

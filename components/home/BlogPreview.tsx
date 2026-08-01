@@ -6,6 +6,7 @@ import { LocaleLink as Link } from "@/components/LocaleLink";
 import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import type { SiteArticle } from "@/lib/data/platform-api";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("fr-MA", {
@@ -15,7 +16,7 @@ function formatDate(iso: string) {
   });
 }
 
-function ArticleCard({ article, index }: { article: SiteArticle; index: number }) {
+function ArticleCard({ article, index, dict }: { article: SiteArticle; index: number; dict: Dictionary }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
 
@@ -50,7 +51,7 @@ function ArticleCard({ article, index }: { article: SiteArticle; index: number }
         <div className="flex items-center gap-3 mb-3">
           <span className="font-body text-[11px] text-text-muted">{formatDate(article.publishedAt)}</span>
           <span className="w-1 h-1 rounded-full bg-gray-300" />
-          <span className="font-body text-[11px] text-text-muted">{article.readingMinutes} min de lecture</span>
+          <span className="font-body text-[11px] text-text-muted">{article.readingMinutes} {dict.blogPreview.minLecture}</span>
         </div>
 
         <h3 className="font-display text-[18px] font-semibold text-brand-blue group-hover:text-brand-gold transition-colors duration-200 leading-snug mb-3">
@@ -62,7 +63,7 @@ function ArticleCard({ article, index }: { article: SiteArticle; index: number }
         </p>
 
         <span className="inline-flex items-center gap-2 font-body text-xs font-semibold text-brand-blue group-hover:text-brand-gold transition-colors duration-200">
-          Lire l&apos;article
+          {dict.blogPreview.lireArticle}
           <span className="w-4 h-px bg-current group-hover:w-6 transition-all duration-200 inline-block" />
         </span>
       </Link>
@@ -72,9 +73,10 @@ function ArticleCard({ article, index }: { article: SiteArticle; index: number }
 
 interface Props {
   articles: SiteArticle[];
+  dict: Dictionary;
 }
 
-export function BlogPreview({ articles }: Props) {
+export function BlogPreview({ articles, dict }: Props) {
   const headerRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(headerRef, { once: true });
 
@@ -90,7 +92,7 @@ export function BlogPreview({ articles }: Props) {
               animate={headerInView ? { opacity: 1 } : {}}
               className="font-body text-label-caps text-brand-gold mb-3"
             >
-              BLOG
+              {dict.blogPreview.badge}
             </motion.p>
             <motion.h2
               initial={{ opacity: 0, y: 18 }}
@@ -99,7 +101,7 @@ export function BlogPreview({ articles }: Props) {
               className="font-display font-bold text-brand-blue leading-tight"
               style={{ fontSize: "clamp(1.6rem, 3.5vw, 2.6rem)" }}
             >
-              Conseils &amp; Ressources
+              {dict.blogPreview.titre}
             </motion.h2>
           </div>
           <motion.div
@@ -111,7 +113,7 @@ export function BlogPreview({ articles }: Props) {
               href="/blog"
               className="group flex items-center gap-2 font-body text-sm font-semibold text-text-muted hover:text-brand-blue transition-colors"
             >
-              Voir tout
+              {dict.blogPreview.voirTout}
               <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </Link>
           </motion.div>
@@ -119,7 +121,7 @@ export function BlogPreview({ articles }: Props) {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
           {articles.map((a, i) => (
-            <ArticleCard key={a.slug} article={a} index={i} />
+            <ArticleCard key={a.slug} article={a} index={i} dict={dict} />
           ))}
         </div>
       </Container>

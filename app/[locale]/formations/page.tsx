@@ -18,6 +18,8 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Container } from "@/components/ui/Container";
 import { getFormations, CATEGORIES } from "@/lib/data/platform-api";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import type { Langue } from "@/lib/i18n/config";
 import { FormationsClientGrid } from "./FormationsClientGrid";
 
 export const revalidate = 60;
@@ -29,14 +31,15 @@ export default async function FormationsPage({
   params: Promise<{ locale: string }>;
   searchParams: Promise<{ category?: string }>;
 }) {
-  await params; // locale threaded through for future use (I2+); not consumed yet
+  const { locale } = await params;
+  const dict = getDictionary(locale as Langue);
   const { category } = await searchParams;
   const formations = await getFormations(category ? { category } : undefined);
   const activeCategory = category ?? "";
 
   return (
     <>
-      <SiteHeader />
+      <SiteHeader dict={dict} />
       <main>
         {/* Hero */}
         <div className="bg-brand-dark relative overflow-hidden">
@@ -105,7 +108,7 @@ export default async function FormationsPage({
 
         <FormationsClientGrid formations={formations} />
       </main>
-      <SiteFooter />
+      <SiteFooter dict={dict} />
     </>
   );
 }

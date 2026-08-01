@@ -4,43 +4,45 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Building2, Monitor, Layers, Check } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-const MODES = [
-  {
-    id: "presentiel",
-    label: "Présentiel",
-    icon: Building2,
-    description:
-      "Dans nos centres de Marrakech et Casablanca. Encadrement direct, équipements professionnels, ambiance d'apprentissage.",
-    points: ["Salles équipées", "Formateurs présents", "Networking"],
-    highlighted: false,
-  },
-  {
-    id: "en-ligne",
-    label: "En ligne",
-    icon: Monitor,
-    description:
-      "Depuis chez vous, à votre rythme. Cours en direct et enregistrés, support continu, flexibilité totale.",
-    points: ["Cours en direct", "Replay illimité", "Support 7j/7"],
-    highlighted: true,
-    badge: "Populaire",
-  },
-  {
-    id: "hybride",
-    label: "Hybride",
-    icon: Layers,
-    description:
-      "Le meilleur des deux mondes. Alternez présentiel et distanciel selon votre emploi du temps.",
-    points: ["Flexibilité maximale", "Présentiel + Online", "Suivi personnalisé"],
-    highlighted: false,
-  },
-];
+function buildModes(dict: Dictionary) {
+  return [
+    {
+      id: "presentiel",
+      icon: Building2,
+      label: dict.modesSection.modes.presentiel.label,
+      description: dict.modesSection.modes.presentiel.description,
+      points: Object.values(dict.modesSection.modes.presentiel.points),
+      highlighted: false,
+      badge: undefined as string | undefined,
+    },
+    {
+      id: "en-ligne",
+      icon: Monitor,
+      label: dict.modesSection.modes.enLigne.label,
+      description: dict.modesSection.modes.enLigne.description,
+      points: Object.values(dict.modesSection.modes.enLigne.points),
+      highlighted: true,
+      badge: dict.modesSection.populaire as string | undefined,
+    },
+    {
+      id: "hybride",
+      icon: Layers,
+      label: dict.modesSection.modes.hybride.label,
+      description: dict.modesSection.modes.hybride.description,
+      points: Object.values(dict.modesSection.modes.hybride.points),
+      highlighted: false,
+      badge: undefined as string | undefined,
+    },
+  ];
+}
 
 function ModeCard({
   mode,
   index,
 }: {
-  mode: (typeof MODES)[number];
+  mode: ReturnType<typeof buildModes>[number];
   index: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -145,9 +147,10 @@ function ModeCard({
   );
 }
 
-export function ModesSection() {
+export function ModesSection({ dict }: { dict: Dictionary }) {
   const headerRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(headerRef, { once: true });
+  const MODES = buildModes(dict);
 
   return (
     <section className="py-24 lg:py-32 bg-white">
@@ -160,7 +163,7 @@ export function ModesSection() {
             transition={{ duration: 0.6 }}
             className="font-body text-label-caps text-brand-gold mb-4"
           >
-            FLEXIBILITÉ
+            {dict.modesSection.badge}
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -169,7 +172,7 @@ export function ModesSection() {
             className="font-display font-bold text-brand-blue leading-tight mb-5"
             style={{ fontSize: "clamp(2rem, 4vw, 3rem)" }}
           >
-            Apprenez comme vous voulez.
+            {dict.modesSection.titre}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -177,8 +180,7 @@ export function ModesSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="font-body text-text-secondary text-sm leading-relaxed"
           >
-            Trois modes d&apos;apprentissage pour s&apos;adapter à votre vie, votre rythme et vos objectifs.
-            Changez de mode en cours de formation si besoin.
+            {dict.modesSection.description}
           </motion.p>
         </div>
 

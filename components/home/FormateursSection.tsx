@@ -6,6 +6,7 @@ import { LocaleLink as Link } from "@/components/LocaleLink";
 import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { SITE_IMAGES } from "@/lib/data/images";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 function LinkedinIcon({ className }: { className?: string }) {
   return (
@@ -15,54 +16,60 @@ function LinkedinIcon({ className }: { className?: string }) {
   );
 }
 
-const FORMATEURS = [
-  {
-    slug: "youssef-kabbaj",
-    prenom: "Youssef",
-    nom: "Kabbaj",
-    specialite: "Photographie & Arts Visuels",
-    bio: "Photographe professionnel avec 12 ans d'expérience. Collaborations avec des agences internationales.",
-    formations: 3,
-    etudiants: 120,
-    photo: SITE_IMAGES.formateurs.f1,
-    gradient: "from-brand-blue to-brand-dark",
-  },
-  {
-    slug: "sara-benchekroun",
-    prenom: "Sara",
-    nom: "Benchekroun",
-    specialite: "Marketing Digital",
-    bio: "Directrice marketing dans une agence digitale casablancaise. Experte Meta Ads et stratégie de contenu.",
-    formations: 5,
-    etudiants: 200,
-    photo: SITE_IMAGES.formateurs.f2,
-    gradient: "from-[#1a3a2a] to-brand-dark",
-  },
-  {
-    slug: "nadia-ouahbi",
-    prenom: "Nadia",
-    nom: "Ouahbi",
-    specialite: "Esthétique & Beauté",
-    bio: "Esthéticienne certifiée, gérante d'un institut à Marrakech. Formatrice agréée OFPPT.",
-    formations: 4,
-    etudiants: 180,
-    photo: SITE_IMAGES.formateurs.f3,
-    gradient: "from-[#3a1a2a] to-brand-dark",
-  },
-  {
-    slug: "hassan-tazi",
-    prenom: "Hassan",
-    nom: "Tazi",
-    specialite: "Finance & Gestion PME",
-    bio: "Expert-comptable et consultant financier. Accompagne des PME marocaines depuis plus de 15 ans.",
-    formations: 3,
-    etudiants: 95,
-    photo: SITE_IMAGES.formateurs.f4,
-    gradient: "from-[#2a1a0a] to-brand-dark",
-  },
-];
+function buildFormateurs(dict: Dictionary) {
+  return [
+    {
+      slug: "youssef-kabbaj",
+      prenom: "Youssef",
+      nom: "Kabbaj",
+      ...dict.formateursSection.formateurs.youssef,
+      formations: 3,
+      etudiants: 120,
+      photo: SITE_IMAGES.formateurs.f1,
+      gradient: "from-brand-blue to-brand-dark",
+    },
+    {
+      slug: "sara-benchekroun",
+      prenom: "Sara",
+      nom: "Benchekroun",
+      ...dict.formateursSection.formateurs.sara,
+      formations: 5,
+      etudiants: 200,
+      photo: SITE_IMAGES.formateurs.f2,
+      gradient: "from-[#1a3a2a] to-brand-dark",
+    },
+    {
+      slug: "nadia-ouahbi",
+      prenom: "Nadia",
+      nom: "Ouahbi",
+      ...dict.formateursSection.formateurs.nadia,
+      formations: 4,
+      etudiants: 180,
+      photo: SITE_IMAGES.formateurs.f3,
+      gradient: "from-[#3a1a2a] to-brand-dark",
+    },
+    {
+      slug: "hassan-tazi",
+      prenom: "Hassan",
+      nom: "Tazi",
+      ...dict.formateursSection.formateurs.hassan,
+      formations: 3,
+      etudiants: 95,
+      photo: SITE_IMAGES.formateurs.f4,
+      gradient: "from-[#2a1a0a] to-brand-dark",
+    },
+  ];
+}
 
-function FormateurCard({ f, index }: { f: (typeof FORMATEURS)[number]; index: number }) {
+function FormateurCard({
+  f,
+  index,
+  dict,
+}: {
+  f: ReturnType<typeof buildFormateurs>[number];
+  index: number;
+  dict: Dictionary;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
 
@@ -101,13 +108,13 @@ function FormateurCard({ f, index }: { f: (typeof FORMATEURS)[number]; index: nu
 
         <div className="flex items-center justify-between">
           <div className="font-body text-[11px] text-text-muted">
-            <span className="font-semibold text-text-primary">{f.formations}</span> formations
+            <span className="font-semibold text-text-primary">{f.formations}</span> {dict.formateursSection.formationsSuffix}
             {" · "}
-            <span className="font-semibold text-text-primary">{f.etudiants}</span> étudiants
+            <span className="font-semibold text-text-primary">{f.etudiants}</span> {dict.formateursSection.etudiantsSuffix}
           </div>
           <a
             href="#"
-            aria-label="LinkedIn"
+            aria-label={dict.formateursSection.linkedin}
             className="w-7 h-7 rounded border border-gray-200 hover:border-brand-blue flex items-center justify-center text-text-muted hover:text-brand-blue transition-all duration-200"
             onClick={(e) => e.preventDefault()}
           >
@@ -119,9 +126,10 @@ function FormateurCard({ f, index }: { f: (typeof FORMATEURS)[number]; index: nu
   );
 }
 
-export function FormateursSection() {
+export function FormateursSection({ dict }: { dict: Dictionary }) {
   const headerRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(headerRef, { once: true });
+  const FORMATEURS = buildFormateurs(dict);
 
   return (
     <section className="py-16 sm:py-24 lg:py-32 bg-brand-cream">
@@ -133,7 +141,7 @@ export function FormateursSection() {
               animate={headerInView ? { opacity: 1 } : {}}
               className="font-body text-label-caps text-brand-gold mb-4"
             >
-              NOTRE ÉQUIPE
+              {dict.formateursSection.badge}
             </motion.p>
             <motion.h2
               initial={{ opacity: 0, y: 18 }}
@@ -142,8 +150,8 @@ export function FormateursSection() {
               className="font-display font-bold text-brand-blue leading-tight"
               style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)" }}
             >
-              Apprenez auprès
-              <br />des meilleurs.
+              {dict.formateursSection.titreLigne1}
+              <br />{dict.formateursSection.titreLigne2}
             </motion.h2>
           </div>
           <motion.div
@@ -155,7 +163,7 @@ export function FormateursSection() {
               href="/formateurs"
               className="group flex items-center gap-2 font-body text-sm font-semibold text-brand-blue hover:text-brand-gold transition-colors duration-200"
             >
-              Voir tous les formateurs
+              {dict.formateursSection.voirTousLesFormateurs}
               <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </Link>
           </motion.div>
@@ -165,7 +173,7 @@ export function FormateursSection() {
         <div className="flex lg:grid lg:grid-cols-4 gap-5 overflow-x-auto lg:overflow-visible pb-4 lg:pb-0 no-scrollbar">
           {FORMATEURS.map((f, i) => (
             <div key={f.slug} className="shrink-0 w-[280px] sm:w-72 lg:w-auto">
-              <FormateurCard f={f} index={i} />
+              <FormateurCard f={f} index={i} dict={dict} />
             </div>
           ))}
         </div>

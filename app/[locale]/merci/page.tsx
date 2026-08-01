@@ -3,16 +3,19 @@ import { CheckCircle } from "lucide-react";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Container } from "@/components/ui/Container";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import type { Langue } from "@/lib/i18n/config";
 
 export default async function MerciPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  await params; // locale threaded through for future use (I2+); not consumed yet
+  const { locale } = await params;
+  const dict = getDictionary(locale as Langue);
   return (
     <>
-      <SiteHeader />
+      <SiteHeader dict={dict} />
       <div className="bg-brand-cream min-h-[60vh] flex items-center">
         <Container>
           <div className="max-w-lg mx-auto text-center py-20">
@@ -46,7 +49,7 @@ export default async function MerciPage({
           </div>
         </Container>
       </div>
-      <SiteFooter />
+      <SiteFooter dict={dict} />
     </>
   );
 }

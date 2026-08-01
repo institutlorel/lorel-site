@@ -8,6 +8,8 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Container } from "@/components/ui/Container";
 import { SERVICES, getServiceBySlug, getRelatedServices } from "@/lib/data/services";
 import { getSiteSettings } from "@/lib/data/platform-api";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+import type { Langue } from "@/lib/i18n/config";
 
 export function generateStaticParams() {
   return SERVICES.map((s) => ({ slug: s.slug }));
@@ -34,7 +36,8 @@ export default async function ServiceDetailPage({
 }: {
   params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+  const dict = getDictionary(locale as Langue);
   const service = getServiceBySlug(slug);
   if (!service) notFound();
 
@@ -43,7 +46,7 @@ export default async function ServiceDetailPage({
 
   return (
     <>
-      <SiteHeader />
+      <SiteHeader dict={dict} />
 
       {/* Hero with photo background */}
       <div className="relative overflow-hidden min-h-[320px] flex items-end">
@@ -310,7 +313,7 @@ export default async function ServiceDetailPage({
         </Container>
       </section>
 
-      <SiteFooter />
+      <SiteFooter dict={dict} />
     </>
   );
 }
