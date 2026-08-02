@@ -5,6 +5,7 @@ import { LocaleLink as Link } from "@/components/LocaleLink";
 import { ArrowUpRight, Clock, Calendar } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import type { SiteArticle } from "@/lib/data/platform-api";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 const CATEGORY_COLORS: Record<string, string> = {
   Carrière: "bg-blue-100 text-blue-700",
@@ -25,17 +26,22 @@ function formatDate(iso: string) {
 
 interface Props {
   articles: SiteArticle[];
+  dict: Dictionary;
 }
 
-export function BlogListClient({ articles }: Props) {
-  const [activeCategory, setActiveCategory] = useState<string>("Tous");
+export function BlogListClient({ articles, dict }: Props) {
+  const toutes = dict.faqPage.categories.toutes;
+  const [activeCategory, setActiveCategory] = useState<string>(toutes);
 
-  const categories = ["Tous", ...Array.from(new Set(articles.map((a) => a.category).filter(Boolean)))];
+  // Category pill VALUES (beyond "Tous") come straight from live article data
+  // — dynamic DB content, stays French until I4. Only the "Tous" sentinel is
+  // dict-driven; it's never compared against a real category value.
+  const categories = [toutes, ...Array.from(new Set(articles.map((a) => a.category).filter(Boolean)))];
   const featured = articles[0] ?? null;
 
   const displayArticles = articles.filter((a) => {
     if (featured && a.slug === featured.slug) return false;
-    if (activeCategory === "Tous") return true;
+    if (activeCategory === toutes) return true;
     return a.category === activeCategory;
   });
 
@@ -56,20 +62,20 @@ export function BlogListClient({ articles }: Props) {
         <Container className="relative z-10 py-16 lg:py-20">
           <div className="flex items-center gap-2 font-body text-[11px] text-white/35 mb-6">
             <Link href="/" className="hover:text-white/60 transition-colors">
-              Accueil
+              {dict.common.accueil}
             </Link>
             <span>/</span>
-            <span className="text-white/60">Blog</span>
+            <span className="text-white/60">{dict.nav.blog}</span>
           </div>
-          <p className="font-body text-label-caps text-brand-gold mb-3">BLOG &amp; RESSOURCES</p>
+          <p className="font-body text-label-caps text-brand-gold mb-3">{dict.blogPage.hero.badge}</p>
           <h1
             className="font-display font-bold text-white mb-4"
             style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)" }}
           >
-            Blog &amp; Ressources
+            {dict.blogPage.hero.titre}
           </h1>
           <p className="font-body text-white/60 text-base max-w-xl">
-            Conseils carrière, guides formation et actualités du monde professionnel au Maroc.
+            {dict.blogPage.hero.sousTitre}
           </p>
         </Container>
       </div>
@@ -95,7 +101,7 @@ export function BlogListClient({ articles }: Props) {
               <div className="p-6 lg:p-8">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="font-body text-[10px] font-bold uppercase tracking-widest bg-brand-gold text-brand-dark px-2.5 py-1 rounded-sm">
-                    À la une
+                    {dict.blogPage.alaUne}
                   </span>
                   <span
                     className={`font-body text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-sm ${CATEGORY_COLORS[featured.category] ?? "bg-gray-100 text-gray-600"}`}
@@ -119,7 +125,7 @@ export function BlogListClient({ articles }: Props) {
                   </span>
                   <span className="font-body text-xs flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5" />
-                    {featured.readingMinutes} min
+                    {featured.readingMinutes} {dict.blogPage.min}
                   </span>
                 </div>
               </div>
@@ -151,11 +157,11 @@ export function BlogListClient({ articles }: Props) {
           {/* Grid */}
           {articles.length === 0 ? (
             <p className="font-body text-sm text-text-muted text-center py-12">
-              Bientôt des articles — revenez très vite !
+              {dict.blogPage.empty.aucunArticle}
             </p>
           ) : displayArticles.length === 0 ? (
             <p className="font-body text-sm text-text-muted text-center py-12">
-              Aucun article dans cette catégorie pour le moment.
+              {dict.blogPage.empty.aucuneCategorie}
             </p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -200,7 +206,7 @@ export function BlogListClient({ articles }: Props) {
                           <span className="text-[10px]">·</span>
                           <span className="font-body text-[10px] flex items-center gap-0.5">
                             <Clock className="w-2.5 h-2.5" />
-                            {article.readingMinutes} min
+                            {article.readingMinutes} {dict.blogPage.min}
                           </span>
                         </div>
                       </div>
@@ -218,16 +224,16 @@ export function BlogListClient({ articles }: Props) {
       <section className="bg-white py-12 border-t border-gray-100">
         <Container className="text-center">
           <p className="font-display font-bold text-brand-dark text-xl mb-2">
-            Vous souhaitez contribuer ?
+            {dict.blogPage.contribute.titre}
           </p>
           <p className="font-body text-sm text-text-secondary mb-6">
-            Partagez votre expertise avec notre communauté de professionnels.
+            {dict.blogPage.contribute.texte}
           </p>
           <Link
             href="/contact"
             className="inline-flex items-center gap-2 bg-brand-gold hover:bg-brand-gold-dark text-brand-dark font-body font-bold text-sm px-7 py-3 rounded-sm transition-colors"
           >
-            Proposer un article
+            {dict.blogPage.contribute.cta}
             <ArrowUpRight className="w-4 h-4" />
           </Link>
         </Container>

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Search } from "lucide-react";
 import { COUNTRIES, getCountry, type CountryDial } from "@/lib/data/countries";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 interface Props {
   countryIso2: string;
@@ -11,6 +12,7 @@ interface Props {
   onLocalNumberChange: (v: string) => void;
   error?: string;
   inputClassName: string;
+  dict: Dictionary;
 }
 
 function matches(country: CountryDial, query: string): boolean {
@@ -31,6 +33,7 @@ export function PhoneInput({
   onLocalNumberChange,
   error,
   inputClassName,
+  dict,
 }: Props) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -71,7 +74,7 @@ export function PhoneInput({
           type="button"
           onClick={() => setOpen((v) => !v)}
           className="h-full flex items-center gap-1 border border-gray-200 rounded-lg px-2.5 py-2.5 bg-white hover:border-gray-300 transition-colors focus:outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20"
-          aria-label="Choisir l'indicatif du pays"
+          aria-label={dict.common.phoneCountryAriaLabel}
         >
           <span className="text-base leading-none">{selected.flag}</span>
           <span className="font-body text-sm text-text-primary whitespace-nowrap">
@@ -89,7 +92,7 @@ export function PhoneInput({
                   ref={searchRef}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Pays ou indicatif…"
+                  placeholder={dict.common.phoneCountrySearchPlaceholder}
                   className="w-full font-body text-sm outline-none placeholder:text-text-muted"
                 />
               </div>
@@ -97,7 +100,7 @@ export function PhoneInput({
             <div className="overflow-y-auto flex-1">
               {filtered.length === 0 && (
                 <p className="font-body text-xs text-text-muted text-center py-6">
-                  Aucun pays trouvé
+                  {dict.common.phoneNoCountryFound}
                 </p>
               )}
               {filtered.map((c) => {
@@ -108,12 +111,12 @@ export function PhoneInput({
                   <div key={c.iso2}>
                     {showAfricaHeader && (
                       <p className="font-body text-[10px] font-bold text-text-muted uppercase tracking-wider px-3 pt-2.5 pb-1">
-                        Afrique
+                        {dict.common.phoneRegionAfrica}
                       </p>
                     )}
                     {showOtherHeader && (
                       <p className="font-body text-[10px] font-bold text-text-muted uppercase tracking-wider px-3 pt-2.5 pb-1">
-                        Autres pays
+                        {dict.common.phoneRegionOther}
                       </p>
                     )}
                     <button
@@ -142,7 +145,7 @@ export function PhoneInput({
         inputMode="tel"
         value={localNumber}
         onChange={(e) => onLocalNumberChange(e.target.value)}
-        placeholder="6 00 00 00 00"
+        placeholder={dict.common.phoneLocalPlaceholder}
         className={inputClassName + " flex-1 min-w-0" + (error ? " !border-red-400 !ring-red-100" : "")}
       />
     </div>

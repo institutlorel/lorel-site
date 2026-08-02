@@ -26,20 +26,9 @@ import { Container } from "@/components/ui/Container";
 import { InscriptionModal } from "@/components/InscriptionModal";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-const MODE_LABELS: Record<string, string> = {
-  EN_LIGNE: "En ligne",
-  PRESENTIEL: "Présentiel",
-  HYBRIDE: "Hybride",
-};
 const MODE_ICONS = { EN_LIGNE: MonitorPlay, PRESENTIEL: Building, HYBRIDE: Layers };
 
-const TABS = [
-  { id: "programme", label: "Programme", icon: BookOpen },
-  { id: "objectifs", label: "Objectifs", icon: Target },
-  { id: "formateur", label: "Formateur", icon: Users },
-  { id: "faq", label: "FAQ", icon: MessageSquare },
-] as const;
-type TabId = (typeof TABS)[number]["id"];
+type TabId = "programme" | "objectifs" | "formateur" | "faq";
 
 function AccordionItem({
   title,
@@ -95,10 +84,12 @@ function EnrollCard({
   formation: f,
   waNumber,
   onOpenModal,
+  dict,
 }: {
   formation: Formation;
   waNumber?: string;
   onOpenModal: () => void;
+  dict: Dictionary;
 }) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-card-hover overflow-hidden">
@@ -113,7 +104,7 @@ function EnrollCard({
         <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/30 to-transparent" />
         {f.placesDispo <= 5 && (
           <div className="absolute top-3 left-3 bg-red-500 text-white font-body text-[10px] font-bold px-2 py-0.5 rounded-full">
-            {f.placesDispo} places restantes
+            {dict.formationDetail.placesRestantes.replace("{count}", String(f.placesDispo))}
           </div>
         )}
       </div>
@@ -122,7 +113,7 @@ function EnrollCard({
       <div className="px-5 pt-4">
         <div className="flex items-center justify-between mb-1.5">
           <span className="font-body text-[10px] text-text-muted uppercase tracking-wide">
-            Places disponibles
+            {dict.formationDetail.placesDisponibles}
           </span>
           <span
             className={`font-body text-[11px] font-bold ${
@@ -148,8 +139,9 @@ function EnrollCard({
         </div>
         {f.placesDispo <= 12 && (
           <p className="font-body text-[10px] font-semibold mt-1.5 text-amber-600">
-            Seulement {f.placesDispo} place{f.placesDispo > 1 ? "s" : ""} restante
-            {f.placesDispo > 1 ? "s" : ""}
+            {dict.formationDetail.seulementPlacesRestantes
+              .replace("{count}", String(f.placesDispo))
+              .replaceAll("{s}", f.placesDispo > 1 ? "s" : "")}
           </p>
         )}
       </div>
@@ -163,7 +155,7 @@ function EnrollCard({
             {f.prixPromo ? `${f.prixPromo.toLocaleString("fr-MA")} DH` : f.priceDisplay}
           </div>
           {f.prixPromo && (
-            <div className="font-body text-[11px] text-green-600 font-semibold mt-0.5">Offre limitée</div>
+            <div className="font-body text-[11px] text-green-600 font-semibold mt-0.5">{dict.formationDetail.offreLimitee}</div>
           )}
         </div>
 
@@ -171,7 +163,7 @@ function EnrollCard({
           <div className="flex items-center gap-2.5">
             <Calendar className="w-3.5 h-3.5 text-brand-gold shrink-0" />
             <span className="font-body text-[12px] text-text-secondary">
-              Prochaine session : <span className="font-semibold text-text-primary">{f.nextSession}</span>
+              {dict.formationDetail.prochaineSession} <span className="font-semibold text-text-primary">{f.nextSession}</span>
             </span>
           </div>
           <div className="flex items-center gap-2.5">
@@ -182,7 +174,7 @@ function EnrollCard({
           </div>
           <div className="flex items-center gap-2.5">
             <Award className="w-3.5 h-3.5 text-brand-gold shrink-0" />
-            <span className="font-body text-[12px] text-text-secondary">Certificat inclus</span>
+            <span className="font-body text-[12px] text-text-secondary">{dict.formationDetail.certificatInclus}</span>
           </div>
           {f.villes.length > 0 && (
             <div className="flex items-start gap-2.5">
@@ -199,7 +191,7 @@ function EnrollCard({
             onClick={onOpenModal}
             className="flex items-center justify-center gap-2 w-full min-h-[46px] bg-brand-blue hover:bg-brand-dark text-white font-body text-sm font-semibold py-3.5 rounded-sm transition-all duration-300"
           >
-            S&apos;inscrire maintenant
+            {dict.common.sInscrireNow}
             <ArrowUpRight className="w-4 h-4" />
           </button>
           {waNumber ? (
@@ -207,21 +199,21 @@ function EnrollCard({
               href={`https://wa.me/${waNumber}`}
               className="flex items-center justify-center gap-2 w-full min-h-[46px] bg-brand-cream hover:bg-brand-cream-dark text-brand-blue font-body text-sm font-semibold py-3.5 rounded-sm transition-all duration-300 border border-brand-blue/15"
             >
-              Demander plus d&apos;infos
+              {dict.common.demanderInfo}
             </a>
           ) : (
             <Link
               href="/contact"
               className="flex items-center justify-center gap-2 w-full min-h-[46px] bg-brand-cream hover:bg-brand-cream-dark text-brand-blue font-body text-sm font-semibold py-3.5 rounded-sm transition-all duration-300 border border-brand-blue/15"
             >
-              Demander plus d&apos;infos
+              {dict.common.demanderInfo}
             </Link>
           )}
         </div>
 
         <div className="mt-4 text-center">
           <p className="font-body text-[10px] text-text-muted leading-relaxed">
-            Paiement sécurisé · Satisfaction garantie
+            {dict.formationDetail.paiementSecurise}
           </p>
           <div className="mt-3 flex items-center justify-center gap-2">
             <div className="flex -space-x-1.5">
@@ -237,10 +229,7 @@ function EnrollCard({
               ))}
             </div>
             <p className="font-body text-[10px] text-text-muted">
-              <span className="font-semibold text-text-secondary">
-                {8 + (parseInt(f.id, 10) * 7) % 19} personnes
-              </span>{" "}
-              consultent ceci
+              {dict.formationDetail.personnesConsultent.replace("{count}", String(8 + (parseInt(f.id, 10) * 7) % 19))}
             </p>
           </div>
         </div>
@@ -263,6 +252,17 @@ export function FormationDetailClient({
   const [activeTab, setActiveTab] = useState<TabId>("programme");
   const [inscOpen, setInscOpen] = useState(false);
   const ModeIcon = MODE_ICONS[f.mode];
+  const MODE_LABELS: Record<string, string> = {
+    EN_LIGNE: dict.common.enLigne,
+    PRESENTIEL: dict.common.presentiel,
+    HYBRIDE: dict.common.hybride,
+  };
+  const TABS = [
+    { id: "programme" as const, label: dict.formationDetail.tabs.programme, icon: BookOpen },
+    { id: "objectifs" as const, label: dict.formationDetail.tabs.objectifs, icon: Target },
+    { id: "formateur" as const, label: dict.formationDetail.tabs.formateur, icon: Users },
+    { id: "faq" as const, label: dict.formationDetail.tabs.faq, icon: MessageSquare },
+  ];
 
   return (
     <>
@@ -281,9 +281,9 @@ export function FormationDetailClient({
         <Container className="relative z-10 py-10 lg:py-16">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 font-body text-[11px] text-white/35 mb-5">
-            <Link href="/" className="hover:text-white/60 transition-colors">Accueil</Link>
+            <Link href="/" className="hover:text-white/60 transition-colors">{dict.common.accueil}</Link>
             <span>/</span>
-            <Link href="/formations" className="hover:text-white/60 transition-colors">Formations</Link>
+            <Link href="/formations" className="hover:text-white/60 transition-colors">{dict.nav.formations}</Link>
             <span>/</span>
             <span className="text-white/60 truncate max-w-[160px]">{f.titreFr}</span>
           </div>
@@ -301,7 +301,7 @@ export function FormationDetailClient({
                 </span>
                 {f.placesDispo <= 5 && (
                   <span className="font-body text-[10px] font-bold text-white bg-red-500/80 px-2.5 py-1 rounded-full">
-                    {f.placesDispo} places restantes
+                    {dict.formationDetail.placesRestantes.replace("{count}", String(f.placesDispo))}
                   </span>
                 )}
               </div>
@@ -318,11 +318,11 @@ export function FormationDetailClient({
                 <div className="flex items-center gap-1.5">
                   <Star className="w-4 h-4 text-brand-gold fill-brand-gold" />
                   <span className="font-body text-sm font-semibold text-white">{f.rating}</span>
-                  <span className="font-body text-[11px] text-white/40">({f.ratingCount} avis)</span>
+                  <span className="font-body text-[11px] text-white/40">({f.ratingCount} {dict.formationDetail.avis})</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Users className="w-4 h-4 text-white/40" />
-                  <span className="font-body text-[11px] text-white/60">{f.studentsCount} étudiants</span>
+                  <span className="font-body text-[11px] text-white/60">{f.studentsCount} {dict.common.etudiants}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4 text-white/40" />
@@ -341,7 +341,7 @@ export function FormationDetailClient({
                   <span className="font-display text-xs font-bold text-white/80">{f.formateurInitials}</span>
                 </div>
                 <div>
-                  <div className="font-body text-[11px] text-white/40 uppercase tracking-wide">Formateur</div>
+                  <div className="font-body text-[11px] text-white/40 uppercase tracking-wide">{dict.formationDetail.formateur}</div>
                   <div className="font-body text-sm font-semibold text-white">{f.formateur}</div>
                 </div>
               </div>
@@ -349,7 +349,7 @@ export function FormationDetailClient({
 
             {/* Right: enrollment card (desktop) */}
             <div className="hidden lg:block w-80 shrink-0">
-              <EnrollCard formation={f} waNumber={waNumber} onOpenModal={() => setInscOpen(true)} />
+              <EnrollCard formation={f} waNumber={waNumber} onOpenModal={() => setInscOpen(true)} dict={dict} />
             </div>
           </div>
         </Container>
@@ -382,7 +382,7 @@ export function FormationDetailClient({
               {/* About strip */}
               <div className="bg-white rounded-xl p-5 sm:p-6 mb-6 border border-gray-100">
                 <h2 className="font-display text-xl font-semibold text-brand-blue mb-3">
-                  À propos de la formation
+                  {dict.formationDetail.aPropos}
                 </h2>
                 {f.descriptionFr.split("\n\n").map((para, i) => (
                   <p key={i} className="font-body text-sm text-text-secondary leading-relaxed mb-3 last:mb-0">
@@ -396,12 +396,12 @@ export function FormationDetailClient({
                 <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
                   <div className="px-5 sm:px-6 py-4 border-b border-gray-100">
                     <h3 className="font-display text-lg font-semibold text-brand-blue">
-                      Programme ({f.programmeFr.length} modules)
+                      {dict.formationDetail.tabs.programme} ({f.programmeFr.length} {dict.formationDetail.modules})
                     </h3>
                   </div>
                   <div className="px-5 sm:px-6">
                     {f.programmeFr.map((module, i) => (
-                      <AccordionItem key={i} title={`Module ${i + 1} — ${module.titre}`} index={i}>
+                      <AccordionItem key={i} title={`${dict.formationDetail.modulePrefix.replace("{n}", String(i + 1))} ${module.titre}`} index={i}>
                         <p className="font-body text-sm text-text-secondary leading-relaxed">{module.brief}</p>
                       </AccordionItem>
                     ))}
@@ -412,7 +412,7 @@ export function FormationDetailClient({
               {activeTab === "objectifs" && (
                 <div className="space-y-4">
                   <div className="bg-white rounded-xl border border-gray-100 p-5 sm:p-6">
-                    <h3 className="font-display text-lg font-semibold text-brand-blue mb-5">Objectifs pédagogiques</h3>
+                    <h3 className="font-display text-lg font-semibold text-brand-blue mb-5">{dict.formationDetail.objectifsPedagogiques}</h3>
                     <ul className="space-y-3">
                       {f.objectifsFr.map((obj, i) => (
                         <li key={i} className="flex items-start gap-3">
@@ -424,12 +424,12 @@ export function FormationDetailClient({
                   </div>
                   {f.prerequis && (
                     <div className="bg-white rounded-xl border border-gray-100 p-5 sm:p-6">
-                      <h3 className="font-display text-lg font-semibold text-brand-blue mb-3">Prérequis</h3>
+                      <h3 className="font-display text-lg font-semibold text-brand-blue mb-3">{dict.formationDetail.prerequis}</h3>
                       <p className="font-body text-sm text-text-secondary leading-relaxed">{f.prerequis}</p>
                     </div>
                   )}
                   <div className="bg-white rounded-xl border border-gray-100 p-5 sm:p-6">
-                    <h3 className="font-display text-lg font-semibold text-brand-blue mb-3">Certification</h3>
+                    <h3 className="font-display text-lg font-semibold text-brand-blue mb-3">{dict.formationDetail.certification}</h3>
                     <div className="flex items-start gap-3">
                       <Award className="w-5 h-5 text-brand-gold shrink-0 mt-0.5" />
                       <p className="font-body text-sm text-text-secondary leading-relaxed">{f.certification}</p>
@@ -459,7 +459,7 @@ export function FormationDetailClient({
               {activeTab === "faq" && (
                 <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
                   <div className="px-5 sm:px-6 py-4 border-b border-gray-100">
-                    <h3 className="font-display text-lg font-semibold text-brand-blue">Questions fréquentes</h3>
+                    <h3 className="font-display text-lg font-semibold text-brand-blue">{dict.faqPage.hero.titre}</h3>
                   </div>
                   <div className="px-5 sm:px-6">
                     {f.faqFr.map((item, i) => (
@@ -473,7 +473,7 @@ export function FormationDetailClient({
             {/* Right: sticky enrollment card (desktop only) */}
             <div className="hidden lg:block w-80 shrink-0">
               <div className="sticky top-24">
-                <EnrollCard formation={f} waNumber={waNumber} onOpenModal={() => setInscOpen(true)} />
+                <EnrollCard formation={f} waNumber={waNumber} onOpenModal={() => setInscOpen(true)} dict={dict} />
               </div>
             </div>
           </div>
@@ -486,18 +486,18 @@ export function FormationDetailClient({
           <Container>
             <div className="flex items-center justify-between mb-8">
               <h2 className="font-display text-xl sm:text-2xl lg:text-3xl font-bold text-brand-blue">
-                Formations similaires
+                {dict.formationDetail.formationsSimilaires}
               </h2>
               <Link
                 href="/formations"
                 className="flex items-center gap-1.5 font-body text-[12px] font-semibold text-brand-blue hover:text-brand-gold transition-colors"
               >
-                Voir tout <ArrowUpRight className="w-3.5 h-3.5" />
+                {dict.common.voirTout} <ArrowUpRight className="w-3.5 h-3.5" />
               </Link>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
               {related.map((r) => (
-                <FormationCard key={r.slug} formation={r} />
+                <FormationCard key={r.slug} formation={r} dict={dict} />
               ))}
             </div>
           </Container>
@@ -511,24 +511,23 @@ export function FormationDetailClient({
         <Container className="relative z-10 text-center">
           <div className="max-w-lg mx-auto">
             <span className="font-body text-[10px] font-bold text-brand-gold uppercase tracking-[0.2em] mb-4 block">
-              Prêt à commencer ?
+              {dict.formationDetail.pretACommencer}
             </span>
             <h2
               className="font-display font-bold text-white mb-4"
               style={{ fontSize: "clamp(1.6rem, 4vw, 2.5rem)" }}
             >
-              Rejoignez la prochaine session
+              {dict.formationDetail.rejoignezSession}
             </h2>
             <p className="font-body text-white/50 text-sm leading-relaxed mb-8">
-              Places limitées. La prochaine session commence le {f.nextSession}. Inscrivez-vous maintenant
-              pour garantir votre place.
+              {dict.formationDetail.placesLimiteesTexte.replace("{date}", f.nextSession)}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
                 onClick={() => setInscOpen(true)}
                 className="flex items-center gap-2 bg-brand-gold hover:bg-brand-gold-dark text-brand-dark font-body text-sm font-semibold px-8 py-4 rounded-sm transition-all duration-300 w-full sm:w-auto justify-center"
               >
-                S&apos;inscrire maintenant
+                {dict.common.sInscrireNow}
                 <ArrowUpRight className="w-4 h-4" />
               </button>
               {waNumber && (
@@ -537,7 +536,7 @@ export function FormationDetailClient({
                   className="flex items-center gap-2 text-white/70 hover:text-white font-body text-sm font-semibold border border-white/20 hover:border-white/40 px-8 py-4 rounded-sm transition-all duration-300 w-full sm:w-auto justify-center"
                 >
                   <Phone className="w-4 h-4" />
-                  Nous appeler
+                  {dict.formationDetail.nousAppeler}
                 </a>
               )}
             </div>
@@ -559,7 +558,7 @@ export function FormationDetailClient({
       <div className="fixed bottom-0 inset-x-0 z-50 lg:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
         <div className="flex items-center gap-3 px-4 py-3 max-w-screen-sm mx-auto">
           <div className="shrink-0">
-            <div className="font-body text-[10px] text-text-muted uppercase tracking-wide leading-none mb-0.5">Prix</div>
+            <div className="font-body text-[10px] text-text-muted uppercase tracking-wide leading-none mb-0.5">{dict.common.prix}</div>
             <div className="font-display text-lg font-bold text-brand-gold leading-none">
               {f.prixPromo ? `${f.prixPromo.toLocaleString("fr-MA")} DH` : f.priceDisplay}
             </div>
@@ -568,13 +567,13 @@ export function FormationDetailClient({
             onClick={() => setInscOpen(true)}
             className="flex-1 flex items-center justify-center gap-2 bg-brand-blue text-white font-body text-sm font-semibold py-3 rounded-sm min-h-[44px]"
           >
-            S&apos;inscrire
+            {dict.nav.sInscrire}
             <ArrowUpRight className="w-4 h-4" />
           </button>
           {waNumber && (
             <a
               href={`tel:+${waNumber}`}
-              aria-label="Appeler"
+              aria-label={dict.formationDetail.appelerAriaLabel}
               className="shrink-0 w-11 h-11 flex items-center justify-center border border-gray-200 rounded-sm text-text-secondary hover:border-brand-blue hover:text-brand-blue transition-colors"
             >
               <Phone className="w-4 h-4" />

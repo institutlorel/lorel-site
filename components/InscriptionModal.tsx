@@ -340,6 +340,7 @@ export function InscriptionModal({
                     }}
                     error={errors.telephone}
                     inputClassName={inputClass}
+                    dict={dict}
                   />
                   {errors.telephone && (
                     <p className="font-body text-[11px] text-red-500 mt-1">{errors.telephone}</p>

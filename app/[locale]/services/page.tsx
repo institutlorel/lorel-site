@@ -70,23 +70,22 @@ export default async function ServicesPage({
         <Container className="relative z-10 py-16 lg:py-20">
           <div className="flex items-center gap-2 font-body text-[11px] text-white/35 mb-6">
             <Link href="/" className="hover:text-white/60 transition-colors">
-              Accueil
+              {dict.common.accueil}
             </Link>
             <span>/</span>
-            <span className="text-white/60">Services</span>
+            <span className="text-white/60">{dict.nav.services}</span>
           </div>
-          <p className="font-body text-label-caps text-brand-gold mb-3">NOS SERVICES</p>
+          <p className="font-body text-label-caps text-brand-gold mb-3">{dict.servicesPage.hero.badge}</p>
           <h1
             className="font-display font-bold text-white mb-4"
             style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)" }}
           >
-            Un accompagnement complet
+            {dict.servicesPage.hero.titreLigne1}
             <br />
-            pour chaque étape de votre carrière
+            {dict.servicesPage.hero.titreLigne2}
           </h1>
           <p className="font-body text-white/60 text-base max-w-xl">
-            De la validation de vos acquis à la création d&apos;entreprise, Institut Lorel propose
-            des services pensés pour les professionnels marocains ambitieux.
+            {dict.servicesPage.hero.sousTitre}
           </p>
         </Container>
       </div>
@@ -119,7 +118,7 @@ export default async function ServicesPage({
                       </span>
                       {service.slug === "vae" && (
                         <span className="font-body text-[10px] font-bold uppercase tracking-widest bg-brand-gold text-brand-dark px-2.5 py-1 rounded-sm">
-                          Service phare
+                          {dict.servicesPage.servicePhare}
                         </span>
                       )}
                     </div>
@@ -147,7 +146,7 @@ export default async function ServicesPage({
                     {service.prix && (
                       <div className="pt-3 border-t border-gray-100">
                         <span className="font-body text-[11px] text-text-muted uppercase tracking-wider">
-                          À partir de
+                          {dict.common.aPartirDe}
                         </span>
                         <p className="font-display font-bold text-brand-dark text-sm mt-0.5">
                           {service.prix}
@@ -167,10 +166,10 @@ export default async function ServicesPage({
         <Container>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-0 lg:divide-x divide-gray-100">
             {[
-              { icon: Star, label: "Expertise reconnue", desc: "Formateurs certifiés et praticiens actifs" },
-              { icon: CheckCircle, label: "Accompagnement personnalisé", desc: "Un conseiller dédié tout au long du parcours" },
-              { icon: Award, label: "Résultats concrets", desc: "87% de taux de réussite moyen sur nos certifications" },
-              { icon: BadgeCheck, label: "Tarifs transparents", desc: "Devis gratuit, facilités de paiement disponibles" },
+              { icon: Star, ...dict.servicesPage.trust.expertise },
+              { icon: CheckCircle, ...dict.servicesPage.trust.accompagnement },
+              { icon: Award, ...dict.servicesPage.trust.resultats },
+              { icon: BadgeCheck, ...dict.servicesPage.trust.tarifs },
             ].map(({ icon: Icon, label, desc }) => (
               <div key={label} className="flex flex-col items-center text-center px-4 lg:px-6">
                 <div className="w-10 h-10 rounded-full bg-brand-cream flex items-center justify-center mb-3">
@@ -188,15 +187,15 @@ export default async function ServicesPage({
       <section className="py-16 sm:py-20 bg-brand-dark relative overflow-hidden">
         <div className="absolute inset-0 bg-hero-gradient" />
         <Container className="relative z-10 text-center">
-          <p className="font-body text-label-caps text-brand-gold mb-4">BESOIN DE CONSEILS ?</p>
+          <p className="font-body text-label-caps text-brand-gold mb-4">{dict.servicesPage.cta.badge}</p>
           <h2
             className="font-display font-bold text-white mb-3"
             style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)" }}
           >
-            Un conseiller vous répond sous 24h.
+            {dict.servicesPage.cta.titre}
           </h2>
           <p className="font-body text-white/60 text-sm mb-8 max-w-md mx-auto">
-            Parlez à un expert Lorel pour identifier le service le mieux adapté à votre situation.
+            {dict.servicesPage.cta.sousTitre}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {principal && (
@@ -204,14 +203,14 @@ export default async function ServicesPage({
                 href={`https://wa.me/${principal}`}
                 className="inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-brand-gold-dark text-brand-dark font-body font-bold text-sm px-8 py-3.5 rounded-sm transition-colors"
               >
-                WhatsApp — Réponse immédiate
+                {dict.aboutPage.cta.whatsapp}
               </a>
             )}
             <Link
               href="/contact"
               className="inline-flex items-center justify-center border border-white/30 hover:border-white/60 text-white font-body font-semibold text-sm px-8 py-3.5 rounded-sm transition-colors"
             >
-              Formulaire de contact
+              {dict.common.formulaireContact}
             </Link>
           </div>
         </Container>

@@ -144,7 +144,7 @@ export default async function BlogArticlePage({
       {/* Preview banner */}
       {isPreview && (
         <div className="fixed top-0 inset-x-0 z-50 bg-amber-400 text-amber-900 text-center font-body text-sm font-bold py-2 shadow-md">
-          👁 Aperçu — brouillon non publié
+          {dict.blogDetail.previewBanner}
         </div>
       )}
 
@@ -157,11 +157,11 @@ export default async function BlogArticlePage({
         <Container className="relative z-10 py-14 lg:py-18">
           <div className="flex items-center gap-2 font-body text-[11px] text-white/35 mb-6">
             <Link href="/" className="hover:text-white/60 transition-colors">
-              Accueil
+              {dict.common.accueil}
             </Link>
             <span>/</span>
             <Link href="/blog" className="hover:text-white/60 transition-colors">
-              Blog
+              {dict.nav.blog}
             </Link>
             <span>/</span>
             <span className="text-white/60 truncate max-w-[180px]">{article.title}</span>
@@ -185,7 +185,7 @@ export default async function BlogArticlePage({
             </span>
             <span className="font-body text-xs flex items-center gap-1">
               <Clock className="w-3.5 h-3.5" aria-hidden="true" />
-              {article.readingMinutes} min de lecture
+              {article.readingMinutes} {dict.blogPreview.minLecture}
             </span>
           </div>
         </Container>
@@ -214,11 +214,11 @@ export default async function BlogArticlePage({
             {/* Table of Contents / Sommaire */}
             {hasToc && (
               <nav
-                aria-label="Sommaire"
+                aria-label={dict.blogDetail.sommaire}
                 className="mb-8 rounded-xl border border-brand-gold/30 bg-amber-50/50 p-5"
               >
                 <p className="font-body text-[10px] font-bold uppercase tracking-widest text-brand-gold mb-3">
-                  Sommaire
+                  {dict.blogDetail.sommaire}
                 </p>
                 <ol className="list-none m-0 p-0 space-y-1.5">
                   {toc.map((item) => (
@@ -243,14 +243,14 @@ export default async function BlogArticlePage({
               <Markdown>{article.content}</Markdown>
             ) : (
               <p className="font-body text-base text-text-muted italic">
-                Contenu non disponible.
+                {dict.blogDetail.contenuNonDisponible}
               </p>
             )}
 
             {/* Share */}
             <div className="mt-10 pt-8 border-t border-gray-100">
               <p className="font-body text-xs font-semibold text-text-muted uppercase tracking-wider mb-4">
-                Partager cet article
+                {dict.blogDetail.partagerArticle}
               </p>
               <div className="flex gap-3">
                 <a
@@ -302,7 +302,7 @@ export default async function BlogArticlePage({
           <Container>
             <div className="max-w-2xl mx-auto">
               <h2 className="font-display font-bold text-brand-dark text-2xl mb-6">
-                Questions fréquentes
+                {dict.faqPage.hero.titre}
               </h2>
               <dl className="space-y-3">
                 {faq.map((item, i) => (
@@ -335,7 +335,7 @@ export default async function BlogArticlePage({
         <section className="bg-brand-cream py-12">
           <Container>
             <h2 className="font-display font-bold text-brand-dark text-2xl mb-8">
-              Articles similaires
+              {dict.blogDetail.articlesSimilaires}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {related.map((rel) => (
@@ -374,12 +374,12 @@ export default async function BlogArticlePage({
       <section className="py-16 sm:py-20 bg-brand-dark relative overflow-hidden">
         <div className="absolute inset-0 bg-hero-gradient" />
         <Container className="relative z-10 text-center">
-          <p className="font-body text-label-caps text-brand-gold mb-4">COMMENCEZ MAINTENANT</p>
+          <p className="font-body text-label-caps text-brand-gold mb-4">{dict.common.commencezMaintenant}</p>
           <h2
             className="font-display font-bold text-white mb-5"
             style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)" }}
           >
-            Prêt à transformer votre carrière ?
+            {dict.aboutPage.cta.titre}
           </h2>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {principal && (
@@ -387,14 +387,14 @@ export default async function BlogArticlePage({
                 href={`https://wa.me/${principal}`}
                 className="inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-brand-gold-dark text-brand-dark font-body font-bold text-sm px-8 py-3.5 rounded-sm transition-colors"
               >
-                WhatsApp — Réponse immédiate
+                {dict.aboutPage.cta.whatsapp}
               </a>
             )}
             <Link
               href="/contact"
               className="inline-flex items-center justify-center border border-white/30 hover:border-white/60 text-white font-body font-semibold text-sm px-8 py-3.5 rounded-sm transition-colors"
             >
-              Formulaire de contact
+              {dict.common.formulaireContact}
             </Link>
           </div>
         </Container>

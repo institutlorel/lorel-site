@@ -2,12 +2,7 @@ import { LocaleLink as Link } from "@/components/LocaleLink";
 import { Clock, Star, ArrowUpRight, MonitorPlay, Building, Layers } from "lucide-react";
 import type { Formation } from "@/lib/data/formations";
 import { getCategoryAccent } from "@/lib/data/accents";
-
-const MODE_LABELS: Record<string, string> = {
-  EN_LIGNE: "En ligne",
-  PRESENTIEL: "Présentiel",
-  HYBRIDE: "Hybride",
-};
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 const MODE_ICONS = {
   EN_LIGNE: MonitorPlay,
@@ -15,18 +10,23 @@ const MODE_ICONS = {
   HYBRIDE: Layers,
 };
 
-function getUrgencyBadge(f: Formation): { label: string; color: string } | null {
-  if (f.placesDispo <= 5) return { label: "Bientôt complet", color: "#EF4444" };
-  if (f.placesDispo <= 10) return { label: `${f.placesDispo} places restantes`, color: "#F59E0B" };
-  if (f.prixPromo) return { label: "Offre spéciale", color: "#0EA5E9" };
+function getUrgencyBadge(f: Formation, dict: Dictionary): { label: string; color: string } | null {
+  if (f.placesDispo <= 5) return { label: dict.formationDetail.card.bientotComplet, color: "#EF4444" };
+  if (f.placesDispo <= 10) return { label: dict.formationDetail.placesRestantes.replace("{count}", String(f.placesDispo)), color: "#F59E0B" };
+  if (f.prixPromo) return { label: dict.formationDetail.card.offreSpeciale, color: "#0EA5E9" };
   return null;
 }
 
-export function FormationCard({ formation: f }: { formation: Formation }) {
+export function FormationCard({ formation: f, dict }: { formation: Formation; dict: Dictionary }) {
+  const MODE_LABELS: Record<string, string> = {
+    EN_LIGNE: dict.common.enLigne,
+    PRESENTIEL: dict.common.presentiel,
+    HYBRIDE: dict.common.hybride,
+  };
   const ModeIcon = MODE_ICONS[f.mode];
   const modeLabel = MODE_LABELS[f.mode];
   const accentHex = getCategoryAccent(f.category);
-  const urgency = getUrgencyBadge(f);
+  const urgency = getUrgencyBadge(f, dict);
 
   return (
     <Link
@@ -93,7 +93,7 @@ export function FormationCard({ formation: f }: { formation: Formation }) {
           </div>
           <div>
             <div className="font-body text-[12px] font-semibold text-text-primary">{f.formateur}</div>
-            <div className="font-body text-[10px] text-text-muted">Formateur</div>
+            <div className="font-body text-[10px] text-text-muted">{dict.formationDetail.formateur}</div>
           </div>
         </div>
 
@@ -115,7 +115,7 @@ export function FormationCard({ formation: f }: { formation: Formation }) {
         {/* Price + CTA */}
         <div className="flex items-center justify-between">
           <div>
-            <div className="font-body text-[10px] text-text-muted uppercase tracking-wide">À partir de</div>
+            <div className="font-body text-[10px] text-text-muted uppercase tracking-wide">{dict.common.aPartirDe}</div>
             <div className="font-display text-lg font-bold text-brand-gold leading-none">{f.priceDisplay}</div>
           </div>
           <div className="w-9 h-9 rounded-full bg-brand-blue/8 group-hover:bg-brand-gold flex items-center justify-center transition-all duration-300 border border-brand-blue/15 group-hover:border-brand-gold">

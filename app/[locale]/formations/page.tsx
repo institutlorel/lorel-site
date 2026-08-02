@@ -18,9 +18,18 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Container } from "@/components/ui/Container";
 import { getFormations, CATEGORIES } from "@/lib/data/platform-api";
-import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getDictionary, type Dictionary } from "@/lib/i18n/dictionaries";
 import type { Langue } from "@/lib/i18n/config";
 import { FormationsClientGrid } from "./FormationsClientGrid";
+
+const CATEGORY_LABEL_KEYS: Record<string, keyof Dictionary["nav"]["categories"]> = {
+  "en-ligne": "enLigne",
+  continue: "continue",
+  diplomante: "diplomante",
+  individuel: "individuel",
+  vae: "vae",
+  consulting: "consulting",
+};
 
 export const revalidate = 60;
 
@@ -55,22 +64,22 @@ export default async function FormationsPage({
           />
           <Container className="relative z-10 py-16 lg:py-20">
             <div className="flex items-center gap-2 font-body text-[11px] text-white/35 mb-6">
-              <Link href="/" className="hover:text-white/60 transition-colors">Accueil</Link>
+              <Link href="/" className="hover:text-white/60 transition-colors">{dict.common.accueil}</Link>
               <span>/</span>
-              <span className="text-white/60">Formations</span>
+              <span className="text-white/60">{dict.nav.formations}</span>
             </div>
             <h1
               className="font-display font-bold text-white leading-tight mb-4"
               style={{ fontSize: "clamp(2.2rem, 5vw, 3.8rem)" }}
             >
-              {activeCategory
-                ? (CATEGORIES.find((c) => c.key === activeCategory)?.label ?? "Nos Formations")
-                : "Nos Formations"}
+              {activeCategory && CATEGORY_LABEL_KEYS[activeCategory]
+                ? dict.nav.categories[CATEGORY_LABEL_KEYS[activeCategory]].label
+                : dict.formationsPage.hero.titre}
             </h1>
             <p className="font-body text-white/50 text-sm max-w-lg leading-relaxed">
               {formations.length > 0
-                ? `Découvrez nos ${formations.length} formations professionnelles certifiées.`
-                : "Explorez notre catalogue de formations professionnelles certifiées."}
+                ? dict.formationsPage.hero.sousTitreCount.replace("{count}", String(formations.length))
+                : dict.formationsPage.hero.sousTitreVide}
             </p>
           </Container>
         </div>
@@ -87,7 +96,7 @@ export default async function FormationsPage({
                     : "text-text-secondary border-gray-200 hover:border-brand-blue/40 hover:text-brand-blue"
                 }`}
               >
-                Toutes
+                {dict.faqPage.categories.toutes}
               </Link>
               {CATEGORIES.map((cat) => (
                 <Link
@@ -99,14 +108,14 @@ export default async function FormationsPage({
                       : "text-text-secondary border-gray-200 hover:border-brand-blue/40 hover:text-brand-blue"
                   }`}
                 >
-                  {cat.label}
+                  {dict.nav.categories[CATEGORY_LABEL_KEYS[cat.key]].label}
                 </Link>
               ))}
             </div>
           </Container>
         </div>
 
-        <FormationsClientGrid formations={formations} />
+        <FormationsClientGrid formations={formations} dict={dict} />
       </main>
       <SiteFooter dict={dict} />
     </>

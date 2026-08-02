@@ -31,7 +31,7 @@ export default async function BlogPage({
   return (
     <>
       <SiteHeader dict={dict} />
-      <BlogListClient articles={articles} />
+      <BlogListClient articles={articles} dict={dict} />
       <SiteFooter dict={dict} />
     </>
   );

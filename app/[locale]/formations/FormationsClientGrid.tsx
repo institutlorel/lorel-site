@@ -5,30 +5,39 @@ import { Search, ChevronDown, X } from "lucide-react";
 import { FormationCard } from "@/components/formations/FormationCard";
 import type { Formation } from "@/lib/data/formations";
 import { Container } from "@/components/ui/Container";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
-const MODES = ["Tous", "Présentiel", "En ligne", "Hybride"] as const;
+// NIVEAUX intentionally stays French in every locale: it's compared directly
+// against `f.niveau`, a dynamic DB field that stays French until I4 — a
+// translated filter label here would never match and silently return zero
+// results. MODES is safe to translate because MODE_MAP maps the label to a
+// locale-independent enum code (`f.mode` is compared against the code, not
+// the label).
 const NIVEAUX = ["Tous", "Débutant", "Intermédiaire", "Avancé"] as const;
-const SORTS = [
-  { label: "Populaires", value: "popular" },
-  { label: "Prix croissant", value: "price_asc" },
-  { label: "Prix décroissant", value: "price_desc" },
-] as const;
 
-const MODE_MAP: Record<string, string> = {
-  Présentiel: "PRESENTIEL",
-  "En ligne": "EN_LIGNE",
-  Hybride: "HYBRIDE",
-};
-
-type Sort = (typeof SORTS)[number]["value"];
+type Sort = "popular" | "price_asc" | "price_desc";
 
 export function FormationsClientGrid({
   formations: initialFormations,
+  dict,
 }: {
   formations: Formation[];
+  dict: Dictionary;
 }) {
+  const MODES = [dict.faqPage.categories.toutes, dict.common.presentiel, dict.common.enLigne, dict.common.hybride];
+  const MODE_MAP: Record<string, string> = {
+    [dict.common.presentiel]: "PRESENTIEL",
+    [dict.common.enLigne]: "EN_LIGNE",
+    [dict.common.hybride]: "HYBRIDE",
+  };
+  const SORTS: { label: string; value: Sort }[] = [
+    { label: dict.formationsPage.sort.populaires, value: "popular" },
+    { label: dict.formationsPage.sort.prixCroissant, value: "price_asc" },
+    { label: dict.formationsPage.sort.prixDecroissant, value: "price_desc" },
+  ];
+
   const [query, setQuery] = useState("");
-  const [activeMode, setActiveMode] = useState<(typeof MODES)[number]>("Tous");
+  const [activeMode, setActiveMode] = useState(dict.faqPage.categories.toutes);
   const [activeNiveau, setActiveNiveau] = useState<(typeof NIVEAUX)[number]>("Tous");
   const [sort, setSort] = useState<Sort>("popular");
   const [sortOpen, setSortOpen] = useState(false);
@@ -45,7 +54,7 @@ export function FormationsClientGrid({
           f.shortDesc.toLowerCase().includes(q)
       );
     }
-    if (activeMode !== "Tous") {
+    if (activeMode !== dict.faqPage.categories.toutes) {
       result = result.filter((f) => f.mode === MODE_MAP[activeMode]);
     }
     if (activeNiveau !== "Tous") {
@@ -59,11 +68,11 @@ export function FormationsClientGrid({
     return result;
   }, [query, activeMode, activeNiveau, sort, initialFormations]);
 
-  const hasFilters = query || activeMode !== "Tous" || activeNiveau !== "Tous";
+  const hasFilters = query || activeMode !== dict.faqPage.categories.toutes || activeNiveau !== "Tous";
 
   const clearFilters = () => {
     setQuery("");
-    setActiveMode("Tous");
+    setActiveMode(dict.faqPage.categories.toutes);
     setActiveNiveau("Tous");
     setSort("popular");
   };
@@ -80,7 +89,7 @@ export function FormationsClientGrid({
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Rechercher une formation..."
+                placeholder={dict.formationsPage.searchPlaceholder}
                 className="flex-1 py-2.5 px-3 font-body text-sm text-text-primary placeholder-text-muted outline-none bg-transparent"
               />
               {query && (
@@ -128,7 +137,7 @@ export function FormationsClientGrid({
           <div className="flex items-center justify-between pb-2 border-t border-gray-50 pt-2">
             <span className="font-body text-[12px] text-text-muted">
               <span className="font-semibold text-text-primary">{filtered.length}</span>{" "}
-              formation{filtered.length !== 1 ? "s" : ""}
+              {filtered.length !== 1 ? dict.formationsPage.resultatPluriel : dict.formationsPage.resultatSingulier}
             </span>
             <div className="flex items-center gap-3">
               {hasFilters && (
@@ -136,7 +145,7 @@ export function FormationsClientGrid({
                   onClick={clearFilters}
                   className="flex items-center gap-1 font-body text-[11px] text-text-muted hover:text-text-primary transition-colors"
                 >
-                  <X className="w-3 h-3" /> Effacer
+                  <X className="w-3 h-3" /> {dict.formationsPage.effacer}
                 </button>
               )}
               <div className="relative">
@@ -178,27 +187,27 @@ export function FormationsClientGrid({
               </div>
               <h3 className="font-display text-xl font-semibold text-brand-blue mb-2">
                 {initialFormations.length === 0
-                  ? "Aucune formation disponible pour le moment"
-                  : "Aucune formation trouvée"}
+                  ? dict.formationsPage.empty.titreVide
+                  : dict.formationsPage.empty.titreAucunResultat}
               </h3>
               <p className="font-body text-sm text-text-secondary mb-6 max-w-sm">
                 {initialFormations.length === 0
-                  ? "Revenez bientôt, de nouvelles formations arrivent."
-                  : "Aucune formation ne correspond à vos critères. Essayez de modifier vos filtres."}
+                  ? dict.formationsPage.empty.texteVide
+                  : dict.formationsPage.empty.texteAucunResultat}
               </p>
               {hasFilters && (
                 <button
                   onClick={clearFilters}
                   className="font-body text-sm font-semibold text-brand-blue hover:text-brand-gold border border-brand-blue/30 hover:border-brand-gold px-6 py-2.5 rounded-sm transition-all duration-200"
                 >
-                  Réinitialiser les filtres
+                  {dict.formationsPage.empty.reinitialiser}
                 </button>
               )}
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map((f) => (
-                <FormationCard key={f.slug} formation={f} />
+                <FormationCard key={f.slug} formation={f} dict={dict} />
               ))}
             </div>
           )}
