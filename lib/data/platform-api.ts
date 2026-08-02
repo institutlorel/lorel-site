@@ -196,7 +196,9 @@ export async function getFormations(params?: {
   }
 }
 
-export async function getFormation(slug: string): Promise<SiteFormation | null> {
+// cache()-wrapped: the formation detail page and any nested component
+// requesting the same slug within one render share a single request.
+export const getFormation = cache(async (slug: string): Promise<SiteFormation | null> => {
   try {
     const res = await fetch(`${BASE}/api/public/formations/${slug}`, {
       next: { revalidate: 60 },
@@ -209,16 +211,19 @@ export async function getFormation(slug: string): Promise<SiteFormation | null> 
     console.error("[platform-api] getFormation failed:", e);
     return null;
   }
-}
+});
 
-export async function getRelatedFormations(
+// No fetch() of its own — delegates to getFormations(), which already carries
+// the AbortSignal timeout, so a hang here is impossible without one there
+// too. cache()-wrapped for the same request-dedup reason as getFormation.
+export const getRelatedFormations = cache(async (
   slug: string,
   category: string
-): Promise<SiteFormation[]> {
+): Promise<SiteFormation[]> => {
   const catKey = Object.entries(CATEGORY_LABELS).find(([, v]) => v === category)?.[0];
   const all = await getFormations(catKey ? { category: catKey } : undefined);
   return all.filter((f) => f.slug !== slug).slice(0, 3);
-}
+});
 
 const TEMOIGNAGE_GRADIENTS = [
   "from-brand-blue to-brand-dark",

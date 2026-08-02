@@ -317,10 +317,26 @@ export function Navbar({ dict }: { dict: Dictionary }) {
                 </Link>
               ))}
 
+              <div className="flex items-center gap-2 mt-5">
+                {LOCALES.map((code) => (
+                  <button
+                    key={code}
+                    onClick={() => { switchLocale(code); setMenuOpen(false); }}
+                    className={`flex-1 min-h-[40px] rounded-sm font-body text-[12px] font-semibold text-center transition-colors ${
+                      activeLang === code
+                        ? "bg-brand-gold/15 text-brand-gold"
+                        : "text-white/50 border border-white/10 hover:text-white hover:border-white/20"
+                    }`}
+                  >
+                    {LANGUE_INFO[code].nom}
+                  </button>
+                ))}
+              </div>
+
               <a
                 href="https://app.institutlorel.com/login"
                 onClick={() => setMenuOpen(false)}
-                className="mt-5 min-h-[44px] flex items-center justify-center text-center text-white/60 hover:text-white font-body text-sm transition-colors"
+                className="mt-3 min-h-[44px] flex items-center justify-center text-center text-white/60 hover:text-white font-body text-sm transition-colors"
               >
                 {dict.nav.seConnecter}
               </a>
