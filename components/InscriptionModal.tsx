@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { X, Lock, ShieldCheck } from "lucide-react";
 import { PhoneInput } from "@/components/PhoneInput";
 import { DEFAULT_COUNTRY_ISO2, toE164, localDigitCount } from "@/lib/data/countries";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 type Cta = "PAYER" | "RAPPEL";
 
@@ -17,31 +18,28 @@ interface Choice {
   hint?: string;
 }
 
-const CHOICES: Choice[] = [
-  {
-    cta: "PAYER",
-    icon: "💳",
-    label: "Payer par carte en ligne",
-    desc: "Place confirmée immédiatement après paiement",
-    badge: "Recommandé",
-    hint: "Paiement sécurisé via YouCan Pay",
-  },
-  {
-    cta: "RAPPEL",
-    icon: "📞",
-    label: "Être rappelé(e) par un conseiller",
-    desc: "Notre équipe vous rappelle sous 24h",
-    hint: "Sans engagement",
-  },
-  {
-    cta: "RAPPEL",
-    message: "Souhaite payer sur place au centre",
-    icon: "🏫",
-    label: "Payer sur place au centre",
-    desc: "Casablanca · Marrakech",
-    hint: "Sans engagement",
-  },
-];
+// `message` values are sent to the backend/admin CRM only — never rendered
+// to the site visitor — so they stay French regardless of locale.
+function buildChoices(dict: Dictionary): Choice[] {
+  return [
+    {
+      cta: "PAYER",
+      icon: "💳",
+      ...dict.inscriptionModal.choices.payer,
+    },
+    {
+      cta: "RAPPEL",
+      icon: "📞",
+      ...dict.inscriptionModal.choices.rappel,
+    },
+    {
+      cta: "RAPPEL",
+      message: "Souhaite payer sur place au centre",
+      icon: "🏫",
+      ...dict.inscriptionModal.choices.surPlace,
+    },
+  ];
+}
 
 interface Props {
   open: boolean;
@@ -50,6 +48,7 @@ interface Props {
   formationTitre: string;
   formationSlug: string;
   formationPrix?: string;
+  dict: Dictionary;
 }
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -64,7 +63,9 @@ export function InscriptionModal({
   formationTitre,
   formationSlug,
   formationPrix,
+  dict,
 }: Props) {
+  const CHOICES = buildChoices(dict);
   const [prenom, setPrenom] = useState("");
   const [nom, setNom] = useState("");
   const [countryIso2, setCountryIso2] = useState(DEFAULT_COUNTRY_ISO2);
@@ -106,10 +107,10 @@ export function InscriptionModal({
 
   function validate(): boolean {
     const errs: { prenom?: string; nom?: string; telephone?: string; ville?: string } = {};
-    if (prenom.trim().length < 2) errs.prenom = "Minimum 2 caractères";
-    if (nom.trim().length < 2) errs.nom = "Minimum 2 caractères";
-    if (localDigitCount(telephone) < 6) errs.telephone = "Numéro de téléphone invalide";
-    if (ville.trim().length < 2) errs.ville = "Veuillez indiquer votre ville";
+    if (prenom.trim().length < 2) errs.prenom = dict.forms.validation.min2Caracteres;
+    if (nom.trim().length < 2) errs.nom = dict.forms.validation.min2Caracteres;
+    if (localDigitCount(telephone) < 6) errs.telephone = dict.inscriptionModal.validation.telephoneInvalide;
+    if (ville.trim().length < 2) errs.ville = dict.inscriptionModal.validation.villeRequise;
     setErrors(errs);
     return Object.keys(errs).length === 0;
   }
@@ -148,10 +149,10 @@ export function InscriptionModal({
         return;
       }
       setStatus("error");
-      setErrorMsg(data.error || "Une erreur est survenue, réessayez.");
+      setErrorMsg(data.error || dict.forms.erreur);
     } catch {
       setStatus("error");
-      setErrorMsg("Une erreur est survenue, réessayez.");
+      setErrorMsg(dict.forms.erreur);
     }
   }
 
@@ -174,7 +175,7 @@ export function InscriptionModal({
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
               <p className="font-body text-[10px] font-bold text-brand-gold uppercase tracking-[0.18em] mb-1.5">
-                Inscription
+                {dict.inscriptionModal.eyebrow}
               </p>
               <h2 className="font-display font-bold text-white text-[1.1rem] leading-snug line-clamp-2">
                 {formationTitre}
@@ -187,7 +188,7 @@ export function InscriptionModal({
             </div>
             <button
               onClick={onClose}
-              aria-label="Fermer"
+              aria-label={dict.inscriptionModal.fermerAriaLabel}
               className="shrink-0 mt-0.5 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
             >
               <X className="w-4 h-4" />
@@ -205,23 +206,23 @@ export function InscriptionModal({
                 <ShieldCheck className="w-8 h-8 text-green-600" />
               </div>
               <h3 className="font-display font-bold text-brand-dark text-xl mb-2">
-                Demande envoyée !
+                {dict.inscriptionModal.successTitre}
               </h3>
               <p className="font-body text-sm text-text-secondary mb-6 max-w-xs mx-auto">
-                Un conseiller vous contactera sous 24h pour finaliser votre inscription.
+                {dict.inscriptionModal.successTexte}
               </p>
               <button
                 onClick={onClose}
                 className="font-body text-sm font-bold text-brand-dark bg-brand-gold hover:bg-brand-gold-dark px-8 py-2.5 rounded-lg transition-colors"
               >
-                Fermer
+                {dict.inscriptionModal.fermerBtn}
               </button>
             </div>
           ) : (
             <>
               {/* ── Payment choice ── */}
               <p className="font-body text-[11px] font-bold text-text-muted uppercase tracking-[0.12em] mb-3">
-                Comment souhaitez-vous procéder ?
+                {dict.inscriptionModal.procedeQuestion}
               </p>
               <div className="space-y-2 mb-5">
                 {CHOICES.map((c, i) => {
@@ -282,7 +283,7 @@ export function InscriptionModal({
               {/* Divider */}
               <div className="flex items-center gap-3 mb-5">
                 <div className="flex-1 h-px bg-gray-100" />
-                <p className="font-body text-[11px] text-text-muted shrink-0">Vos coordonnées</p>
+                <p className="font-body text-[11px] text-text-muted shrink-0">{dict.inscriptionModal.vosCoordonnees}</p>
                 <div className="flex-1 h-px bg-gray-100" />
               </div>
 
@@ -291,7 +292,7 @@ export function InscriptionModal({
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">
-                      Prénom *
+                      {dict.forms.prenom} *
                     </label>
                     <input
                       value={prenom}
@@ -299,7 +300,7 @@ export function InscriptionModal({
                         setPrenom(e.target.value);
                         if (errors.prenom) setErrors((prev) => ({ ...prev, prenom: undefined }));
                       }}
-                      placeholder="Votre prénom"
+                      placeholder={dict.forms.placeholderPrenom}
                       className={inputClass + (errors.prenom ? " !border-red-400 !ring-red-100" : "")}
                     />
                     {errors.prenom && (
@@ -308,7 +309,7 @@ export function InscriptionModal({
                   </div>
                   <div>
                     <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">
-                      Nom *
+                      {dict.forms.nom} *
                     </label>
                     <input
                       value={nom}
@@ -316,7 +317,7 @@ export function InscriptionModal({
                         setNom(e.target.value);
                         if (errors.nom) setErrors((prev) => ({ ...prev, nom: undefined }));
                       }}
-                      placeholder="Votre nom"
+                      placeholder={dict.forms.placeholderNom}
                       className={inputClass + (errors.nom ? " !border-red-400 !ring-red-100" : "")}
                     />
                     {errors.nom && (
@@ -327,7 +328,7 @@ export function InscriptionModal({
 
                 <div>
                   <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">
-                    Téléphone *
+                    {dict.forms.telephone} *
                   </label>
                   <PhoneInput
                     countryIso2={countryIso2}
@@ -347,7 +348,7 @@ export function InscriptionModal({
 
                 <div>
                   <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">
-                    Ville *
+                    {dict.inscriptionModal.labelVille} *
                   </label>
                   <input
                     value={ville}
@@ -355,7 +356,7 @@ export function InscriptionModal({
                       setVille(e.target.value);
                       if (errors.ville) setErrors((prev) => ({ ...prev, ville: undefined }));
                     }}
-                    placeholder="Casablanca, Marrakech…"
+                    placeholder={dict.inscriptionModal.placeholderVille}
                     className={inputClass + (errors.ville ? " !border-red-400 !ring-red-100" : "")}
                   />
                   {errors.ville && (
@@ -365,14 +366,14 @@ export function InscriptionModal({
 
                 <div>
                   <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">
-                    Email{" "}
-                    <span className="font-normal text-text-muted">(optionnel)</span>
+                    {dict.forms.email}{" "}
+                    <span className="font-normal text-text-muted">{dict.inscriptionModal.emailOptionnel}</span>
                   </label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="vous@exemple.com"
+                    placeholder={dict.forms.placeholderEmail}
                     className={inputClass}
                   />
                 </div>
@@ -422,12 +423,12 @@ export function InscriptionModal({
                       />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                     </svg>
-                    Envoi en cours…
+                    {dict.inscriptionModal.submitting}
                   </>
                 ) : isPayer ? (
-                  "Réserver ma place →"
+                  dict.inscriptionModal.submitIdlePayer
                 ) : (
-                  "Envoyer ma demande →"
+                  dict.inscriptionModal.submitIdleRappel
                 )}
               </button>
 
@@ -436,11 +437,11 @@ export function InscriptionModal({
                 {isPayer ? (
                   <span className="flex items-center gap-1.5 font-body text-[11px] text-text-muted">
                     <Lock className="w-3 h-3 text-green-500" />
-                    Paiement 100% sécurisé · YouCan Pay
+                    {dict.inscriptionModal.trustPayer}
                   </span>
                 ) : (
                   <span className="font-body text-[11px] text-text-muted">
-                    Sans engagement · Réponse sous 24h
+                    {dict.inscriptionModal.trustRappel}
                   </span>
                 )}
               </div>

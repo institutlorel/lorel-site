@@ -24,6 +24,7 @@ import type { Formation } from "@/lib/data/formations";
 import { FormationCard } from "@/components/formations/FormationCard";
 import { Container } from "@/components/ui/Container";
 import { InscriptionModal } from "@/components/InscriptionModal";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 const MODE_LABELS: Record<string, string> = {
   EN_LIGNE: "En ligne",
@@ -252,10 +253,12 @@ export function FormationDetailClient({
   formation: f,
   related,
   waNumber,
+  dict,
 }: {
   formation: Formation;
   related: Formation[];
   waNumber?: string;
+  dict: Dictionary;
 }) {
   const [activeTab, setActiveTab] = useState<TabId>("programme");
   const [inscOpen, setInscOpen] = useState(false);
@@ -549,6 +552,7 @@ export function FormationDetailClient({
         formationTitre={f.titreFr}
         formationSlug={f.slug}
         formationPrix={f.prixPromo ? `${f.prixPromo.toLocaleString("fr-MA")} DH` : f.priceDisplay}
+        dict={dict}
       />
 
       {/* Fixed mobile bottom CTA bar */}

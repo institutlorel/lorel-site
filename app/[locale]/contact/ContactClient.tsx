@@ -5,6 +5,7 @@ import { LocaleLink as Link } from "@/components/LocaleLink";
 import { CheckCircle, MapPin, Mail } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { FORMATIONS } from "@/lib/data/formations";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 interface FormData {
   prenom: string;
@@ -24,9 +25,10 @@ interface FormErrors {
 
 interface Props {
   waSettings: { casablanca: string; marrakech: string; enLigne: string };
+  dict: Dictionary;
 }
 
-export function ContactClient({ waSettings }: Props) {
+export function ContactClient({ waSettings, dict }: Props) {
   const [form, setForm] = useState<FormData>({
     prenom: "", nom: "", email: "", telephone: "", formation: "", message: "",
   });
@@ -38,10 +40,10 @@ export function ContactClient({ waSettings }: Props) {
 
   function validate(): boolean {
     const errs: FormErrors = {};
-    if (form.prenom.trim().length < 2) errs.prenom = "Minimum 2 caractères";
-    if (form.nom.trim().length < 2) errs.nom = "Minimum 2 caractères";
-    if (form.telephone.trim().length < 6) errs.telephone = "Numéro invalide";
-    if (!form.message.trim()) errs.message = "Ce champ est requis";
+    if (form.prenom.trim().length < 2) errs.prenom = dict.forms.validation.min2Caracteres;
+    if (form.nom.trim().length < 2) errs.nom = dict.forms.validation.min2Caracteres;
+    if (form.telephone.trim().length < 6) errs.telephone = dict.contactPage.validation.telephoneInvalide;
+    if (!form.message.trim()) errs.message = dict.contactPage.validation.messageRequis;
     setErrors(errs);
     return Object.keys(errs).length === 0;
   }
@@ -74,9 +76,9 @@ export function ContactClient({ waSettings }: Props) {
       });
       const data = await res.json();
       if (data.ok) { setSubmitted(true); }
-      else { setSubmitError(data.error || "Une erreur est survenue, réessayez."); }
+      else { setSubmitError(data.error || dict.forms.erreur); }
     } catch {
-      setSubmitError("Une erreur est survenue, réessayez.");
+      setSubmitError(dict.forms.erreur);
     } finally {
       setLoading(false);
     }
@@ -101,16 +103,16 @@ export function ContactClient({ waSettings }: Props) {
         <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: "linear-gradient(rgba(201,168,76,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.8) 1px, transparent 1px)", backgroundSize: "72px 72px" }} />
         <Container className="relative z-10 py-16 lg:py-20">
           <div className="flex items-center gap-2 font-body text-[11px] text-white/35 mb-6">
-            <Link href="/" className="hover:text-white/60 transition-colors">Accueil</Link>
+            <Link href="/" className="hover:text-white/60 transition-colors">{dict.common.accueil}</Link>
             <span>/</span>
-            <span className="text-white/60">Contact</span>
+            <span className="text-white/60">{dict.nav.contact}</span>
           </div>
-          <p className="font-body text-label-caps text-brand-gold mb-3">CONTACT</p>
+          <p className="font-body text-label-caps text-brand-gold mb-3">{dict.contactPage.hero.badge}</p>
           <h1 className="font-display font-bold text-white mb-4" style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)" }}>
-            Contactez-nous
+            {dict.contactPage.hero.titre}
           </h1>
           <p className="font-body text-white/60 text-base max-w-md">
-            Une question sur nos formations ? Notre équipe vous répond dans les 24 heures.
+            {dict.contactPage.hero.sousTitre}
           </p>
         </Container>
       </div>
@@ -120,13 +122,13 @@ export function ContactClient({ waSettings }: Props) {
           <div className="lg:grid lg:grid-cols-12 gap-10">
             <div className="lg:col-span-7">
               <div className="bg-white rounded-2xl p-6 shadow-card">
-                <h2 className="font-display font-bold text-brand-dark text-2xl mb-6">Envoyez-nous un message</h2>
+                <h2 className="font-display font-bold text-brand-dark text-2xl mb-6">{dict.contactPage.form.titre}</h2>
 
                 {submitted ? (
                   <div className="text-center py-10">
                     <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
-                    <h3 className="font-display font-bold text-brand-dark text-xl mb-2">Message envoyé !</h3>
-                    <p className="font-body text-sm text-text-secondary">Nous vous contacterons sous 24h.</p>
+                    <h3 className="font-display font-bold text-brand-dark text-xl mb-2">{dict.contactPage.form.successTitre}</h3>
+                    <p className="font-body text-sm text-text-secondary">{dict.contactPage.form.successTexte}</p>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} noValidate>
@@ -134,33 +136,33 @@ export function ContactClient({ waSettings }: Props) {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                       <div>
-                        <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">Prénom *</label>
-                        <input name="prenom" value={form.prenom} onChange={handleChange} placeholder="Votre prénom" className={inputClass} />
+                        <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">{dict.forms.prenom} *</label>
+                        <input name="prenom" value={form.prenom} onChange={handleChange} placeholder={dict.forms.placeholderPrenom} className={inputClass} />
                         {errors.prenom && <p className="font-body text-[11px] text-red-500 mt-1">{errors.prenom}</p>}
                       </div>
                       <div>
-                        <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">Nom *</label>
-                        <input name="nom" value={form.nom} onChange={handleChange} placeholder="Votre nom" className={inputClass} />
+                        <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">{dict.forms.nom} *</label>
+                        <input name="nom" value={form.nom} onChange={handleChange} placeholder={dict.forms.placeholderNom} className={inputClass} />
                         {errors.nom && <p className="font-body text-[11px] text-red-500 mt-1">{errors.nom}</p>}
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                       <div>
-                        <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">Email</label>
-                        <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="vous@exemple.com" className={inputClass} />
+                        <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">{dict.forms.email}</label>
+                        <input type="email" name="email" value={form.email} onChange={handleChange} placeholder={dict.forms.placeholderEmail} className={inputClass} />
                       </div>
                       <div>
-                        <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">Téléphone *</label>
-                        <input type="tel" name="telephone" value={form.telephone} onChange={handleChange} placeholder="+212 6 00 00 00 00" className={inputClass} />
+                        <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">{dict.forms.telephone} *</label>
+                        <input type="tel" name="telephone" value={form.telephone} onChange={handleChange} placeholder={dict.contactPage.form.placeholderTelephone} className={inputClass} />
                         {errors.telephone && <p className="font-body text-[11px] text-red-500 mt-1">{errors.telephone}</p>}
                       </div>
                     </div>
 
                     <div className="mb-4">
-                      <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">Formation d&apos;intérêt</label>
+                      <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">{dict.contactPage.form.labelFormation}</label>
                       <select name="formation" value={form.formation} onChange={handleChange} className={inputClass}>
-                        <option value="">Choisir une formation</option>
+                        <option value="">{dict.contactPage.form.optionChoisir}</option>
                         {FORMATIONS.map((f) => (
                           <option key={f.slug} value={f.slug}>{f.titreFr}</option>
                         ))}
@@ -168,8 +170,8 @@ export function ContactClient({ waSettings }: Props) {
                     </div>
 
                     <div className="mb-6">
-                      <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">Message *</label>
-                      <textarea name="message" value={form.message} onChange={handleChange} rows={4} placeholder="Décrivez votre projet ou vos questions..." className={inputClass + " resize-none"} />
+                      <label className="font-body text-xs font-semibold text-text-primary block mb-1.5">{dict.forms.message} *</label>
+                      <textarea name="message" value={form.message} onChange={handleChange} rows={4} placeholder={dict.contactPage.form.placeholderMessage} className={inputClass + " resize-none"} />
                       {errors.message && <p className="font-body text-[11px] text-red-500 mt-1">{errors.message}</p>}
                     </div>
 
@@ -182,9 +184,9 @@ export function ContactClient({ waSettings }: Props) {
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                           </svg>
-                          Envoi en cours…
+                          {dict.contactPage.form.submitting}
                         </>
-                      ) : "Envoyer le message"}
+                      ) : dict.contactPage.form.submit}
                     </button>
                   </form>
                 )}
@@ -204,7 +206,7 @@ export function ContactClient({ waSettings }: Props) {
               {(["casablanca", "marrakech", "enLigne"] as const).map((city) => {
                 const num = waSettings[city];
                 if (!num) return null;
-                const label = city === "casablanca" ? "WhatsApp Casablanca" : city === "marrakech" ? "WhatsApp Marrakech" : "WhatsApp En ligne";
+                const label = city === "casablanca" ? dict.contactPage.contactInfo.whatsappCasablanca : city === "marrakech" ? dict.contactPage.contactInfo.whatsappMarrakech : dict.contactPage.contactInfo.whatsappEnLigne;
                 return (
                   <a key={city} href={`https://wa.me/${num}`} target="_blank" rel="noopener noreferrer" className="bg-white rounded-xl p-5 shadow-card flex items-start gap-4 group hover:border-green-200 border border-transparent transition-colors block">
                     <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
@@ -214,7 +216,7 @@ export function ContactClient({ waSettings }: Props) {
                     </div>
                     <div>
                       <p className="font-body font-semibold text-text-primary text-sm mb-0.5">{label}</p>
-                      <p className="font-body text-xs text-text-muted">Réponse en moins de 30 min</p>
+                      <p className="font-body text-xs text-text-muted">{dict.contactPage.contactInfo.reponseRapide}</p>
                     </div>
                   </a>
                 );
@@ -225,8 +227,8 @@ export function ContactClient({ waSettings }: Props) {
                   <MapPin className="w-5 h-5 text-brand-gold" />
                 </div>
                 <div>
-                  <p className="font-body font-semibold text-text-primary text-sm mb-0.5">Centre de Marrakech</p>
-                  <p className="font-body text-xs text-text-muted leading-relaxed">Quartier Guéliz, Marrakech 40000<br />Lun–Sam 8h30–18h</p>
+                  <p className="font-body font-semibold text-text-primary text-sm mb-0.5">{dict.contactPage.contactInfo.centreMarrakechTitre}</p>
+                  <p className="font-body text-xs text-text-muted leading-relaxed">{dict.contactPage.contactInfo.centreMarrakechAdresse}<br />{dict.contactPage.contactInfo.horaires}</p>
                 </div>
               </div>
 
@@ -235,8 +237,8 @@ export function ContactClient({ waSettings }: Props) {
                   <MapPin className="w-5 h-5 text-brand-gold" />
                 </div>
                 <div>
-                  <p className="font-body font-semibold text-text-primary text-sm mb-0.5">Centre de Casablanca</p>
-                  <p className="font-body text-xs text-text-muted leading-relaxed">Quartier Maârif, Casablanca 20000<br />Lun–Sam 8h30–18h</p>
+                  <p className="font-body font-semibold text-text-primary text-sm mb-0.5">{dict.contactPage.contactInfo.centreCasablancaTitre}</p>
+                  <p className="font-body text-xs text-text-muted leading-relaxed">{dict.contactPage.contactInfo.centreCasablancaAdresse}<br />{dict.contactPage.contactInfo.horaires}</p>
                 </div>
               </div>
             </div>

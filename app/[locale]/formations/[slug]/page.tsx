@@ -50,7 +50,7 @@ export default async function FormationDetailPage({
       <JsonLd data={courseJsonLd(formation)} />
       <SiteHeader dict={dict} />
       <main>
-        <FormationDetailClient formation={formation} related={related} waNumber={principal} />
+        <FormationDetailClient formation={formation} related={related} waNumber={principal} dict={dict} />
       </main>
       <SiteFooter dict={dict} />
     </>

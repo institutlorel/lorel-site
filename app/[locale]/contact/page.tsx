@@ -29,7 +29,7 @@ export default async function ContactPage({
   return (
     <>
       <SiteHeader dict={dict} />
-      <ContactClient waSettings={{ casablanca, marrakech, enLigne }} />
+      <ContactClient waSettings={{ casablanca, marrakech, enLigne }} dict={dict} />
       <SiteFooter dict={dict} />
     </>
   );
