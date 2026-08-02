@@ -48,7 +48,7 @@ function DomaineCard({
       transition={{ duration: 0.55, delay: index * 0.07, ease: [0.16, 1, 0.3, 1] }}
     >
       <Link
-        href={`/domaines/${domaine.slug}`}
+        href="/formations"
         className="group block bg-white border rounded-xl p-6 transition-all duration-300 hover:shadow-card-hover relative overflow-hidden"
         style={{ borderColor: hovered ? `${domaine.accent}45` : "#f3f4f6" }}
         onMouseEnter={() => setHovered(true)}
@@ -168,7 +168,7 @@ export function DomainesGrid({ dict }: { dict: Dictionary }) {
         {/* CTA */}
         <div className="flex justify-center">
           <Link
-            href="/domaines"
+            href="/formations"
             className="group inline-flex items-center gap-3 border border-brand-blue/30 hover:border-brand-blue text-brand-blue font-body font-semibold text-sm px-8 py-3.5 rounded-sm hover:bg-brand-blue/5 transition-all duration-200"
           >
             {dict.domainesGrid.voirTousLesDomaines}

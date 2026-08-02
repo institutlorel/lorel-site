@@ -10,8 +10,8 @@ import type { Dictionary } from "@/lib/i18n/dictionaries";
 function buildServices(dict: Dictionary) {
   return [
     { slug: "vae", icon: Award, ...dict.servicesVAE.items.vae, featured: true, badge: dict.servicesVAE.populaire as string | undefined },
-    { slug: "formation-entreprises", icon: Briefcase, ...dict.servicesVAE.items.entreprises, featured: false, badge: undefined as string | undefined },
-    { slug: "accompagnement", icon: Users, ...dict.servicesVAE.items.accompagnement, featured: false, badge: undefined as string | undefined },
+    { slug: "formation-entreprise", icon: Briefcase, ...dict.servicesVAE.items.entreprises, featured: false, badge: undefined as string | undefined },
+    { slug: "accompagnement-projet", icon: Users, ...dict.servicesVAE.items.accompagnement, featured: false, badge: undefined as string | undefined },
     { slug: "certification", icon: BadgeCheck, ...dict.servicesVAE.items.certification, featured: false, badge: undefined as string | undefined },
   ];
 }

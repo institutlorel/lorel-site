@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Bash(curl -s https://institutlorel.com/formations)",
+      "Bash(curl -s https://institutlorel.com/blog)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://institutlorel.com/formations/formation-photographie\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://institutlorel.com/blog/comment-choisir-sa-formation-professionnelle-maroc\")",
+      "Bash(curl -s https://institutlorel.com/sitemap.xml)",
+      "Bash(curl -s \"https://app.institutlorel.com/api/public/formations\")",
+      "Bash(python3 -c ' *)",
+      "Bash(curl -s https://institutlorel.com/formations -o /private/tmp/claude-501/-Users-alhamdulilah-lorel-site/62651dbe-e378-4ed2-b467-53cd61bc7dca/scratchpad/formations.html)"
+    ]
+  }
+}

@@ -26,18 +26,18 @@ export function Footer({ waNumber, dict }: { waNumber?: string; dict: Dictionary
   const [sent, setSent] = useState(false);
 
   const FORMATIONS_LINKS = [
-    { label: dict.footer.formationsLinks.photographie, href: "/formations/photographie-professionnelle" },
-    { label: dict.footer.formationsLinks.marketingDigital, href: "/formations/marketing-digital" },
-    { label: dict.footer.formationsLinks.esthetique, href: "/formations/esthetique-soins" },
-    { label: dict.footer.formationsLinks.montageVideo, href: "/formations/montage-video" },
-    { label: dict.footer.formationsLinks.comptabilite, href: "/formations/comptabilite-gestion" },
-    { label: dict.footer.formationsLinks.stylisme, href: "/formations/stylisme-mode" },
+    { label: dict.nav.categories.enLigne.label, href: "/formations?category=en-ligne" },
+    { label: dict.nav.categories.continue.label, href: "/formations?category=continue" },
+    { label: dict.nav.categories.diplomante.label, href: "/formations?category=diplomante" },
+    { label: dict.nav.categories.individuel.label, href: "/formations?category=individuel" },
+    { label: dict.nav.categories.vae.label, href: "/formations?category=vae" },
+    { label: dict.nav.categories.consulting.label, href: "/formations?category=consulting" },
   ];
 
   const SERVICES_LINKS = [
     { label: dict.footer.servicesLinks.vae, href: "/services/vae" },
-    { label: dict.footer.servicesLinks.entreprises, href: "/services/formation-entreprises" },
-    { label: dict.footer.servicesLinks.accompagnement, href: "/services/accompagnement" },
+    { label: dict.footer.servicesLinks.entreprises, href: "/services/formation-entreprise" },
+    { label: dict.footer.servicesLinks.accompagnement, href: "/services/accompagnement-projet" },
     { label: dict.footer.servicesLinks.certifications, href: "/services/certification" },
   ];
 
