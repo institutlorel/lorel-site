@@ -32,6 +32,8 @@ const fr = {
     formations: "formations",
     etudiants: "étudiants",
     enSavoirPlus: "En savoir plus",
+    accueil: "Accueil",
+    formulaireContact: "Formulaire de contact",
   },
   nav: {
     formations: "Formations",
@@ -335,6 +337,111 @@ const fr = {
     erreur: "Une erreur est survenue. Veuillez réessayer.",
     champsObligatoires: "Les champs * sont obligatoires.",
   },
+  aboutPage: {
+    hero: {
+      badge: "À PROPOS",
+      titre: "À propos de l'Institut Lorel",
+      sousTitre: "Depuis 2015, nous formons les talents de demain au Maroc et en Afrique.",
+    },
+    story: {
+      badge: "NOTRE HISTOIRE",
+      titre: "15 ans de passion pour la formation.",
+      paragraphe1: "Fondé en 2015 à Marrakech par une équipe de passionnés de pédagogie, Institut Lorel est né d'une conviction simple : chaque individu mérite d'accéder à une formation professionnelle de qualité, quel que soit son parcours initial.",
+      paragraphe2: "En 2017, l'ouverture de notre centre de Casablanca marque notre ambition nationale. Avec deux pôles d'excellence, nous répondons aux besoins d'un Maroc en pleine transformation économique, formant des professionnels opérationnels dans les secteurs les plus porteurs.",
+      paragraphe3: "Aujourd'hui, avec le programme LOREL PRO, nous visons l'Afrique. Nos certifications homologuées en France ouvrent des horizons nouveaux à nos diplômés africains, positionnant Institut Lorel comme la référence continentale en formation professionnelle certifiée.",
+    },
+    engagements: {
+      badge: "NOS ENGAGEMENTS",
+      titre: "Mission, Vision & Valeurs",
+      items: {
+        mission: { titre: "Mission", texte: "Former pour transformer. Chaque diplômé qui réussit est notre plus grande fierté." },
+        vision: { titre: "Vision", texte: "Devenir la référence en formation professionnelle certifiée en Afrique du Nord." },
+        valeurs: { titre: "Valeurs", texte: "Excellence, bienveillance, impact. Nous plaçons l'humain au centre de chaque formation." },
+      },
+    },
+    stats: {
+      centres: "Centres",
+    },
+    timeline: {
+      badge: "NOTRE PARCOURS",
+      titre: "10 ans de jalons",
+      evenements: [
+        { annee: "2015", texte: "Fondation à Marrakech — lancement de la première filière Beauté" },
+        { annee: "2017", texte: "Ouverture du centre de Casablanca" },
+        { annee: "2019", texte: "Accréditation OFPPT — 200+ diplômés" },
+        { annee: "2021", texte: "Lancement de la plateforme e-learning" },
+        { annee: "2023", texte: "500ème diplômé — partenariat européen LOREL PRO" },
+        { annee: "2025", texte: "LOREL LAUNCH — programme d'incubation" },
+      ],
+    },
+    equipe: {
+      badge: "L'ÉQUIPE",
+      titre: "Notre équipe de formateurs",
+      cta: "Voir tous nos formateurs",
+    },
+    cta: {
+      badge: "REJOIGNEZ-NOUS",
+      titre: "Prêt à transformer votre carrière ?",
+      whatsapp: "WhatsApp — Réponse immédiate",
+    },
+  },
+  faqPage: {
+    breadcrumbLabel: "FAQ",
+    hero: {
+      badge: "FAQ",
+      titre: "Questions fréquentes",
+      sousTitre: "Tout ce que vous voulez savoir sur nos formations, certifications et services.",
+    },
+    search: {
+      placeholder: "Rechercher une question...",
+    },
+    categories: {
+      toutes: "Toutes",
+      inscriptions: "Inscriptions",
+      formations: "Formations",
+      paiement: "Paiement",
+      certifications: "Certifications",
+      vae: "VAE",
+    },
+    aucunResultat: "Aucune question trouvée pour cette recherche.",
+    questions: {
+      inscriptions: [
+        { q: "Comment s'inscrire à une formation ?", a: "Remplissez le formulaire sur la page de la formation ou contactez-nous directement sur WhatsApp. Notre équipe vous rappelle sous 24h pour confirmer votre inscription et vous guider dans les prochaines étapes." },
+        { q: "Quelles sont les conditions d'admission ?", a: "La plupart de nos formations sont accessibles sans prérequis particuliers. Pour les niveaux avancés ou les programmes Pro, un entretien préalable permet de s'assurer que la formation correspond à votre profil." },
+        { q: "Peut-on s'inscrire en cours de session ?", a: "Oui, dans la limite des places disponibles. Nous proposons des rattrapages pour les modules déjà dispensés. Contactez-nous pour connaître les possibilités selon la formation souhaitée." },
+        { q: "Y a-t-il une liste d'attente ?", a: "Oui, pour les formations affichant complet, une liste d'attente est gérée. En cas de désistement, vous serez contacté en priorité. Nous organisons une nouvelle session dès que la liste d'attente atteint un nombre suffisant." },
+      ],
+      formations: [
+        { q: "Quelle est la différence entre présentiel, en ligne et hybride ?", a: "Le présentiel se déroule dans nos centres à Marrakech ou Casablanca. L'en ligne est 100% à distance via notre plateforme, accessible 24h/24. L'hybride combine 80% de cours en ligne avec 20% d'ateliers pratiques présentiels — c'est notre format le plus populaire pour les actifs." },
+        { q: "Les formations sont-elles reconnues par les employeurs ?", a: "Oui. Nos certifications sont accréditées par l'OFPPT et reconnues par les employeurs marocains. Les programmes LOREL PRO disposent d'équivalences européennes reconnues en France, en Belgique et au Canada." },
+        { q: "Comment se déroule une journée de formation en ligne ?", a: "Vous accédez aux modules vidéo quand vous le souhaitez, à votre rythme. Des sessions de questions/réponses en direct avec le formateur sont organisées chaque semaine. Les exercices pratiques sont soumis via la plateforme et corrigés sous 48h." },
+        { q: "Peut-on suivre plusieurs formations simultanément ?", a: "C'est techniquement possible mais nous le déconseillons pour garantir la qualité de votre apprentissage. Nous recommandons de terminer une formation avant d'en commencer une autre, sauf pour des formations très courtes." },
+      ],
+      paiement: [
+        { q: "Quels modes de paiement sont acceptés ?", a: "Virement bancaire, carte bancaire, espèces au guichet de nos centres, et paiement mobile (CIH Mobile, Attijariwafa, etc.). Nous acceptons également les chèques pour les montants supérieurs à 2 000 DH." },
+        { q: "Peut-on payer en plusieurs fois ?", a: "Oui, nous proposons des facilités de paiement en 2 à 6 mensualités sans frais pour la plupart de nos formations. Un acompte de 30% est généralement requis à l'inscription. Contactez-nous pour connaître les modalités selon votre formation." },
+        { q: "Y a-t-il des bourses ou réductions disponibles ?", a: "Nous proposons des réductions pour les inscriptions anticipées (jusqu'à 20%), les groupes familiaux (2ème membre -15%), et les demandeurs d'emploi sur justificatif. Contactez notre équipe pour discuter de votre situation." },
+        { q: "La formation est-elle remboursable en cas d'abandon ?", a: "En cas d'abandon dans les 7 premiers jours, nous remboursons 80% des frais de formation. Au-delà, les frais déjà engagés ne sont pas remboursables, mais nous pouvons reporter votre inscription sur une session ultérieure." },
+      ],
+      certifications: [
+        { q: "Les certifications sont-elles reconnues officiellement ?", a: "Oui. Nos certifications sont émises en partenariat avec l'OFPPT et des organismes certificateurs reconnus au niveau national. Les programmes LOREL PRO disposent d'accréditations permettant des équivalences en France et dans plusieurs pays d'Afrique." },
+        { q: "Comment se déroule l'examen de certification ?", a: "Selon la formation, l'examen comprend une ou plusieurs des modalités suivantes : QCM théorique, réalisation d'un projet pratique, et soutenance orale devant un jury professionnel. La date d'examen est communiquée 3 semaines à l'avance." },
+        { q: "Que se passe-t-il si on échoue à l'examen ?", a: "Vous disposez de deux sessions de rattrapage sans frais supplémentaires. Un accompagnement personnalisé est proposé entre les deux tentatives pour travailler les points faibles identifiés lors du premier examen." },
+        { q: "Peut-on partager son diplôme sur LinkedIn ?", a: "Oui, chaque diplôme est accompagné d'une version numérique avec un QR code de vérification. Un guide est fourni pour ajouter facilement votre certification à votre profil LinkedIn." },
+      ],
+      vae: [
+        { q: "Qui peut bénéficier de la VAE ?", a: "Toute personne ayant au moins un an d'expérience professionnelle — salariée, bénévole ou indépendante — dans le domaine du diplôme visé. Aucun diplôme minimum n'est requis." },
+        { q: "Combien de temps dure une VAE ?", a: "Le processus complet dure entre 12 et 18 mois selon la complexité du dossier et les délais de l'organisme certificateur. Notre accompagnement accélère sensiblement ce délai en structurant efficacement votre dossier dès le début." },
+        { q: "Quel est le coût d'un accompagnement VAE ?", a: "Notre accompagnement VAE est proposé entre 5 000 et 15 000 DH selon le niveau du diplôme visé et l'intensité de l'accompagnement souhaité. Une consultation gratuite préalable permet d'évaluer précisément votre situation." },
+        { q: "Mon employeur peut-il financer ma VAE ?", a: "Oui, la VAE peut être prise en charge dans le cadre du plan de développement des compétences de votre entreprise. Nous vous aidons à monter le dossier de financement et à convaincre votre service RH." },
+      ],
+    },
+    cta: {
+      titre: "Vous ne trouvez pas votre réponse ?",
+      sousTitre: "Notre équipe est disponible pour répondre à toutes vos questions personnalisées.",
+      whatsapp: "WhatsApp",
+    },
+  },
 };
 
 export type Dictionary = typeof fr;
@@ -367,6 +474,8 @@ const ar: Dictionary = {
     formations: "تكوينات",
     etudiants: "متكوّنين",
     enSavoirPlus: "اعرف المزيد",
+    accueil: "الرئيسية",
+    formulaireContact: "نموذج الاتصال",
   },
   nav: {
     formations: "التكوينات",
@@ -667,6 +776,111 @@ const ar: Dictionary = {
     erreur: "حدث خطأ. يرجى المحاولة مرة أخرى.",
     champsObligatoires: "الحقول * إلزامية.",
   },
+  aboutPage: {
+    hero: {
+      badge: "نبذة عنا",
+      titre: "نبذة عن معهد لوريل",
+      sousTitre: "منذ 2015، نكوّن مواهب الغد في المغرب وإفريقيا.",
+    },
+    story: {
+      badge: "قصتنا",
+      titre: "15 عامًا من الشغف بالتكوين.",
+      paragraphe1: "تأسس معهد لوريل سنة 2015 بمراكش على يد فريق شغوف بالتربية والتكوين، انطلاقًا من قناعة بسيطة: كل فرد يستحق الوصول إلى تكوين مهني ذي جودة، مهما كان مساره الأولي.",
+      paragraphe2: "في 2017، شكّل افتتاح مركزنا بالدار البيضاء طموحنا الوطني. بقطبين للتميز، نستجيب لاحتياجات مغرب في تحول اقتصادي متسارع، مكوّنين مهنيين عمليين في القطاعات الواعدة.",
+      paragraphe3: "اليوم، ومع برنامج LOREL PRO، نتطلع نحو إفريقيا. شهاداتنا المعتمدة في فرنسا تفتح آفاقًا جديدة لخريجينا الأفارقة، لتضع معهد لوريل كمرجع قاري في التكوين المهني المعتمد.",
+    },
+    engagements: {
+      badge: "التزاماتنا",
+      titre: "الرسالة، الرؤية والقيم",
+      items: {
+        mission: { titre: "الرسالة", texte: "نكوّن لنُحدث التغيير. كل خريج ناجح هو فخرنا الأكبر." },
+        vision: { titre: "الرؤية", texte: "أن نصبح المرجع في التكوين المهني المعتمد بشمال إفريقيا." },
+        valeurs: { titre: "القيم", texte: "التميز، الاهتمام بالإنسان، والأثر. نضع الإنسان في صميم كل تكوين." },
+      },
+    },
+    stats: {
+      centres: "مراكز",
+    },
+    timeline: {
+      badge: "مسيرتنا",
+      titre: "10 سنوات من المحطات",
+      evenements: [
+        { annee: "2015", texte: "التأسيس بمراكش — إطلاق أول شعبة في التجميل" },
+        { annee: "2017", texte: "افتتاح مركز الدار البيضاء" },
+        { annee: "2019", texte: "اعتماد OFPPT — أكثر من 200 خريج" },
+        { annee: "2021", texte: "إطلاق منصة التعلم عن بعد" },
+        { annee: "2023", texte: "الخريج رقم 500 — شراكة أوروبية LOREL PRO" },
+        { annee: "2025", texte: "LOREL LAUNCH — برنامج للحاضنة" },
+      ],
+    },
+    equipe: {
+      badge: "فريقنا",
+      titre: "فريق المكوّنين لدينا",
+      cta: "عرض جميع المكوّنين",
+    },
+    cta: {
+      badge: "انضم إلينا",
+      titre: "مستعد لتحويل مسارك المهني؟",
+      whatsapp: "واتساب — رد فوري",
+    },
+  },
+  faqPage: {
+    breadcrumbLabel: "الأسئلة الشائعة",
+    hero: {
+      badge: "الأسئلة الشائعة",
+      titre: "الأسئلة الشائعة",
+      sousTitre: "كل ما تريد معرفته عن تكويناتنا وشهاداتنا وخدماتنا.",
+    },
+    search: {
+      placeholder: "ابحث عن سؤال...",
+    },
+    categories: {
+      toutes: "الكل",
+      inscriptions: "التسجيل",
+      formations: "التكوينات",
+      paiement: "الدفع",
+      certifications: "الشهادات",
+      vae: "تثمين الخبرة (VAE)",
+    },
+    aucunResultat: "لم يتم العثور على أي سؤال يطابق بحثك.",
+    questions: {
+      inscriptions: [
+        { q: "كيف يمكنني التسجيل في تكوين؟", a: "املأ الاستمارة في صفحة التكوين أو تواصل معنا مباشرة عبر واتساب. سيتصل بكم فريقنا خلال 24 ساعة لتأكيد تسجيلكم وإرشادكم للخطوات المقبلة." },
+        { q: "ما هي شروط القبول؟", a: "معظم تكويناتنا متاحة دون شروط مسبقة خاصة. أما بالنسبة للمستويات المتقدمة أو البرامج الاحترافية (Pro)، فتُجرى مقابلة تمهيدية للتأكد من ملاءمة التكوين لملفكم." },
+        { q: "هل يمكن التسجيل أثناء الدورة؟", a: "نعم، في حدود الأماكن المتاحة. نقترح دروس استدراك للوحدات التي سبق تقديمها. تواصلوا معنا لمعرفة الإمكانيات المتاحة حسب التكوين المطلوب." },
+        { q: "هل توجد قائمة انتظار؟", a: "نعم، بالنسبة للتكوينات المكتملة العدد، يتم تدبير قائمة انتظار. في حال الانسحاب، سيتم الاتصال بكم أولاً. ننظم دورة جديدة فور بلوغ قائمة الانتظار عددًا كافيًا." },
+      ],
+      formations: [
+        { q: "ما الفرق بين الحضوري وعن بعد والمختلط؟", a: "يُنظَّم التكوين الحضوري في مراكزنا بمراكش أو الدار البيضاء. التكوين عن بعد يتم بالكامل عن بعد عبر منصتنا، متاح على مدار الساعة. أما المختلط فيجمع بين 80% دروسًا عن بعد و20% ورشات تطبيقية حضورية — وهو الصيغة الأكثر شعبية لدى العاملين." },
+        { q: "هل التكوينات معترف بها لدى أصحاب العمل؟", a: "نعم. شهاداتنا معتمدة من طرف OFPPT ومعترف بها لدى أرباب العمل المغاربة. تتوفر برامج LOREL PRO على معادلات أوروبية معترف بها في فرنسا وبلجيكا وكندا." },
+        { q: "كيف يسير يوم التكوين عن بعد؟", a: "تصلون إلى الوحدات المرئية في الوقت الذي يناسبكم وبوتيرتكم الخاصة. تُنظَّم أسبوعيًا جلسات أسئلة وأجوبة مباشرة مع المكوّن. تُرسل التمارين التطبيقية عبر المنصة ويتم تصحيحها خلال 48 ساعة." },
+        { q: "هل يمكن متابعة عدة تكوينات في آن واحد؟", a: "الأمر ممكن تقنيًا، لكننا لا ننصح به لضمان جودة تعلمكم. نوصي بإنهاء تكوين واحد قبل البدء في آخر، باستثناء التكوينات القصيرة جدًا." },
+      ],
+      paiement: [
+        { q: "ما هي وسائل الدفع المقبولة؟", a: "التحويل البنكي، البطاقة البنكية، النقد بشباك مراكزنا، والدفع عبر الهاتف المحمول (CIH Mobile، التجاري وفا بنك، إلخ). نقبل أيضًا الشيكات للمبالغ التي تفوق 2000 درهم." },
+        { q: "هل يمكن الدفع على دفعات؟", a: "نعم، نقترح تسهيلات للدفع من دفعتين إلى ست دفعات دون رسوم إضافية لمعظم تكويناتنا. عادةً ما يُطلب عربون بنسبة 30% عند التسجيل. تواصلوا معنا لمعرفة الشروط حسب تكوينكم." },
+        { q: "هل توجد منح أو تخفيضات متاحة؟", a: "نقترح تخفيضات للتسجيل المبكر (تصل إلى 20%)، وللمجموعات العائلية (خصم 15% للعضو الثاني)، وللباحثين عن عمل بشهادة إثبات. تواصلوا مع فريقنا لمناقشة وضعيتكم." },
+        { q: "هل التكوين قابل للاسترجاع في حال الانقطاع؟", a: "في حال الانقطاع خلال الأيام السبعة الأولى، نسترجع 80% من مصاريف التكوين. بعد ذلك، لا تُسترجع المصاريف المدفوعة، لكن يمكننا تأجيل تسجيلكم إلى دورة لاحقة." },
+      ],
+      certifications: [
+        { q: "هل الشهادات معترف بها رسميًا؟", a: "نعم. شهاداتنا تُصدَر بشراكة مع OFPPT وهيئات معتمدة على المستوى الوطني. تتوفر برامج LOREL PRO على اعتمادات تتيح معادلات في فرنسا وعدة دول إفريقية." },
+        { q: "كيف يسير امتحان الحصول على الشهادة؟", a: "حسب التكوين، يتضمن الامتحان صيغة واحدة أو أكثر مما يلي: اختبار نظري بالاختيار من متعدد، إنجاز مشروع تطبيقي، ومناقشة شفوية أمام لجنة مهنية. يُعلن عن تاريخ الامتحان قبل ثلاثة أسابيع." },
+        { q: "ماذا يحدث في حال الرسوب في الامتحان؟", a: "تتوفرون على دورتي استدراك دون رسوم إضافية. يُقترح مواكبة شخصية بين المحاولتين للاشتغال على نقاط الضعف التي تم رصدها في الامتحان الأول." },
+        { q: "هل يمكن مشاركة الشهادة على LinkedIn؟", a: "نعم، كل شهادة تُرفق بنسخة رقمية تتضمن رمز QR للتحقق. يُقدَّم دليل لإضافة شهادتكم بسهولة إلى ملفكم على LinkedIn." },
+      ],
+      vae: [
+        { q: "من يمكنه الاستفادة من تثمين الخبرة (VAE)؟", a: "كل شخص يتوفر على سنة واحدة على الأقل من الخبرة المهنية — كأجير أو متطوع أو مستقل — في مجال الشهادة المستهدفة. لا يُشترط أي حد أدنى من الشهادات." },
+        { q: "كم تستغرق مدة تثمين الخبرة؟", a: "تستغرق العملية الكاملة ما بين 12 و18 شهرًا حسب تعقيد الملف وآجال الهيئة المانحة للشهادة. تسرّع مواكبتنا هذا الأجل بشكل ملحوظ من خلال هيكلة ملفكم بفعالية منذ البداية." },
+        { q: "ما هي تكلفة مواكبة تثمين الخبرة؟", a: "تُقترح مواكبتنا لتثمين الخبرة بين 5000 و15000 درهم حسب مستوى الشهادة المستهدفة وكثافة المواكبة المرغوبة. تتيح استشارة مجانية مسبقة تقييم وضعيتكم بدقة." },
+        { q: "هل يمكن لصاحب العمل تمويل تثمين خبرتي؟", a: "نعم، يمكن تحمّل تكاليف تثمين الخبرة في إطار مخطط تطوير الكفاءات بمقاولتكم. نساعدكم في إعداد ملف التمويل وإقناع مصلحة الموارد البشرية." },
+      ],
+    },
+    cta: {
+      titre: "لم تجد إجابتك؟",
+      sousTitre: "فريقنا متاح للإجابة عن جميع أسئلتكم الشخصية.",
+      whatsapp: "واتساب",
+    },
+  },
 };
 
 const en: Dictionary = {
@@ -697,6 +911,8 @@ const en: Dictionary = {
     formations: "programs",
     etudiants: "students",
     enSavoirPlus: "Learn more",
+    accueil: "Home",
+    formulaireContact: "Contact form",
   },
   nav: {
     formations: "Programs",
@@ -999,6 +1215,111 @@ const en: Dictionary = {
     merci: "Thank you! We'll reach out within 24 hours.",
     erreur: "An error occurred. Please try again.",
     champsObligatoires: "Fields marked * are required.",
+  },
+  aboutPage: {
+    hero: {
+      badge: "ABOUT US",
+      titre: "About Institut Lorel",
+      sousTitre: "Since 2015, we've been training tomorrow's talent in Morocco and Africa.",
+    },
+    story: {
+      badge: "OUR STORY",
+      titre: "15 years of passion for training.",
+      paragraphe1: "Founded in 2015 in Marrakech by a team passionate about education, Institut Lorel was born from a simple conviction: everyone deserves access to quality professional training, regardless of their background.",
+      paragraphe2: "In 2017, the opening of our Casablanca center marked our national ambition. With two centers of excellence, we meet the needs of a Morocco undergoing rapid economic transformation, training operational professionals in the most promising sectors.",
+      paragraphe3: "Today, with the LOREL PRO program, we're setting our sights on Africa. Our certifications, accredited in France, open new horizons for our African graduates, positioning Institut Lorel as the continental reference in certified professional training.",
+    },
+    engagements: {
+      badge: "OUR COMMITMENTS",
+      titre: "Mission, Vision & Values",
+      items: {
+        mission: { titre: "Mission", texte: "Training to transform. Every graduate who succeeds is our greatest pride." },
+        vision: { titre: "Vision", texte: "To become the reference in certified professional training in North Africa." },
+        valeurs: { titre: "Values", texte: "Excellence, care, impact. We put people at the heart of every training program." },
+      },
+    },
+    stats: {
+      centres: "Centers",
+    },
+    timeline: {
+      badge: "OUR JOURNEY",
+      titre: "10 years of milestones",
+      evenements: [
+        { annee: "2015", texte: "Founded in Marrakech — launch of our first Beauty program" },
+        { annee: "2017", texte: "Opening of the Casablanca center" },
+        { annee: "2019", texte: "OFPPT accreditation — 200+ graduates" },
+        { annee: "2021", texte: "Launch of the e-learning platform" },
+        { annee: "2023", texte: "500th graduate — European partnership LOREL PRO" },
+        { annee: "2025", texte: "LOREL LAUNCH — incubation program" },
+      ],
+    },
+    equipe: {
+      badge: "THE TEAM",
+      titre: "Our team of instructors",
+      cta: "See all our instructors",
+    },
+    cta: {
+      badge: "JOIN US",
+      titre: "Ready to transform your career?",
+      whatsapp: "WhatsApp — Instant reply",
+    },
+  },
+  faqPage: {
+    breadcrumbLabel: "FAQ",
+    hero: {
+      badge: "FAQ",
+      titre: "Frequently Asked Questions",
+      sousTitre: "Everything you want to know about our programs, certifications, and services.",
+    },
+    search: {
+      placeholder: "Search a question...",
+    },
+    categories: {
+      toutes: "All",
+      inscriptions: "Registration",
+      formations: "Programs",
+      paiement: "Payment",
+      certifications: "Certifications",
+      vae: "VAE",
+    },
+    aucunResultat: "No question found for this search.",
+    questions: {
+      inscriptions: [
+        { q: "How do I register for a training program?", a: "Fill out the form on the program's page or contact us directly on WhatsApp. Our team will call you back within 24 hours to confirm your registration and guide you through the next steps." },
+        { q: "What are the admission requirements?", a: "Most of our programs are open with no specific prerequisites. For advanced levels or Pro programs, a preliminary interview ensures the program matches your profile." },
+        { q: "Can I register mid-session?", a: "Yes, subject to availability. We offer catch-up sessions for modules already covered. Contact us to find out what's possible for your chosen program." },
+        { q: "Is there a waiting list?", a: "Yes, for full programs we manage a waiting list. If a spot opens up, you'll be contacted first. We organize a new session as soon as the waiting list reaches a sufficient number." },
+      ],
+      formations: [
+        { q: "What's the difference between in-person, online, and hybrid?", a: "In-person classes take place at our centers in Marrakech or Casablanca. Online is 100% remote via our platform, accessible 24/7. Hybrid combines 80% online coursework with 20% in-person practical workshops — our most popular format for working professionals." },
+        { q: "Are the programs recognized by employers?", a: "Yes. Our certifications are accredited by OFPPT and recognized by Moroccan employers. LOREL PRO programs carry European equivalencies recognized in France, Belgium, and Canada." },
+        { q: "What does a day of online training look like?", a: "You access video modules whenever you like, at your own pace. Live Q&A sessions with the instructor are held every week. Practical exercises are submitted through the platform and corrected within 48 hours." },
+        { q: "Can I take several programs at the same time?", a: "It's technically possible, but we don't recommend it to ensure the quality of your learning. We suggest completing one program before starting another, except for very short programs." },
+      ],
+      paiement: [
+        { q: "What payment methods are accepted?", a: "Bank transfer, credit/debit card, cash at our centers, and mobile payment (CIH Mobile, Attijariwafa, etc.). We also accept checks for amounts over 2,000 DH." },
+        { q: "Can I pay in installments?", a: "Yes, we offer interest-free payment plans of 2 to 6 installments for most programs. A 30% deposit is generally required at registration. Contact us for the terms specific to your program." },
+        { q: "Are there scholarships or discounts available?", a: "We offer discounts for early registration (up to 20%), family groups (15% off for a second member), and job seekers with proof of status. Contact our team to discuss your situation." },
+        { q: "Is the program refundable if I withdraw?", a: "If you withdraw within the first 7 days, we refund 80% of the program fees. Beyond that, fees already paid are non-refundable, but we can defer your registration to a later session." },
+      ],
+      certifications: [
+        { q: "Are the certifications officially recognized?", a: "Yes. Our certifications are issued in partnership with OFPPT and nationally recognized certifying bodies. LOREL PRO programs carry accreditations enabling equivalencies in France and several African countries." },
+        { q: "How does the certification exam work?", a: "Depending on the program, the exam includes one or more of the following: a theoretical multiple-choice test, a practical project, and an oral defense before a professional panel. The exam date is announced 3 weeks in advance." },
+        { q: "What happens if I fail the exam?", a: "You get two retake sessions at no extra cost. Personalized support is offered between attempts to work on the weak points identified in the first exam." },
+        { q: "Can I share my diploma on LinkedIn?", a: "Yes, every diploma comes with a digital version featuring a verification QR code. A guide is provided to easily add your certification to your LinkedIn profile." },
+      ],
+      vae: [
+        { q: "Who can benefit from Prior Learning Recognition (VAE)?", a: "Anyone with at least one year of professional experience — as an employee, volunteer, or self-employed — in the field of the targeted diploma. No minimum diploma is required." },
+        { q: "How long does a VAE process take?", a: "The full process takes between 12 and 18 months depending on the complexity of the file and the certifying body's timelines. Our support significantly speeds up this timeline by structuring your file efficiently from the start." },
+        { q: "What does VAE support cost?", a: "Our VAE support is offered between 5,000 and 15,000 DH depending on the level of the targeted diploma and the intensity of support desired. A free preliminary consultation allows us to accurately assess your situation." },
+        { q: "Can my employer fund my VAE?", a: "Yes, VAE can be covered under your company's skills development plan. We help you put together the funding file and make the case to your HR department." },
+      ],
+    },
+    cta: {
+      titre: "Can't find your answer?",
+      sousTitre: "Our team is available to answer all your personalized questions.",
+      whatsapp: "WhatsApp",
+    },
   },
 };
 

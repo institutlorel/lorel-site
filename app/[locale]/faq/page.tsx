@@ -29,7 +29,7 @@ export default async function FaqPage({
   return (
     <>
       <SiteHeader dict={dict} />
-      <FaqClient waNumber={principal} />
+      <FaqClient waNumber={principal} dict={dict} />
       <SiteFooter dict={dict} />
     </>
   );

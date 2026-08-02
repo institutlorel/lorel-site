@@ -33,15 +33,6 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
   );
 }
 
-const TIMELINE = [
-  { year: "2015", event: "Fondation à Marrakech — lancement de la première filière Beauté" },
-  { year: "2017", event: "Ouverture du centre de Casablanca" },
-  { year: "2019", event: "Accréditation OFPPT — 200+ diplômés" },
-  { year: "2021", event: "Lancement de la plateforme e-learning" },
-  { year: "2023", event: "500ème diplômé — partenariat européen LOREL PRO" },
-  { year: "2025", event: "LOREL LAUNCH — programme d&apos;incubation" },
-];
-
 const TEAM_PREVIEW = [
   { slug: "youssef-kabbaj", nomComplet: "Youssef Kabbaj", specialite: "Photographie & Arts Visuels", photo: "https://images.pexels.com/photos/3777943/pexels-photo-3777943.jpeg?auto=compress&cs=tinysrgb&w=400", initials: "YK" },
   { slug: "sara-benali", nomComplet: "Sara Benali", specialite: "Marketing Digital & Réseaux Sociaux", photo: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400", initials: "SB" },
@@ -71,16 +62,16 @@ export function AboutClient({ waNumber, dict }: Props) {
         />
         <Container className="relative z-10 py-16 lg:py-24">
           <div className="flex items-center gap-2 font-body text-[11px] text-white/35 mb-6">
-            <Link href="/" className="hover:text-white/60 transition-colors">Accueil</Link>
+            <Link href="/" className="hover:text-white/60 transition-colors">{dict.common.accueil}</Link>
             <span>/</span>
-            <span className="text-white/60">À propos</span>
+            <span className="text-white/60">{dict.nav.about}</span>
           </div>
-          <p className="font-body text-label-caps text-brand-gold mb-3">À PROPOS</p>
+          <p className="font-body text-label-caps text-brand-gold mb-3">{dict.aboutPage.hero.badge}</p>
           <h1 className="font-display font-bold text-white mb-4" style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)" }}>
-            À propos de l&apos;Institut Lorel
+            {dict.aboutPage.hero.titre}
           </h1>
           <p className="font-body text-white/60 text-base max-w-xl">
-            Depuis 2015, nous formons les talents de demain au Maroc et en Afrique.
+            {dict.aboutPage.hero.sousTitre}
           </p>
         </Container>
       </div>
@@ -90,27 +81,19 @@ export function AboutClient({ waNumber, dict }: Props) {
         <Container>
           <div className="lg:grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <p className="font-body text-label-caps text-brand-gold mb-3">NOTRE HISTOIRE</p>
+              <p className="font-body text-label-caps text-brand-gold mb-3">{dict.aboutPage.story.badge}</p>
               <h2 className="font-display font-bold text-brand-dark mb-6" style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)" }}>
-                15 ans de passion pour la formation.
+                {dict.aboutPage.story.titre}
               </h2>
               <div className="space-y-4">
                 <p className="font-body text-base text-text-secondary leading-relaxed">
-                  Fondé en 2015 à Marrakech par une équipe de passionnés de pédagogie, Institut Lorel
-                  est né d&apos;une conviction simple : chaque individu mérite d&apos;accéder à une
-                  formation professionnelle de qualité, quel que soit son parcours initial.
+                  {dict.aboutPage.story.paragraphe1}
                 </p>
                 <p className="font-body text-base text-text-secondary leading-relaxed">
-                  En 2017, l&apos;ouverture de notre centre de Casablanca marque notre ambition
-                  nationale. Avec deux pôles d&apos;excellence, nous répondons aux besoins d&apos;un
-                  Maroc en pleine transformation économique, formant des professionnels opérationnels
-                  dans les secteurs les plus porteurs.
+                  {dict.aboutPage.story.paragraphe2}
                 </p>
                 <p className="font-body text-base text-text-secondary leading-relaxed">
-                  Aujourd&apos;hui, avec le programme LOREL PRO, nous visons l&apos;Afrique. Nos
-                  certifications homologuées en France ouvrent des horizons nouveaux à nos diplômés
-                  africains, positionnant Institut Lorel comme la référence continentale en formation
-                  professionnelle certifiée.
+                  {dict.aboutPage.story.paragraphe3}
                 </p>
               </div>
             </div>
@@ -126,7 +109,7 @@ export function AboutClient({ waNumber, dict }: Props) {
               </div>
               <div className="absolute -bottom-5 -left-5 bg-brand-gold text-brand-dark rounded-xl p-4 shadow-gold">
                 <p className="font-display font-bold text-2xl">500+</p>
-                <p className="font-body text-xs font-semibold">Diplômés</p>
+                <p className="font-body text-xs font-semibold">{dict.hero.stats.diplomes}</p>
               </div>
             </div>
           </div>
@@ -137,16 +120,16 @@ export function AboutClient({ waNumber, dict }: Props) {
       <section className="bg-brand-cream py-16">
         <Container>
           <div className="text-center mb-10">
-            <p className="font-body text-label-caps text-brand-gold mb-2">NOS ENGAGEMENTS</p>
+            <p className="font-body text-label-caps text-brand-gold mb-2">{dict.aboutPage.engagements.badge}</p>
             <h2 className="font-display font-bold text-brand-dark" style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)" }}>
-              Mission, Vision &amp; Valeurs
+              {dict.aboutPage.engagements.titre}
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { icon: Target, titre: "Mission", texte: "Former pour transformer. Chaque diplômé qui réussit est notre plus grande fierté.", accent: "#C9A84C" },
-              { icon: Award, titre: "Vision", texte: "Devenir la référence en formation professionnelle certifiée en Afrique du Nord.", accent: "#1B3A5C" },
-              { icon: Heart, titre: "Valeurs", texte: "Excellence, bienveillance, impact. Nous plaçons l&apos;humain au centre de chaque formation.", accent: "#4CAF9D" },
+              { icon: Target, ...dict.aboutPage.engagements.items.mission, accent: "#C9A84C" },
+              { icon: Award, ...dict.aboutPage.engagements.items.vision, accent: "#1B3A5C" },
+              { icon: Heart, ...dict.aboutPage.engagements.items.valeurs, accent: "#4CAF9D" },
             ].map(({ icon: Icon, titre, texte, accent }) => (
               <div key={titre} className="bg-white rounded-2xl p-7 shadow-card">
                 <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: accent + "20" }}>
@@ -165,10 +148,10 @@ export function AboutClient({ waNumber, dict }: Props) {
         <Container>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x divide-white/10">
             {[
-              { target: 500, suffix: "+", label: "Diplômés" },
-              { target: 15, suffix: "+", label: "Formations" },
-              { target: 95, suffix: "%", label: "Satisfaction" },
-              { target: 2, suffix: "", label: "Centres" },
+              { target: 500, suffix: "+", label: dict.hero.stats.diplomes },
+              { target: 15, suffix: "+", label: dict.hero.stats.formations },
+              { target: 95, suffix: "%", label: dict.hero.stats.satisfaction },
+              { target: 2, suffix: "", label: dict.aboutPage.stats.centres },
             ].map(({ target, suffix, label }) => (
               <div key={label} className="text-center px-4 lg:px-8">
                 <AnimatedCounter target={target} suffix={suffix} />
@@ -183,18 +166,18 @@ export function AboutClient({ waNumber, dict }: Props) {
       <section className="bg-white py-16">
         <Container>
           <div className="text-center mb-12">
-            <p className="font-body text-label-caps text-brand-gold mb-2">NOTRE PARCOURS</p>
+            <p className="font-body text-label-caps text-brand-gold mb-2">{dict.aboutPage.timeline.badge}</p>
             <h2 className="font-display font-bold text-brand-dark" style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)" }}>
-              10 ans de jalons
+              {dict.aboutPage.timeline.titre}
             </h2>
           </div>
           <div className="max-w-2xl mx-auto">
             <div className="relative border-l-2 border-brand-gold/30 pl-8 space-y-8">
-              {TIMELINE.map(({ year, event }) => (
-                <div key={year} className="relative">
+              {dict.aboutPage.timeline.evenements.map(({ annee, texte }) => (
+                <div key={annee} className="relative">
                   <div className="absolute -left-[2.65rem] top-1 w-5 h-5 rounded-full bg-brand-gold border-4 border-white" />
-                  <p className="font-display font-bold text-brand-gold mb-1" style={{ fontSize: "clamp(1rem, 2vw, 1.25rem)" }}>{year}</p>
-                  <p className="font-body text-sm text-text-secondary leading-relaxed">{event}</p>
+                  <p className="font-display font-bold text-brand-gold mb-1" style={{ fontSize: "clamp(1rem, 2vw, 1.25rem)" }}>{annee}</p>
+                  <p className="font-body text-sm text-text-secondary leading-relaxed">{texte}</p>
                 </div>
               ))}
             </div>
@@ -206,9 +189,9 @@ export function AboutClient({ waNumber, dict }: Props) {
       <section className="bg-brand-cream py-16">
         <Container>
           <div className="text-center mb-10">
-            <p className="font-body text-label-caps text-brand-gold mb-2">L&apos;ÉQUIPE</p>
+            <p className="font-body text-label-caps text-brand-gold mb-2">{dict.aboutPage.equipe.badge}</p>
             <h2 className="font-display font-bold text-brand-dark" style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)" }}>
-              Notre équipe de formateurs
+              {dict.aboutPage.equipe.titre}
             </h2>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
@@ -225,7 +208,7 @@ export function AboutClient({ waNumber, dict }: Props) {
           </div>
           <div className="text-center">
             <Link href="/formateurs" className="inline-flex items-center gap-2 font-body font-semibold text-sm text-brand-blue border border-brand-blue hover:bg-brand-blue hover:text-white px-6 py-3 rounded-sm transition-colors">
-              Voir tous nos formateurs
+              {dict.aboutPage.equipe.cta}
               <MapPin className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -238,9 +221,9 @@ export function AboutClient({ waNumber, dict }: Props) {
       <section className="py-16 sm:py-20 bg-brand-dark relative overflow-hidden">
         <div className="absolute inset-0 bg-hero-gradient" />
         <Container className="relative z-10 text-center">
-          <p className="font-body text-label-caps text-brand-gold mb-4">REJOIGNEZ-NOUS</p>
+          <p className="font-body text-label-caps text-brand-gold mb-4">{dict.aboutPage.cta.badge}</p>
           <h2 className="font-display font-bold text-white mb-5" style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)" }}>
-            Prêt à transformer votre carrière ?
+            {dict.aboutPage.cta.titre}
           </h2>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {waNumber && (
@@ -250,11 +233,11 @@ export function AboutClient({ waNumber, dict }: Props) {
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 bg-brand-gold hover:bg-brand-gold-dark text-brand-dark font-body font-bold text-sm px-8 py-3.5 rounded-sm transition-colors"
               >
-                WhatsApp — Réponse immédiate
+                {dict.aboutPage.cta.whatsapp}
               </a>
             )}
             <Link href="/contact" className="inline-flex items-center justify-center border border-white/30 hover:border-white/60 text-white font-body font-semibold text-sm px-8 py-3.5 rounded-sm transition-colors">
-              Formulaire de contact
+              {dict.common.formulaireContact}
             </Link>
           </div>
         </Container>
