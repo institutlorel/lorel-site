@@ -38,6 +38,7 @@ export function Navbar({ dict }: { dict: Dictionary }) {
   const [langOpen, setLangOpen] = useState(false);
   const megaRef = useRef<HTMLDivElement>(null);
   const langRef = useRef<HTMLDivElement>(null);
+  const langMobileRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -70,10 +71,22 @@ export function Navbar({ dict }: { dict: Dictionary }) {
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (megaRef.current && !megaRef.current.contains(e.target as Node)) setMegaOpen(false);
-      if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false);
+      const outsideDesktopLang = !langRef.current || !langRef.current.contains(e.target as Node);
+      const outsideMobileLang = !langMobileRef.current || !langMobileRef.current.contains(e.target as Node);
+      if (outsideDesktopLang && outsideMobileLang) setLangOpen(false);
     };
     document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMegaOpen(false);
+        setLangOpen(false);
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+      document.removeEventListener("keydown", onKeyDown);
+    };
   }, []);
 
   // STATE 1 (top, over dark hero): transparent bg, white text
@@ -126,8 +139,10 @@ export function Navbar({ dict }: { dict: Dictionary }) {
           {/* Domaines mega menu */}
           <div ref={megaRef} className="relative">
             <button
-              onMouseEnter={() => setMegaOpen(true)}
-              onMouseLeave={() => setMegaOpen(false)}
+              type="button"
+              onClick={() => setMegaOpen((v) => !v)}
+              aria-haspopup="true"
+              aria-expanded={megaOpen}
               className={`flex items-center gap-1 font-body text-[13px] font-medium transition-colors duration-200 tracking-wide py-5 ${navLink}`}
             >
               {dict.nav.domaines}
@@ -143,8 +158,6 @@ export function Navbar({ dict }: { dict: Dictionary }) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 6 }}
                   transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                  onMouseEnter={() => setMegaOpen(true)}
-                  onMouseLeave={() => setMegaOpen(false)}
                   className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-[580px] bg-white rounded-xl shadow-card-hover border border-gray-100 overflow-hidden"
                 >
                   <div className="grid grid-cols-3 gap-0 p-4">
@@ -211,7 +224,10 @@ export function Navbar({ dict }: { dict: Dictionary }) {
 
           <div ref={langRef} className="relative">
             <button
+              type="button"
               onClick={() => setLangOpen((v) => !v)}
+              aria-haspopup="true"
+              aria-expanded={langOpen}
               className={`flex items-center gap-1.5 px-2.5 py-2 transition-colors duration-200 ${iconCls}`}
             >
               <Globe className="w-4 h-4" />
@@ -266,14 +282,58 @@ export function Navbar({ dict }: { dict: Dictionary }) {
           </Link>
         </div>
 
-        {/* Mobile hamburger */}
-        <button
-          onClick={() => setMenuOpen((v) => !v)}
-          className={`lg:hidden p-2.5 transition-colors duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${hamburgerCls}`}
-          aria-label={dict.nav.menu}
-        >
-          {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
+        {/* Mobile: compact lang switcher + hamburger, grouped together */}
+        <div className="flex items-center gap-1 lg:hidden">
+          <div ref={langMobileRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setLangOpen((v) => !v)}
+              aria-haspopup="true"
+              aria-expanded={langOpen}
+              className={`flex items-center gap-1 px-2 py-2.5 min-h-[44px] transition-colors duration-200 ${hamburgerCls}`}
+            >
+              <Globe className="w-[18px] h-[18px]" />
+              <span className="font-body text-[11px] font-semibold tracking-wide">
+                {activeLang.toUpperCase()}
+              </span>
+            </button>
+
+            <AnimatePresence>
+              {langOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 4 }}
+                  transition={{ duration: 0.15 }}
+                  className="absolute end-0 top-full mt-1 w-36 bg-brand-dark border border-white/10 rounded-lg overflow-hidden shadow-blue z-50"
+                >
+                  {LOCALES.map((code) => (
+                    <button
+                      key={code}
+                      onClick={() => switchLocale(code)}
+                      className={`w-full flex items-center justify-between px-4 py-2.5 font-body text-[12px] transition-colors duration-150 ${
+                        activeLang === code
+                          ? "text-brand-gold bg-white/5"
+                          : "text-white/60 hover:text-white hover:bg-white/5"
+                      }`}
+                    >
+                      <span>{LANGUE_INFO[code].nom}</span>
+                      <span className="text-[10px] font-bold tracking-wide opacity-50">{code.toUpperCase()}</span>
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <button
+            onClick={() => setMenuOpen((v) => !v)}
+            className={`p-2.5 transition-colors duration-200 min-h-[44px] min-w-[44px] flex items-center justify-center ${hamburgerCls}`}
+            aria-label={dict.nav.menu}
+          >
+            {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile full menu — always solid dark */}
@@ -317,26 +377,10 @@ export function Navbar({ dict }: { dict: Dictionary }) {
                 </Link>
               ))}
 
-              <div className="flex items-center gap-2 mt-5">
-                {LOCALES.map((code) => (
-                  <button
-                    key={code}
-                    onClick={() => { switchLocale(code); setMenuOpen(false); }}
-                    className={`flex-1 min-h-[40px] rounded-sm font-body text-[12px] font-semibold text-center transition-colors ${
-                      activeLang === code
-                        ? "bg-brand-gold/15 text-brand-gold"
-                        : "text-white/50 border border-white/10 hover:text-white hover:border-white/20"
-                    }`}
-                  >
-                    {LANGUE_INFO[code].nom}
-                  </button>
-                ))}
-              </div>
-
               <a
                 href="https://app.institutlorel.com/login"
                 onClick={() => setMenuOpen(false)}
-                className="mt-3 min-h-[44px] flex items-center justify-center text-center text-white/60 hover:text-white font-body text-sm transition-colors"
+                className="mt-5 min-h-[44px] flex items-center justify-center text-center text-white/60 hover:text-white font-body text-sm transition-colors"
               >
                 {dict.nav.seConnecter}
               </a>
