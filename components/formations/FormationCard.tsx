@@ -31,7 +31,7 @@ export function FormationCard({ formation: f, dict }: { formation: Formation; di
   return (
     <Link
       href={`/formations/${f.slug}`}
-      className="group block bg-white border border-gray-100 hover:border-brand-gold/25 rounded-2xl overflow-hidden hover:shadow-card-hover transition-all duration-300"
+      className="group block min-w-0 bg-white border border-gray-100 hover:border-brand-gold/25 rounded-2xl overflow-hidden hover:shadow-card-hover transition-all duration-300"
     >
       {/* Image area */}
       <div className="relative h-48 overflow-hidden">
