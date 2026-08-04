@@ -158,7 +158,7 @@ export function Navbar({ dict }: { dict: Dictionary }) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 6 }}
                   transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-[580px] bg-white rounded-xl shadow-card-hover border border-gray-100 overflow-hidden"
+                  className="absolute top-full start-0 mt-0 w-[580px] max-w-[calc(100vw-2.5rem)] bg-white rounded-xl shadow-card-hover border border-gray-100 overflow-hidden"
                 >
                   <div className="grid grid-cols-3 gap-0 p-4">
                     <div className="col-span-2 grid grid-cols-2 gap-1 pe-4 border-e border-gray-100">

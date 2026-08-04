@@ -232,7 +232,7 @@ export function InscriptionModal({
                       key={i}
                       type="button"
                       onClick={() => setChoiceIdx(i)}
-                      className={`w-full text-left p-3.5 rounded-xl border-2 transition-all duration-150 ${
+                      className={`w-full text-start p-3.5 rounded-xl border-2 transition-all duration-150 ${
                         selected
                           ? "border-brand-gold bg-brand-gold/8 shadow-gold"
                           : "border-gray-100 bg-gray-50 hover:border-gray-200"

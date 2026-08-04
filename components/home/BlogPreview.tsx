@@ -41,7 +41,7 @@ function ArticleCard({ article, index, dict }: { article: SiteArticle; index: nu
             <div className="w-full h-full bg-gradient-to-br from-brand-blue to-brand-dark" />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/50 via-transparent to-transparent" />
-          <div className="absolute top-4 left-4">
+          <div className="absolute top-4 start-4">
             <span className="font-body text-[10px] font-bold text-brand-dark bg-brand-gold px-2.5 py-1 rounded-full uppercase tracking-wide">
               {article.category}
             </span>

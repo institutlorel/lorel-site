@@ -40,7 +40,7 @@ export function AnnouncementBar({ dict }: { dict: Dictionary }) {
       <button
         onClick={() => setVisible(false)}
         aria-label={dict.announcementBar.fermer}
-        className="absolute right-4 lg:right-10 p-1 text-white/30 hover:text-white/70 transition-colors duration-200"
+        className="absolute end-4 lg:end-10 p-1 text-white/30 hover:text-white/70 transition-colors duration-200"
       >
         <X className="w-3.5 h-3.5" />
       </button>

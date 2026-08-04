@@ -226,7 +226,7 @@ export function Hero({ dict }: { dict: Dictionary }) {
             </motion.div>
 
             {/* Floating card — Session */}
-            <FloatingCard delay={0.6} className="absolute -left-2 lg:-left-8 top-12 z-10">
+            <FloatingCard delay={0.6} className="absolute -start-2 lg:-start-8 top-12 z-10">
               <div className="bg-white rounded-xl shadow-card-hover px-4 py-3 flex items-center gap-3 min-w-[170px]">
                 <div className="w-8 h-8 rounded-lg bg-brand-blue/10 flex items-center justify-center shrink-0">
                   <CalendarDays className="w-4 h-4 text-brand-blue" />
@@ -239,7 +239,7 @@ export function Hero({ dict }: { dict: Dictionary }) {
             </FloatingCard>
 
             {/* Floating card — Rating */}
-            <FloatingCard delay={0.8} className="absolute -right-2 lg:-right-6 bottom-20 z-10">
+            <FloatingCard delay={0.8} className="absolute -end-2 lg:-end-6 bottom-20 z-10">
               <div className="bg-white rounded-xl shadow-card-hover px-4 py-3 min-w-[140px]">
                 <div className="flex items-center gap-1 mb-1">
                   {[1, 2, 3, 4, 5].map((s) => (
@@ -254,7 +254,7 @@ export function Hero({ dict }: { dict: Dictionary }) {
             </FloatingCard>
 
             {/* Floating card — Partners */}
-            <FloatingCard delay={1.0} className="absolute -left-4 lg:-left-10 bottom-10 z-10">
+            <FloatingCard delay={1.0} className="absolute -start-4 lg:-start-10 bottom-10 z-10">
               <div className="bg-brand-gold rounded-xl shadow-gold px-4 py-3 flex items-center gap-3 min-w-[160px]">
                 <div className="w-7 h-7 rounded-lg bg-brand-dark/20 flex items-center justify-center shrink-0">
                   <Building2 className="w-3.5 h-3.5 text-brand-dark" />

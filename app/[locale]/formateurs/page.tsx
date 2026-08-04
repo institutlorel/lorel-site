@@ -91,14 +91,14 @@ export default async function FormateursPage({
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                   {/* Domain badge */}
-                  <div className="absolute top-3 left-3">
+                  <div className="absolute top-3 start-3">
                     <span className="font-body text-[10px] font-bold uppercase tracking-widest bg-white/15 backdrop-blur-sm border border-white/25 text-white px-2.5 py-1 rounded-sm">
                       {formateur.domaine}
                     </span>
                   </div>
                   {/* Initials fallback */}
                   <div
-                    className="absolute bottom-3 right-3 w-10 h-10 rounded-full flex items-center justify-center font-body font-bold text-sm text-white"
+                    className="absolute bottom-3 end-3 w-10 h-10 rounded-full flex items-center justify-center font-body font-bold text-sm text-white"
                     style={{ backgroundColor: formateur.accent }}
                   >
                     {formateur.initials}

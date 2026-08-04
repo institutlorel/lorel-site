@@ -74,7 +74,7 @@ function CenterCard({
           <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/70 via-brand-dark/20 to-transparent" />
 
           {/* City label */}
-          <div className="absolute bottom-4 left-5">
+          <div className="absolute bottom-4 start-5">
             <div className="font-display text-2xl font-bold text-white leading-none">
               {center.ville}
             </div>
@@ -84,7 +84,7 @@ function CenterCard({
           </div>
 
           {/* Location pin */}
-          <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/15 backdrop-blur-sm border border-white/30 flex items-center justify-center">
+          <div className="absolute top-4 end-4 w-9 h-9 rounded-full bg-white/15 backdrop-blur-sm border border-white/30 flex items-center justify-center">
             <MapPin className="w-4 h-4 text-white" />
           </div>
         </div>
@@ -185,7 +185,7 @@ export function CentersSection({ dict }: { dict: Dictionary }) {
           transition={{ delay: 0.4 }}
           className="mt-10 pt-8 border-t border-white/8 flex flex-col sm:flex-row items-center justify-between gap-4"
         >
-          <p className="font-body text-sm text-white/50 text-center sm:text-left">
+          <p className="font-body text-sm text-white/50 text-center sm:text-start">
             {dict.centersSection.question}
           </p>
           <a

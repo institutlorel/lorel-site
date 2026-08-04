@@ -84,7 +84,7 @@ export function PhoneInput({
         </button>
 
         {open && (
-          <div className="absolute z-50 top-full left-0 mt-1 w-72 max-w-[85vw] bg-white border border-gray-200 rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-80">
+          <div className="absolute z-50 top-full start-0 mt-1 w-72 max-w-[85vw] bg-white border border-gray-200 rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-80">
             <div className="p-2 border-b border-gray-100 shrink-0">
               <div className="flex items-center gap-2 border border-gray-200 rounded-lg px-2.5 py-2 focus-within:border-brand-gold focus-within:ring-2 focus-within:ring-brand-gold/20">
                 <Search className="w-3.5 h-3.5 text-text-muted shrink-0" />
@@ -122,7 +122,7 @@ export function PhoneInput({
                     <button
                       type="button"
                       onClick={() => pick(c)}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2 text-left hover:bg-brand-cream transition-colors ${
+                      className={`w-full flex items-center gap-2.5 px-3 py-2 text-start hover:bg-brand-cream transition-colors ${
                         c.iso2 === selected.iso2 ? "bg-brand-gold/8" : ""
                       }`}
                     >

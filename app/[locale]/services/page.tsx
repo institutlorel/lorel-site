@@ -112,7 +112,7 @@ export default async function ServicesPage({
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                     {/* Type badge */}
-                    <div className="absolute top-3 left-3 flex items-center gap-2">
+                    <div className="absolute top-3 start-3 flex items-center gap-2">
                       <span className="font-body text-[10px] font-bold uppercase tracking-widest bg-white/15 backdrop-blur-sm border border-white/25 text-white px-2.5 py-1 rounded-sm">
                         {service.type}
                       </span>

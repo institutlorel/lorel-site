@@ -85,7 +85,7 @@ export function FormationsClientGrid({
           {/* Search row */}
           <div className="pt-3 pb-2">
             <div className="flex items-center bg-brand-cream rounded-xl overflow-hidden max-w-xl border border-gray-200">
-              <Search className="w-4 h-4 text-text-muted ml-4 shrink-0" />
+              <Search className="w-4 h-4 text-text-muted ms-4 shrink-0" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -93,7 +93,7 @@ export function FormationsClientGrid({
                 className="flex-1 py-2.5 px-3 font-body text-sm text-text-primary placeholder-text-muted outline-none bg-transparent"
               />
               {query && (
-                <button onClick={() => setQuery("")} className="mr-3 text-text-muted hover:text-text-primary">
+                <button onClick={() => setQuery("")} className="me-3 text-text-muted hover:text-text-primary">
                   <X className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -157,12 +157,12 @@ export function FormationsClientGrid({
                   <ChevronDown className={`w-3 h-3 transition-transform ${sortOpen ? "rotate-180" : ""}`} />
                 </button>
                 {sortOpen && (
-                  <div className="absolute right-0 top-full mt-1 bg-white border border-gray-100 rounded-xl shadow-card-hover z-20 min-w-[160px] overflow-hidden">
+                  <div className="absolute end-0 top-full mt-1 bg-white border border-gray-100 rounded-xl shadow-card-hover z-20 min-w-[160px] overflow-hidden">
                     {SORTS.map((s) => (
                       <button
                         key={s.value}
                         onClick={() => { setSort(s.value); setSortOpen(false); }}
-                        className={`w-full text-left px-4 py-2.5 font-body text-[12px] transition-colors hover:bg-brand-cream ${
+                        className={`w-full text-start px-4 py-2.5 font-body text-[12px] transition-colors hover:bg-brand-cream ${
                           sort === s.value ? "text-brand-blue font-semibold" : "text-text-secondary"
                         }`}
                       >

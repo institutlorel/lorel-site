@@ -123,7 +123,7 @@ export function WhyLorel({ dict }: { dict: Dictionary }) {
             <motion.div
               animate={{ y: [0, -7, 0] }}
               transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -right-4 lg:-right-8 top-16 bg-white rounded-xl shadow-card-hover px-5 py-4 min-w-[160px] border border-gray-100"
+              className="absolute -end-4 lg:-end-8 top-16 bg-white rounded-xl shadow-card-hover px-5 py-4 min-w-[160px] border border-gray-100"
             >
               <div className="font-display text-2xl font-bold text-brand-blue leading-none mb-1">95%</div>
               <div className="font-body text-[11px] text-text-secondary">{dict.whyLorel.tauxInsertion}</div>
@@ -135,7 +135,7 @@ export function WhyLorel({ dict }: { dict: Dictionary }) {
             <motion.div
               animate={{ y: [0, -5, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-              className="absolute -left-4 lg:-left-6 bottom-16 bg-brand-dark rounded-xl shadow-blue px-5 py-4 border border-white/8"
+              className="absolute -start-4 lg:-start-6 bottom-16 bg-brand-dark rounded-xl shadow-blue px-5 py-4 border border-white/8"
             >
               <div className="font-display text-xl font-bold text-brand-gold leading-none mb-1">500+</div>
               <div className="font-body text-[11px] text-white/50">{dict.whyLorel.diplomesDepuis}</div>

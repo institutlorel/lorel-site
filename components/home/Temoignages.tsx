@@ -173,7 +173,7 @@ export function Temoignages({ temoignages, dict }: Props) {
                 <button
                   key={item.id}
                   onClick={() => setActive(temoignages.indexOf(item))}
-                  className="group text-left bg-brand-cream hover:bg-white border border-gray-100 hover:border-brand-gold/20 rounded-xl p-5 transition-all duration-200 hover:shadow-card"
+                  className="group text-start bg-brand-cream hover:bg-white border border-gray-100 hover:border-brand-gold/20 rounded-xl p-5 transition-all duration-200 hover:shadow-card"
                 >
                   <div className="flex items-start gap-3 mb-3">
                     <div className="relative w-9 h-9 rounded-full overflow-hidden shrink-0">

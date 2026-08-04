@@ -222,13 +222,13 @@ export default async function BlogArticlePage({
                 </p>
                 <ol className="list-none m-0 p-0 space-y-1.5">
                   {toc.map((item) => (
-                    <li key={item.id} className={item.depth === 3 ? "pl-4" : ""}>
+                    <li key={item.id} className={item.depth === 3 ? "ps-4" : ""}>
                       <a
                         href={`#${item.id}`}
                         className="font-body text-sm text-brand-dark hover:text-brand-blue transition-colors no-underline leading-snug"
                       >
                         {item.depth === 3 && (
-                          <span className="mr-1.5 text-brand-gold/60">›</span>
+                          <span className="me-1.5 text-brand-gold/60">›</span>
                         )}
                         {item.text}
                       </a>

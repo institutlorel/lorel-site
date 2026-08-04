@@ -60,7 +60,7 @@ function ModeCard({
       >
         {/* Badge */}
         {mode.badge && (
-          <div className="absolute -top-3 left-8">
+          <div className="absolute -top-3 start-8">
             <span className="font-body text-[10px] font-bold text-brand-dark bg-brand-gold px-3 py-1 rounded-full tracking-wide uppercase">
               {mode.badge}
             </span>

@@ -180,7 +180,7 @@ export function BlogListClient({ articles, dict }: Props) {
                         className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
                       />
                     )}
-                    <div className="absolute top-3 left-3">
+                    <div className="absolute top-3 start-3">
                       <span
                         className={`font-body text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-sm ${CATEGORY_COLORS[article.category] ?? "bg-gray-100 text-gray-600"}`}
                       >

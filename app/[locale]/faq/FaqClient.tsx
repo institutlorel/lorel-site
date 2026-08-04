@@ -23,8 +23,8 @@ function AccordionItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="border-b border-gray-100 last:border-0">
-      <button onClick={() => setOpen((v) => !v)} className="w-full flex items-center justify-between py-4 text-left group">
-        <span className="font-body text-[13px] font-semibold text-text-primary group-hover:text-brand-blue transition-colors pr-4">{q}</span>
+      <button onClick={() => setOpen((v) => !v)} className="w-full flex items-center justify-between py-4 text-start group">
+        <span className="font-body text-[13px] font-semibold text-text-primary group-hover:text-brand-blue transition-colors pe-4">{q}</span>
         <ChevronDown className={`w-4 h-4 text-text-muted shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </button>
       {open && <p className="font-body text-sm text-text-secondary leading-relaxed pb-4">{a}</p>}

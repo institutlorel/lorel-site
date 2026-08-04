@@ -44,9 +44,9 @@ function AccordionItem({
     <div className="border-b border-gray-100 last:border-0">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between py-4 text-left group"
+        className="w-full flex items-center justify-between py-4 text-start group"
       >
-        <span className="font-body text-[13px] font-semibold text-text-primary group-hover:text-brand-blue transition-colors pr-4">
+        <span className="font-body text-[13px] font-semibold text-text-primary group-hover:text-brand-blue transition-colors pe-4">
           {title}
         </span>
         <ChevronDown
@@ -64,9 +64,9 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
     <div className="border-b border-gray-100 last:border-0">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between py-4 text-left group"
+        className="w-full flex items-center justify-between py-4 text-start group"
       >
-        <span className="font-body text-[13px] font-semibold text-text-primary group-hover:text-brand-blue transition-colors pr-4">
+        <span className="font-body text-[13px] font-semibold text-text-primary group-hover:text-brand-blue transition-colors pe-4">
           {q}
         </span>
         <ChevronDown
@@ -103,7 +103,7 @@ function EnrollCard({
         />
         <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/30 to-transparent" />
         {f.placesDispo <= 5 && (
-          <div className="absolute top-3 left-3 bg-red-500 text-white font-body text-[10px] font-bold px-2 py-0.5 rounded-full">
+          <div className="absolute top-3 start-3 bg-red-500 text-white font-body text-[10px] font-bold px-2 py-0.5 rounded-full">
             {dict.formationDetail.placesRestantes.replace("{count}", String(f.placesDispo))}
           </div>
         )}

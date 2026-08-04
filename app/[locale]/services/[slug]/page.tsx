@@ -176,7 +176,7 @@ export default async function ServiceDetailPage({
                           </div>
                         )}
                         {service.duree && (
-                          <div className="text-right">
+                          <div className="text-end">
                             <p className="font-body text-[10px] text-text-muted uppercase tracking-wider mb-0.5">
                               {dict.common.duree}
                             </p>
@@ -231,7 +231,7 @@ export default async function ServiceDetailPage({
                 <details key={i} className="group">
                   <summary className="font-body text-[13px] font-semibold text-text-primary cursor-pointer py-4 flex items-center justify-between list-none hover:text-brand-blue transition-colors">
                     {item.q}
-                    <span className="ml-4 shrink-0 text-text-muted group-open:rotate-180 transition-transform duration-200">
+                    <span className="ms-4 shrink-0 text-text-muted group-open:rotate-180 transition-transform duration-200">
                       ▾
                     </span>
                   </summary>

@@ -107,7 +107,7 @@ export function AboutClient({ waNumber, dict }: Props) {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/40 to-transparent" />
               </div>
-              <div className="absolute -bottom-5 -left-5 bg-brand-gold text-brand-dark rounded-xl p-4 shadow-gold">
+              <div className="absolute -bottom-5 -start-5 bg-brand-gold text-brand-dark rounded-xl p-4 shadow-gold">
                 <p className="font-display font-bold text-2xl">500+</p>
                 <p className="font-body text-xs font-semibold">{dict.hero.stats.diplomes}</p>
               </div>
@@ -172,10 +172,10 @@ export function AboutClient({ waNumber, dict }: Props) {
             </h2>
           </div>
           <div className="max-w-2xl mx-auto">
-            <div className="relative border-l-2 border-brand-gold/30 pl-8 space-y-8">
+            <div className="relative border-s-2 border-brand-gold/30 ps-8 space-y-8">
               {dict.aboutPage.timeline.evenements.map(({ annee, texte }) => (
                 <div key={annee} className="relative">
-                  <div className="absolute -left-[2.65rem] top-1 w-5 h-5 rounded-full bg-brand-gold border-4 border-white" />
+                  <div className="absolute -start-[2.65rem] top-1 w-5 h-5 rounded-full bg-brand-gold border-4 border-white" />
                   <p className="font-display font-bold text-brand-gold mb-1" style={{ fontSize: "clamp(1rem, 2vw, 1.25rem)" }}>{annee}</p>
                   <p className="font-body text-sm text-text-secondary leading-relaxed">{texte}</p>
                 </div>

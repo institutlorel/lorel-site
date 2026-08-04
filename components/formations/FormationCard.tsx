@@ -45,7 +45,7 @@ export function FormationCard({ formation: f, dict }: { formation: Formation; di
         <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/60 via-transparent to-transparent" />
 
         {/* Category badge — accent color */}
-        <div className="absolute top-3 left-3">
+        <div className="absolute top-3 start-3">
           <span
             className="font-body text-[10px] font-bold text-white px-2.5 py-1 rounded-full uppercase tracking-wide"
             style={{ backgroundColor: accentHex }}
@@ -55,7 +55,7 @@ export function FormationCard({ formation: f, dict }: { formation: Formation; di
         </div>
 
         {/* Mode badge */}
-        <div className="absolute top-3 right-3">
+        <div className="absolute top-3 end-3">
           <span className="flex items-center gap-1.5 font-body text-[10px] font-semibold text-white bg-white/15 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/20">
             <ModeIcon className="w-3 h-3" />
             {modeLabel}
@@ -64,7 +64,7 @@ export function FormationCard({ formation: f, dict }: { formation: Formation; di
 
         {/* Urgency badge */}
         {urgency && (
-          <div className="absolute bottom-3 left-3">
+          <div className="absolute bottom-3 start-3">
             <span
               className="font-body text-[10px] font-bold text-white px-2.5 py-1 rounded-full"
               style={{ backgroundColor: urgency.color }}
