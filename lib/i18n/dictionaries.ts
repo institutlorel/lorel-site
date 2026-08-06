@@ -699,11 +699,11 @@ const ar: Dictionary = {
     voirToutesLesFormations: "عرض جميع التكوينات",
     toutLeCatalogue: "كامل الكتالوج",
     categories: {
-      enLigne: { label: "تكوينات عن بُعد", desc: "فيديوهات، حسب وتيرتك" },
-      continue: { label: "تكوينات مؤطرة", desc: "بث مباشر مع مكوّن" },
-      diplomante: { label: "تكوينات دبلومة", desc: "شهادة معترف بها" },
-      individuel: { label: "تكوينات فردية", desc: "حصص فردية" },
-      vae: { label: "تثمين الخبرة المهنية", desc: "تثمين المكتسبات" },
+      enLigne: { label: "تكوينات مسجّلة", desc: "فيديوهات، تتعلّم بوتيرتك" },
+      continue: { label: "تكوينات مؤطّرة", desc: "مباشر مع مكوّن" },
+      diplomante: { label: "تكوينات بدبلوم", desc: "دبلوم معترف به" },
+      individuel: { label: "تكوينات فردية", desc: "حصص خاصة، واحد لواحد" },
+      vae: { label: "تثمين الخبرة", desc: "حوّل خبرتك لدبلوم" },
       consulting: { label: "استشارة", desc: "ساعتان مع خبير" },
     },
   },
@@ -735,7 +735,7 @@ const ar: Dictionary = {
       stylisme: "التصميم",
     },
     servicesLinks: {
-      vae: "تثمين الخبرة المهنية",
+      vae: "تثمين الخبرة",
       entreprises: "تكوين المقاولات",
       accompagnement: "المواكبة",
       certifications: "الشهادات",
@@ -875,8 +875,8 @@ const ar: Dictionary = {
     populaire: "الأكثر طلباً",
     items: {
       vae: {
-        titre: "تثمين الخبرة المهنية",
-        description: "حوّل خبرتك المهنية إلى شهادة معترف بها. مسار مواكب من الألف إلى الياء.",
+        titre: "تثمين الخبرة",
+        description: "حوّل خبرتك المهنية إلى دبلوم معترف به. مسار مواكب من الألف إلى الياء.",
       },
       entreprises: {
         titre: "تكوين المقاولات",
