@@ -703,7 +703,7 @@ const ar: Dictionary = {
       continue: { label: "تكوينات مؤطّرة", desc: "مباشر مع مكوّن" },
       diplomante: { label: "تكوينات بدبلوم", desc: "دبلوم معترف به" },
       individuel: { label: "تكوينات فردية", desc: "حصص خاصة، واحد لواحد" },
-      vae: { label: "تثمين الخبرة", desc: "حوّل خبرتك لدبلوم" },
+      vae: { label: "دبلوم بالخبرة", desc: "حوّل خبرتك لدبلوم" },
       consulting: { label: "استشارة", desc: "ساعتان مع خبير" },
     },
   },
@@ -735,7 +735,7 @@ const ar: Dictionary = {
       stylisme: "التصميم",
     },
     servicesLinks: {
-      vae: "تثمين الخبرة",
+      vae: "دبلوم بالخبرة",
       entreprises: "تكوين المقاولات",
       accompagnement: "المواكبة",
       certifications: "الشهادات",
@@ -875,8 +875,8 @@ const ar: Dictionary = {
     populaire: "الأكثر طلباً",
     items: {
       vae: {
-        titre: "تثمين الخبرة",
-        description: "حوّل خبرتك المهنية إلى دبلوم معترف به. مسار مواكب من الألف إلى الياء.",
+        titre: "دبلوم بالخبرة",
+        description: "حوّل خبرتك المهنية إلى دبلوم معترف به. نعاونوك في كل مرحلة.",
       },
       entreprises: {
         titre: "تكوين المقاولات",
@@ -1051,7 +1051,7 @@ const ar: Dictionary = {
       formations: "التكوينات",
       paiement: "الدفع",
       certifications: "الشهادات",
-      vae: "تثمين الخبرة (VAE)",
+      vae: "دبلوم بالخبرة (VAE)",
     },
     aucunResultat: "لم يتم العثور على أي سؤال يطابق بحثك.",
     questions: {
