@@ -542,6 +542,7 @@ const fr = {
     resultatSingulier: "formation",
     resultatPluriel: "formations",
     effacer: "Effacer",
+    filtres: "Filtres",
     empty: {
       titreVide: "Aucune formation disponible pour le moment",
       titreAucunResultat: "Aucune formation trouvée",
@@ -1178,6 +1179,7 @@ const ar: Dictionary = {
     resultatSingulier: "تكوين",
     resultatPluriel: "تكوينات",
     effacer: "مسح",
+    filtres: "الفلاتر",
     empty: {
       titreVide: "لا يوجد أي تكوين متاح حاليًا",
       titreAucunResultat: "لم يتم العثور على أي تكوين",
@@ -1815,6 +1817,7 @@ const en: Dictionary = {
     resultatSingulier: "program",
     resultatPluriel: "programs",
     effacer: "Clear",
+    filtres: "Filters",
     empty: {
       titreVide: "No programs available at the moment",
       titreAucunResultat: "No program found",

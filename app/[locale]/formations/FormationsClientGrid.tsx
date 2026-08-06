@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Search, ChevronDown, X } from "lucide-react";
+import { Search, ChevronDown, X, SlidersHorizontal } from "lucide-react";
 import { FormationCard } from "@/components/formations/FormationCard";
 import type { Formation } from "@/lib/data/formations";
 import { Container } from "@/components/ui/Container";
@@ -41,6 +41,9 @@ export function FormationsClientGrid({
   const [activeNiveau, setActiveNiveau] = useState<(typeof NIVEAUX)[number]>("Tous");
   const [sort, setSort] = useState<Sort>("popular");
   const [sortOpen, setSortOpen] = useState(false);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const activeFilterCount =
+    (activeMode !== dict.faqPage.categories.toutes ? 1 : 0) + (activeNiveau !== "Tous" ? 1 : 0);
 
   const filtered = useMemo(() => {
     let result = [...initialFormations];
@@ -83,14 +86,14 @@ export function FormationsClientGrid({
       <div className="sticky top-0 z-30 bg-white border-b border-gray-100 shadow-sm">
         <Container>
           {/* Search row */}
-          <div className="pt-3 pb-2">
-            <div className="flex items-center bg-brand-cream rounded-xl overflow-hidden max-w-xl border border-gray-200">
+          <div className="pt-2 pb-2 sm:pt-3 flex items-center gap-2">
+            <div className="flex items-center bg-brand-cream rounded-xl overflow-hidden flex-1 sm:flex-initial sm:max-w-xl border border-gray-200">
               <Search className="w-4 h-4 text-text-muted ms-4 shrink-0" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={dict.formationsPage.searchPlaceholder}
-                className="flex-1 py-2.5 px-3 font-body text-sm text-text-primary placeholder-text-muted outline-none bg-transparent"
+                className="flex-1 min-w-0 py-2.5 px-3 font-body text-sm text-text-primary placeholder-text-muted outline-none bg-transparent"
               />
               {query && (
                 <button onClick={() => setQuery("")} className="me-3 text-text-muted hover:text-text-primary">
@@ -98,7 +101,26 @@ export function FormationsClientGrid({
                 </button>
               )}
             </div>
+
+            {/* Mobile-only filters toggle — pills/sort collapse behind this below sm: */}
+            <button
+              type="button"
+              onClick={() => setMobileFiltersOpen((v) => !v)}
+              aria-expanded={mobileFiltersOpen}
+              aria-label={dict.formationsPage.filtres}
+              className="sm:hidden relative shrink-0 flex items-center justify-center w-[42px] h-[42px] rounded-xl border border-gray-200 text-text-secondary hover:border-brand-blue/40 hover:text-brand-blue transition-colors"
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+              {activeFilterCount > 0 && (
+                <span className="absolute -top-1 -end-1 w-4 h-4 rounded-full bg-brand-gold text-brand-dark font-body text-[9px] font-bold flex items-center justify-center">
+                  {activeFilterCount}
+                </span>
+              )}
+            </button>
           </div>
+
+          {/* Pills + count/sort/clear — always visible at sm:+, collapsible on mobile */}
+          <div className={`${mobileFiltersOpen ? "block" : "hidden"} sm:block`}>
 
           {/* Filter chips row */}
           <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-2">
@@ -173,6 +195,8 @@ export function FormationsClientGrid({
                 )}
               </div>
             </div>
+          </div>
+
           </div>
         </Container>
       </div>
